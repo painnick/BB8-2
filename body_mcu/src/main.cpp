@@ -1,11 +1,12 @@
+#include "esp_log.h"
 #include <Arduino.h>
 #include <HardwareSerial.h>
-#include "esp_log.h"
 
-#include "pinmap.h"
-#include "controllers/VoiceCommander.h"
-#include "controllers/Mp3Controller.h"
+#include "command.h"
 #include "controllers/BluetoothController.h"
+#include "controllers/Mp3Controller.h"
+#include "controllers/VoiceCommander.h"
+#include "pinmap.h"
 
 #define MAIN_TAG "Main"
 
@@ -26,15 +27,15 @@ void setup() {
 uint32_t lastChecked = 0;
 void loop() {
   auto vcCommand = vc02.receive();
-  if(vcCommand != VCCommand::VC_UNKNOWN)
+  if (vcCommand != Command::UNKNOWN)
     ESP_LOGW(MAIN_TAG, "VC Cmd : %s", ToString(vcCommand).c_str());
 
-  auto btCommand = bt.receive();
-  if(btCommand != BTCommand::BT_UNKNOWN)
-    ESP_LOGW(MAIN_TAG, "BT Cmd : %s", ToString(btCommand).c_str());
+  auto Command = bt.receive();
+  if (Command != Command::UNKNOWN)
+    ESP_LOGW(MAIN_TAG, "BT Cmd : %s", ToString(Command).c_str());
 
   auto now = millis();
-  if(now - lastChecked > 1000 * 10) {
+  if (now - lastChecked > 1000 * 10) {
     playAlive();
     lastChecked = now;
   }

@@ -7,33 +7,12 @@
 
 #include <HardwareSerial.h>
 
+#include "../command.h"
+
 #ifndef BODY_MCU_VOICE_COMMANDER_H
 #define BODY_MCU_VOICE_COMMANDER_H
 
 #define VOICE_COMMANDER_PACKET_SIZE 4
-#define VOICE_COMMANDER_COMMAND_COUNT 10
-
-enum VCCommand : uint64_t {
-  VC_UNKNOWN = 0x43434343,
-  VC_WAKE_UP = 0x00000001,
-  VC_TURN_LEFT = 0x01000100,
-  VC_TURN_RIGHT = 0x01000200,
-  VC_PLAY_MUSIC = 0x70000000,
-  VC_FOOL = 0x44444444,
-  VC_STOP = 0x00000000,
-  VC_TURN_ON = 0x02000001,
-  VC_TURN_OFF = 0x02000002,
-  VC_WHERE_ARE_YOU = 0xFFFFFF01,
-};
-
-static VCCommand VCCommands[VOICE_COMMANDER_COMMAND_COUNT] = {
-    VCCommand::VC_UNKNOWN,       VCCommand::VC_WAKE_UP,    VCCommand::VC_TURN_LEFT,
-    VCCommand::VC_TURN_RIGHT,    VCCommand::VC_PLAY_MUSIC, VCCommand::VC_FOOL,
-    VCCommand::VC_STOP,          VCCommand::VC_TURN_ON,    VCCommand::VC_TURN_OFF,
-    VCCommand::VC_WHERE_ARE_YOU,
-};
-
-extern String ToString(VCCommand cmd);
 
 class VoiceCommander {
 public:
@@ -46,7 +25,7 @@ public:
              int8_t rxPin = -1, int8_t txPin = -1, bool invert = false,
              unsigned long timeout_ms = 20000UL,
              uint8_t rxfifo_full_thrhd = 112);
-  VCCommand receive();
+  Command receive();
 
 protected:
   HardwareSerial &serial;
