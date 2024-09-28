@@ -10,6 +10,8 @@
 
 #define MAIN_TAG "Main"
 
+#define ALIVE_SOUND_INTERVAL_MS 30000
+
 VoiceCommander vc02(Serial1);
 BluetoothController bt;
 
@@ -41,7 +43,7 @@ void loop() {
   }
 
   auto now = millis();
-  if (now - lastChecked > 1000 * 10) {
+  if (now - lastChecked > ALIVE_SOUND_INTERVAL_MS) {
     playAlive();
     lastChecked = now;
   }
