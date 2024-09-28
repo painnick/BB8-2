@@ -14,7 +14,9 @@ class BluetoothController {
 public:
   void begin(String name);
   Command receive();
+  void println(const char c[]);
 
+protected:
   BluetoothSerial serial;
 };
 

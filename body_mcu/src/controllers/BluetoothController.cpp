@@ -45,3 +45,7 @@ Command BluetoothController::receive() {
   }
   return Command::UNKNOWN;
 }
+
+void BluetoothController::println(const char c[]) {
+  serial.println(c);
+}

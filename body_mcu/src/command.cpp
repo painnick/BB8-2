@@ -32,7 +32,7 @@ String ToString(const Command& cmd) {
 void processCommand(BluetoothController& bt, Command cmd) {
   switch (cmd) {
   case Command::WAKE_UP:
-    bt.serial.println("WakeUp!");
+    bt.println("WakeUp!");
     break;
   default:
     break;
