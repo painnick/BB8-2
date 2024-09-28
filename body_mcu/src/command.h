@@ -2,7 +2,9 @@
 
 #include <Arduino.h>
 
-#define VOICE_COMMANDER_COMMAND_COUNT 10
+#define COMMAND_COUNT 10
+
+class BluetoothController;
 
 enum Command : uint64_t {
   UNKNOWN = 0x43434343,
@@ -17,11 +19,13 @@ enum Command : uint64_t {
   WHERE_ARE_YOU = 0xFFFFFF01,
 };
 
-extern String ToString(Command cmd);
+extern String ToString(const Command& cmd);
 
-static Command VCCommands[VOICE_COMMANDER_COMMAND_COUNT] = {
+static Command Commands[COMMAND_COUNT] = {
     Command::UNKNOWN,       Command::WAKE_UP,    Command::TURN_LEFT,
     Command::TURN_RIGHT,    Command::PLAY_MUSIC, Command::FOOL,
     Command::STOP,          Command::TURN_ON,    Command::TURN_OFF,
     Command::WHERE_ARE_YOU,
 };
+
+extern void processCommand(BluetoothController &bt, Command cmd);

@@ -26,13 +26,19 @@ void setup() {
 
 uint32_t lastChecked = 0;
 void loop() {
-  auto vcCommand = vc02.receive();
-  if (vcCommand != Command::UNKNOWN)
-    ESP_LOGW(MAIN_TAG, "VC Cmd : %s", ToString(vcCommand).c_str());
+  Command cmd;
 
-  auto Command = bt.receive();
-  if (Command != Command::UNKNOWN)
-    ESP_LOGW(MAIN_TAG, "BT Cmd : %s", ToString(Command).c_str());
+  cmd = vc02.receive();
+  if ((cmd & Command::UNKNOWN) != Command::UNKNOWN) {
+    ESP_LOGD(MAIN_TAG, "VC Cmd : %s", ToString(cmd).c_str());
+    processCommand(bt, cmd);
+  }
+
+  cmd = bt.receive();
+  if ((cmd & Command::UNKNOWN) != Command::UNKNOWN) {
+    ESP_LOGD(MAIN_TAG, "BT Cmd : %s", ToString(cmd).c_str());
+    processCommand(bt, cmd);
+  }
 
   auto now = millis();
   if (now - lastChecked > 1000 * 10) {

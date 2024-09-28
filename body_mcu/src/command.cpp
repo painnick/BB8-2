@@ -1,6 +1,8 @@
 #include "command.h"
 
-String ToString(Command cmd) {
+#include "./controllers/BluetoothController.h"
+
+String ToString(const Command& cmd) {
   switch (cmd) {
   case Command::UNKNOWN:
     return "Unknown";
@@ -24,5 +26,15 @@ String ToString(Command cmd) {
     return "WHERE_ARE_YOU";
   default:
     return "Not found";
+  }
+}
+
+void processCommand(BluetoothController& bt, Command cmd) {
+  switch (cmd) {
+  case Command::WAKE_UP:
+    bt.serial.println("WakeUp!");
+    break;
+  default:
+    break;
   }
 }

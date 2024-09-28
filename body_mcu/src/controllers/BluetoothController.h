@@ -15,7 +15,6 @@ public:
   void begin(String name);
   Command receive();
 
-protected:
   BluetoothSerial serial;
 };
 
