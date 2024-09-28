@@ -9,6 +9,8 @@
 
 #include "../command.h"
 
+#define VC_TAG "VC02"
+
 #ifndef BODY_MCU_VOICE_COMMANDER_H
 #define BODY_MCU_VOICE_COMMANDER_H
 

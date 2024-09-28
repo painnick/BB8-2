@@ -10,6 +10,8 @@
 
 #include "command.h"
 
+#define BT_TAG "BLUETOOTH"
+
 class BluetoothController {
 public:
   void begin(String name);

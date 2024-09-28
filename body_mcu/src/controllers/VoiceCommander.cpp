@@ -4,8 +4,6 @@
 
 #include "VoiceCommander.h"
 
-#define TAG "VC02"
-
 VoiceCommander::VoiceCommander(HardwareSerial &serial) : serial(serial) {}
 
 VoiceCommander::~VoiceCommander() {}
@@ -21,24 +19,24 @@ Command VoiceCommander::receive() {
   if (serial.available()) {
     size_t read_bytes = serial.read(buffer, VOICE_COMMANDER_PACKET_SIZE);
     if (read_bytes != VOICE_COMMANDER_PACKET_SIZE) {
-      ESP_LOGW(TAG, "%d bytes read", read_bytes);
+      ESP_LOGW(VC_TAG, "%d bytes read", read_bytes);
       return Command::UNKNOWN;
     }
 
     uint64_t read_data =
         buffer[3] + (buffer[2] << 8) + (buffer[1] << 16) + (buffer[0] << 24);
 
-    ESP_LOGD(TAG, "Read 0x%08X", read_data);
+    ESP_LOGD(VC_TAG, "Read 0x%08X", read_data);
 
     for (int i = 0; i < COMMAND_COUNT; i++) {
       uint64_t val = Commands[i];
       if (read_data == val) {
-        ESP_LOGD(TAG, "Found. [%d](%s)", i, ToString(Commands[i]).c_str());
+        ESP_LOGD(VC_TAG, "Found. [%d](%s)", i, ToString(Commands[i]).c_str());
         return Commands[i];
       }
     }
 
-    ESP_LOGW(TAG, "Not Found.");
+    ESP_LOGW(VC_TAG, "Not Found.");
   }
 
   return Command::UNKNOWN;

@@ -4,8 +4,6 @@
 
 #include "BluetoothController.h"
 
-#define TAG "BLUETOOTH"
-
 void BluetoothController::begin(String name) {
   serial.begin(name);
   serial.register_callback(
@@ -22,7 +20,7 @@ void BluetoothController::begin(String name) {
 Command BluetoothController::receive() {
   if (serial.available()) {
     String btCmd = serial.readString();
-    ESP_LOGD(TAG, "BT >> %s", btCmd.c_str());
+    ESP_LOGD(BT_TAG, "BT >> %s", btCmd.c_str());
 
     if (btCmd == "wake_up")
       return Command::WAKE_UP;
@@ -46,6 +44,4 @@ Command BluetoothController::receive() {
   return Command::UNKNOWN;
 }
 
-void BluetoothController::println(const char c[]) {
-  serial.println(c);
-}
+void BluetoothController::println(const char c[]) { serial.println(c); }
