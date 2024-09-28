@@ -12,8 +12,9 @@
 #define HEAD_COMMAND_TX_PIN 18
 #define HEAD_COMMAND_RX_PIN 19
 
-#define DFPLAYER_TX_PIN 32
-#define DFPLAYER_RX_PIN 33
+// BUG: PCB v1.0.0(29230921a) Exchange RX/TX Pin
+#define DFPLAYER_TX_PIN 33
+#define DFPLAYER_RX_PIN 32
 
 #define SR_DATA_PIN 25
 #define SR_LATCH_PIN 26
