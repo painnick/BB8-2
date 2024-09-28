@@ -28,7 +28,6 @@ public:
              unsigned long timeout_ms = 20000UL,
              uint8_t rxfifo_full_thrhd = 112);
   Command receive();
-  void wakeUp();
 
 protected:
   HardwareSerial &serial;

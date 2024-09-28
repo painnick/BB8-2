@@ -41,12 +41,3 @@ Command VoiceCommander::receive() {
 
   return Command::UNKNOWN;
 }
-
-void VoiceCommander::wakeUp() {
-  uint8_t msg[VOICE_COMMANDER_PACKET_SIZE];
-  msg[0] = 0x00;
-  msg[1] = 0x00;
-  msg[2] = 0x00;
-  msg[3] = 0x01;
-  serial.write(msg, VOICE_COMMANDER_PACKET_SIZE);
-}
