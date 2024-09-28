@@ -26,7 +26,7 @@ void setup() {
   playWelcome();
 }
 
-uint32_t lastChecked = 0;
+uint32_t lastAliveSoundChecked = 0;
 void loop() {
   Command cmd;
 
@@ -43,9 +43,9 @@ void loop() {
   }
 
   auto now = millis();
-  if (now - lastChecked > ALIVE_SOUND_INTERVAL_MS) {
+  if (now - lastAliveSoundChecked > ALIVE_SOUND_INTERVAL_MS) {
     playAlive();
-    lastChecked = now;
+    lastAliveSoundChecked = now;
   }
   dfmp3.loop();
 }
