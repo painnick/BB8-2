@@ -22,7 +22,7 @@ void setup() {
 uint32_t lastChecked = 0;
 void loop() {
   auto command = vc02.receive();
-  if(command != Command::UNKNOWN)
+  if(command != VCCommand::UNKNOWN)
     ESP_LOGW(MAIN_TAG, "Cmd : %s", ToString(command).c_str());
 
   auto now = millis();

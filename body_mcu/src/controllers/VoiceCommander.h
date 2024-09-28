@@ -13,7 +13,7 @@
 #define VOICE_COMMANDER_PACKET_SIZE 4
 #define VOICE_COMMANDER_COMMAND_COUNT 10
 
-enum Command : uint64_t {
+enum VCCommand : uint64_t {
   UNKNOWN = 0x43434343,
   WAKE_UP = 0x00000001,
   TURN_LEFT = 0x01000100,
@@ -26,14 +26,14 @@ enum Command : uint64_t {
   WHERE_ARE_YOU = 0xFFFFFF01,
 };
 
-static Command Commands[VOICE_COMMANDER_COMMAND_COUNT] = {
-    Command::UNKNOWN,       Command::WAKE_UP,    Command::TURN_LEFT,
-    Command::TURN_RIGHT,    Command::PLAY_MUSIC, Command::FOOL,
-    Command::STOP,          Command::TURN_ON,    Command::TURN_OFF,
-    Command::WHERE_ARE_YOU,
+static VCCommand VCCommands[VOICE_COMMANDER_COMMAND_COUNT] = {
+    VCCommand::UNKNOWN,       VCCommand::WAKE_UP,    VCCommand::TURN_LEFT,
+    VCCommand::TURN_RIGHT,    VCCommand::PLAY_MUSIC, VCCommand::FOOL,
+    VCCommand::STOP,          VCCommand::TURN_ON,    VCCommand::TURN_OFF,
+    VCCommand::WHERE_ARE_YOU,
 };
 
-extern String ToString(Command cmd);
+extern String ToString(VCCommand cmd);
 
 class VoiceCommander {
 public:
@@ -46,7 +46,7 @@ public:
              int8_t rxPin = -1, int8_t txPin = -1, bool invert = false,
              unsigned long timeout_ms = 20000UL,
              uint8_t rxfifo_full_thrhd = 112);
-  Command receive();
+  VCCommand receive();
 
 protected:
   HardwareSerial &serial;
