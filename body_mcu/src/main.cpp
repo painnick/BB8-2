@@ -59,6 +59,8 @@ void loop() {
     setDefaultVolume();
     playAlive();
     lastAliveSoundChecked = now;
+
+    vc02.wakeUp();
   }
   dfmp3.loop();
   shiftRegister.loop(now);
