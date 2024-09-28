@@ -4,9 +4,10 @@
 
 #include "command.h"
 #include "controllers/BluetoothController.h"
+#include "controllers/CommandRouter.h"
 #include "controllers/Mp3Controller.h"
-#include "controllers/VoiceCommander.h"
 #include "controllers/ShiftRegisterController.h"
+#include "controllers/VoiceCommander.h"
 #include "pinmap.h"
 
 #define MAIN_TAG "Main"
@@ -16,11 +17,18 @@
 VoiceCommander vc02(Serial1);
 BluetoothController bt;
 ShiftRegisterController shiftRegister(SR_DATA_PIN, SR_LATCH_PIN, SR_CLOCK_PIN);
+SoftwareSerial cmdSerial;
+CommandRouter router(cmdSerial);
 
 void setup() {
   vc02.begin(115200, SERIAL_8N1, VOICE_COMMAND_RX_PIN, VOICE_COMMAND_TX_PIN);
 
   bt.begin("BB-8");
+
+  router.begin(115200, SWSERIAL_8N1, HEAD_COMMAND_RX_PIN, HEAD_COMMAND_TX_PIN);
+  router.init([=](const CommandRouter *router, const String &msg) {
+    ESP_LOGD(MAIN_TAG, "Router msg : %s", msg.c_str());
+  });
 
   setupSound();
   setDefaultVolume();
@@ -54,4 +62,5 @@ void loop() {
   }
   dfmp3.loop();
   shiftRegister.loop(now);
+  router.loop();
 }
