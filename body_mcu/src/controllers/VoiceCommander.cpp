@@ -8,26 +8,26 @@
 
 String ToString(VCCommand cmd) {
   switch (cmd) {
-  case VCCommand::UNKNOWN:
+  case VCCommand::VC_UNKNOWN:
     return "Unknown";
-  case VCCommand::WAKE_UP:
-    return "WAKE_UP";
-  case VCCommand::TURN_LEFT:
-    return "TURN_LEFT";
-  case VCCommand::TURN_RIGHT:
-    return "TURN_RIGHT";
-  case VCCommand::PLAY_MUSIC:
-    return "PLAY_MUSIC";
-  case VCCommand::FOOL:
-    return "FOOL";
-  case VCCommand::STOP:
-    return "STOP";
-  case VCCommand::TURN_ON:
-    return "TURN_ON";
-  case VCCommand::TURN_OFF:
-    return "TURN_OFF";
-  case VCCommand::WHERE_ARE_YOU:
-    return "WHERE_ARE_YOU";
+  case VCCommand::VC_WAKE_UP:
+    return "VC_WAKE_UP";
+  case VCCommand::VC_TURN_LEFT:
+    return "VC_TURN_LEFT";
+  case VCCommand::VC_TURN_RIGHT:
+    return "VC_TURN_RIGHT";
+  case VCCommand::VC_PLAY_MUSIC:
+    return "VC_PLAY_MUSIC";
+  case VCCommand::VC_FOOL:
+    return "VC_FOOL";
+  case VCCommand::VC_STOP:
+    return "VC_STOP";
+  case VCCommand::VC_TURN_ON:
+    return "VC_TURN_ON";
+  case VCCommand::VC_TURN_OFF:
+    return "VC_TURN_OFF";
+  case VCCommand::VC_WHERE_ARE_YOU:
+    return "VC_WHERE_ARE_YOU";
   default:
     return "Not found";
   }
@@ -46,13 +46,13 @@ void VoiceCommander::begin(unsigned long baud, uint32_t config, int8_t rxPin,
 
 VCCommand VoiceCommander::receive() {
   size_t read_bytes = 0;
-  uint64_t read_data = VCCommand::UNKNOWN;
+  uint64_t read_data = VCCommand::VC_UNKNOWN;
 
   if (serial.available()) {
     read_bytes = serial.read(buffer, VOICE_COMMANDER_PACKET_SIZE);
     if (read_bytes != VOICE_COMMANDER_PACKET_SIZE) {
       ESP_LOGW(VC_TAG, "%d bytes read", read_bytes);
-      return VCCommand::UNKNOWN;
+      return VCCommand::VC_UNKNOWN;
     }
 
     read_data =
@@ -70,5 +70,5 @@ VCCommand VoiceCommander::receive() {
     ESP_LOGW(VC_TAG, "Not Found.");
   }
 
-  return VCCommand::UNKNOWN;
+  return VCCommand::VC_UNKNOWN;
 }

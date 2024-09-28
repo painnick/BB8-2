@@ -14,23 +14,23 @@
 #define VOICE_COMMANDER_COMMAND_COUNT 10
 
 enum VCCommand : uint64_t {
-  UNKNOWN = 0x43434343,
-  WAKE_UP = 0x00000001,
-  TURN_LEFT = 0x01000100,
-  TURN_RIGHT = 0x01000200,
-  PLAY_MUSIC = 0x70000000,
-  FOOL = 0x44444444,
-  STOP = 0x00000000,
-  TURN_ON = 0x02000001,
-  TURN_OFF = 0x02000002,
-  WHERE_ARE_YOU = 0xFFFFFF01,
+  VC_UNKNOWN = 0x43434343,
+  VC_WAKE_UP = 0x00000001,
+  VC_TURN_LEFT = 0x01000100,
+  VC_TURN_RIGHT = 0x01000200,
+  VC_PLAY_MUSIC = 0x70000000,
+  VC_FOOL = 0x44444444,
+  VC_STOP = 0x00000000,
+  VC_TURN_ON = 0x02000001,
+  VC_TURN_OFF = 0x02000002,
+  VC_WHERE_ARE_YOU = 0xFFFFFF01,
 };
 
 static VCCommand VCCommands[VOICE_COMMANDER_COMMAND_COUNT] = {
-    VCCommand::UNKNOWN,       VCCommand::WAKE_UP,    VCCommand::TURN_LEFT,
-    VCCommand::TURN_RIGHT,    VCCommand::PLAY_MUSIC, VCCommand::FOOL,
-    VCCommand::STOP,          VCCommand::TURN_ON,    VCCommand::TURN_OFF,
-    VCCommand::WHERE_ARE_YOU,
+    VCCommand::VC_UNKNOWN,       VCCommand::VC_WAKE_UP,    VCCommand::VC_TURN_LEFT,
+    VCCommand::VC_TURN_RIGHT,    VCCommand::VC_PLAY_MUSIC, VCCommand::VC_FOOL,
+    VCCommand::VC_STOP,          VCCommand::VC_TURN_ON,    VCCommand::VC_TURN_OFF,
+    VCCommand::VC_WHERE_ARE_YOU,
 };
 
 extern String ToString(VCCommand cmd);
