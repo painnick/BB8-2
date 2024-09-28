@@ -6,6 +6,7 @@
 #include "controllers/BluetoothController.h"
 #include "controllers/Mp3Controller.h"
 #include "controllers/VoiceCommander.h"
+#include "controllers/ShiftRegisterController.h"
 #include "pinmap.h"
 
 #define MAIN_TAG "Main"
@@ -14,6 +15,7 @@
 
 VoiceCommander vc02(Serial1);
 BluetoothController bt;
+ShiftRegisterController shiftRegister(SR_DATA_PIN, SR_LATCH_PIN, SR_CLOCK_PIN);
 
 void setup() {
   vc02.begin(115200, SERIAL_8N1, VOICE_COMMAND_RX_PIN, VOICE_COMMAND_TX_PIN);
@@ -24,6 +26,8 @@ void setup() {
   setDefaultVolume();
   delay(1000 * 3);
   playWelcome();
+
+  shiftRegister.set(0xFF, 0xFF);
 }
 
 uint32_t lastAliveSoundChecked = 0;
@@ -48,4 +52,5 @@ void loop() {
     lastAliveSoundChecked = now;
   }
   dfmp3.loop();
+  shiftRegister.loop(now);
 }
