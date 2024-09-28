@@ -48,6 +48,7 @@ void loop() {
 
   auto now = millis();
   if (now - lastAliveSoundChecked > ALIVE_SOUND_INTERVAL_MS) {
+    setDefaultVolume();
     playAlive();
     lastAliveSoundChecked = now;
   }
