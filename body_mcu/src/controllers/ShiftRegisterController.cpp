@@ -141,8 +141,8 @@ byte ShiftRegisterController::get() { return value1; }
 
 void ShiftRegisterController::internalSet(byte val1, byte val2) {
   digitalWrite(pin_latch, LOW);
-  shiftOut(pin_data, pin_clock, LSBFIRST, val1);
-  shiftOut(pin_data, pin_clock, LSBFIRST, val2);
+  shiftOut(pin_data, pin_clock, MSBFIRST, val1);
+  shiftOut(pin_data, pin_clock, MSBFIRST, val2);
   digitalWrite(pin_latch, HIGH);
 
   ESP_LOGD(SR_TAG, "%02X %02X", val1, val2);
