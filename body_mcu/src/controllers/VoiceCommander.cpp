@@ -4,15 +4,18 @@
 
 #include "VoiceCommander.h"
 
-VoiceCommander::VoiceCommander(HardwareSerial &serial) : serial(serial) {}
+VoiceCommander::VoiceCommander(HardwareSerial &serial) : serial(serial), buffer{0} {}
 
-VoiceCommander::~VoiceCommander() {}
+VoiceCommander::~VoiceCommander() = default;
 
-void VoiceCommander::begin(unsigned long baud, uint32_t config, int8_t rxPin,
-                           int8_t txPin, bool invert, unsigned long timeout_ms,
+void VoiceCommander::begin(unsigned long baud,
+                           uint32_t config,
+                           int8_t rxPin,
+                           int8_t txPin,
+                           bool invert,
+                           unsigned long timeout_ms,
                            uint8_t rxfifo_full_thrhd) {
-  serial.begin(baud, config, rxPin, txPin, invert, timeout_ms,
-               rxfifo_full_thrhd);
+  serial.begin(baud, config, rxPin, txPin, invert, timeout_ms, rxfifo_full_thrhd);
 }
 
 Command VoiceCommander::receive() {

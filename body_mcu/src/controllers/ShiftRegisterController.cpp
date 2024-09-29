@@ -7,7 +7,11 @@
 ShiftRegisterController::ShiftRegisterController(uint8_t data_pin,
                                                  uint8_t latch_pin,
                                                  uint8_t clock_pin)
-    : pin_data(data_pin), pin_latch(latch_pin), pin_clock(clock_pin), value1(0),
+    : pin_data(data_pin),
+      pin_latch(latch_pin),
+      pin_clock(clock_pin),
+      value1(0),
+      value2(0),
       changed(false) {
   pinMode(pin_data, OUTPUT);
   pinMode(pin_latch, OUTPUT);
@@ -16,40 +20,40 @@ ShiftRegisterController::ShiftRegisterController(uint8_t data_pin,
 
 void ShiftRegisterController::loop(unsigned long now, bool forceUpdate) {
   switch (mode) {
-  case ShiftRegisterMode::FIXED:
-    if (forceUpdate || changed) {
-      internalSet(value1, value2);
-      changed = false;
-    }
-    break;
-  case ShiftRegisterMode::ACTIONS:
-    if (actions.isEmpty()) {
+    case ShiftRegisterMode::FIXED:
       if (forceUpdate || changed) {
         internalSet(value1, value2);
+        changed = false;
       }
-      changed = false;
-    } else {
-      SR_ACTION lastAction = actions.first();
-      if (lastAction.endMs > now) {
-        ESP_LOGD(SR_TAG, "Shift First Action");
-        actions.shift();
+      break;
+    case ShiftRegisterMode::ACTIONS:
+      if (actions.isEmpty()) {
+        if (forceUpdate || changed) {
+          internalSet(value1, value2);
+        }
+        changed = false;
+      } else {
+        SR_ACTION lastAction = actions.first();
+        if (lastAction.endMs > now) {
+          ESP_LOGD(SR_TAG, "Shift First Action");
+          actions.shift();
 
-        if (!actions.isEmpty()) {
-          ESP_LOGD(SR_TAG, "Next Action");
-          SR_ACTION newAction = actions.first();
-          internalSet(newAction.val1, newAction.val2);
+          if (!actions.isEmpty()) {
+            ESP_LOGD(SR_TAG, "Next Action");
+            SR_ACTION newAction = actions.first();
+            internalSet(newAction.val1, newAction.val2);
+          }
         }
       }
-    }
-    break;
-  case ShiftRegisterMode::RANDOM:
-    if (now - lastChecked > RANDOM_INTERVAL_MS) {
-      internalSet(random(256), random(256));
-      lastChecked = now;
-    }
-    break;
-  default:
-    break;
+      break;
+    case ShiftRegisterMode::RANDOM:
+      if (now - lastChecked > RANDOM_INTERVAL_MS) {
+        internalSet(random(256), random(256));
+        lastChecked = now;
+      }
+      break;
+    default:
+      break;
   }
 }
 
@@ -137,9 +141,9 @@ void ShiftRegisterController::append(SR_ACTION action) {
   }
 }
 
-byte ShiftRegisterController::get() { return value1; }
+byte ShiftRegisterController::get() const { return value1; }
 
-void ShiftRegisterController::internalSet(byte val1, byte val2) {
+void ShiftRegisterController::internalSet(byte val1, byte val2) const {
   digitalWrite(pin_latch, LOW);
   shiftOut(pin_data, pin_clock, MSBFIRST, val1);
   shiftOut(pin_data, pin_clock, MSBFIRST, val2);

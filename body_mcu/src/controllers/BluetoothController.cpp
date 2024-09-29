@@ -4,17 +4,19 @@
 
 #include "BluetoothController.h"
 
+#include <utility>
+
 void BluetoothController::begin(String name) {
-  serial.begin(name);
-  serial.register_callback(
-      [](esp_spp_cb_event_t evt, esp_spp_cb_param_t *param) {
-        switch (evt) {
-        case ESP_SPP_SRV_OPEN_EVT:
-          break;
-        default:
-          break;
-        }
-      });
+  serial.begin(std::move(name));
+  serial.register_callback([](esp_spp_cb_event_t evt, esp_spp_cb_param_t *param) {
+    switch (evt) {
+      case ESP_SPP_SRV_OPEN_EVT:
+        // TODO. Send Command list
+        break;
+      default:
+        break;
+    }
+  });
 }
 
 Command BluetoothController::receive() {

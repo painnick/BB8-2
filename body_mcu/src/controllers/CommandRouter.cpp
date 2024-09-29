@@ -9,13 +9,12 @@
 #define MAX_COMMAND_BUFFER_SIZE 50
 
 CommandRouter::CommandRouter(SoftwareSerial &serial) : serial(serial) {}
-CommandRouter::~CommandRouter() {}
+CommandRouter::~CommandRouter() = default;
 
 void CommandRouter::init(CommandCallback callback) {
   proc = std::move(callback);
 }
-void CommandRouter::begin(uint32_t baud, EspSoftwareSerial::Config config,
-                          int8_t rxPin, int8_t txPin) {
+void CommandRouter::begin(uint32_t baud, EspSoftwareSerial::Config config, int8_t rxPin, int8_t txPin) {
   serial.begin(baud, config, rxPin, txPin);
 }
 
@@ -23,7 +22,7 @@ void CommandRouter::loop() {
   if (serial.available()) {
     // Append command-buffer
     while (serial.available()) {
-      cmdBuffer += (char)serial.read();
+      cmdBuffer += (char) serial.read();
     }
     // Check size of command-buffer
     if (cmdBuffer.length() > MAX_COMMAND_BUFFER_SIZE) {

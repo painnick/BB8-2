@@ -18,9 +18,8 @@ enum ShiftRegisterMode {
 };
 
 class ShiftRegisterController {
-public:
-  ShiftRegisterController(uint8_t data_pin, uint8_t latch_pin,
-                          uint8_t clock_pin);
+ public:
+  ShiftRegisterController(uint8_t data_pin, uint8_t latch_pin, uint8_t clock_pin);
 
   void loop(unsigned long now, bool forceUpdate = false);
 
@@ -32,7 +31,7 @@ public:
 
   void clear();
 
-  byte get();
+  byte get() const;
 
   void append(SR_ACTION action);
 
@@ -40,7 +39,7 @@ public:
 
   void randomLight(boolean isOn);
 
-private:
+ private:
   uint8_t pin_data;
   uint8_t pin_latch;
   uint8_t pin_clock;
@@ -56,7 +55,7 @@ private:
 
   CircularBuffer<SR_ACTION, 10> actions;
 
-  void internalSet(byte val1, byte val2);
+  void internalSet(byte val1, byte val2) const;
 };
 
 extern ShiftRegisterController shiftRegister;

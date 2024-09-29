@@ -19,12 +19,18 @@ enum Command : uint64_t {
   WHERE_ARE_YOU = 0xFFFFFF01,
 };
 
-extern String ToString(const Command& cmd);
+extern String ToString(const Command &cmd);
 
 static Command Commands[COMMAND_COUNT] = {
-    Command::UNKNOWN,       Command::WAKE_UP,    Command::TURN_LEFT,
-    Command::TURN_RIGHT,    Command::PLAY_MUSIC, Command::FOOL,
-    Command::STOP,          Command::TURN_ON,    Command::TURN_OFF,
+    Command::UNKNOWN,
+    Command::WAKE_UP,
+    Command::TURN_LEFT,
+    Command::TURN_RIGHT,
+    Command::PLAY_MUSIC,
+    Command::FOOL,
+    Command::STOP,
+    Command::TURN_ON,
+    Command::TURN_OFF,
     Command::WHERE_ARE_YOU,
 };
 
