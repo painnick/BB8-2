@@ -254,11 +254,6 @@ static esp_err_t stream_handler(httpd_req_t *req) {
 
     );
 #endif
-    log_i(
-        "MJPG: %uB %ums (%.1ffps), AVG: %ums (%.1ffps)",
-        (uint32_t) (_jpg_buf_len), (uint32_t) frame_time, 1000.0 / (uint32_t) frame_time, avg_frame_time, 1000.0 / avg_frame_time
-
-    );
   }
 
   return res;
