@@ -102,7 +102,10 @@ void shiftRegisterOff(int index) {
   value1 = newVal1;
 }
 
-void clearShiftRegister() {
+void clearShiftRegister(bool fixed) {
+  if (fixed)
+    mode = ShiftRegisterMode::FIXED;
+
   value1 = 0;
   changed = true;
 }

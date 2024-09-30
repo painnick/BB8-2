@@ -77,7 +77,10 @@ void process(const String &cmd) {
   } else if (cmd == "RANDOM2") {
     randomLight(false);
     ackCommand(cmd);
-  } else {
+  } else if (cmd == "LIGHTOFF") {
+    clearShiftRegister();
+    ackCommand(cmd);
+  }else {
     ackCommand("Unknown");
     log_w("Unhandled command : %s", cmd);
   }

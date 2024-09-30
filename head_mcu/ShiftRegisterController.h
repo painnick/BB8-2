@@ -22,7 +22,7 @@ void loopShiftRegister(unsigned long now, bool forceUpdate = false);
 void setShiftRegister(byte newVal1);
 void shiftRegisterOn(int index);
 void shiftRegisterOff(int index);
-void clearShiftRegister();
+void clearShiftRegister(bool fixed = true);
 void appendShiftRegisterAction(SR_ACTION action);
 byte getShiftRegisterValue();
 void warningMessage();
