@@ -5,21 +5,18 @@
 #include "app_httpd.h"
 #include "camera_control.h"
 #include "pins.h"
+#include "command_router.h"
 
 #define ARDUHAL_LOG_LEVEL ARDUHAL_LOG_LEVEL_WARN
 
-#define cmdSerial Serial1
-#define COMMAND_DELIMETER "/|"
-#define COMMAND_DELIMETER_SIZE 2
-#define MAX_COMMAND_BUFFER_SZIE 50
+void process(const String &cmd);
 
 bool isWifiOn = true;
 
 void setup() {
-  cmdSerial.begin(9600, SERIAL_8N1, PIN_RX, PIN_TX);
-  log_i("Commander setup");
-
   initCamera();
+
+  commandRouterBegin(process);
 
   if (isWifiOn) {
     initSoftAP();
@@ -28,56 +25,8 @@ void setup() {
   }
 }
 
-unsigned long lastTime = 0;
-unsigned long bufferSetUntil = 0;
-String cmdBuffer = "";
 void loop() {
-  unsigned long now = millis();
-  if (now - lastTime > 1000 * 10) {
-    lastTime = now;
-    cmdSerial.printf("Keep from HEAD");
-    cmdSerial.printf(COMMAND_DELIMETER);
-    cmdSerial.flush();
-    log_d("=> Keep from HEAD");
-  }
-
-  if (cmdSerial.available()) {
-    if (now > bufferSetUntil) {
-      cmdBuffer = "";
-      log_w("Buffer Timeout");
-    }
-
-    // Append command-buffer
-    while (cmdSerial.available()) {
-      cmdBuffer += (char) cmdSerial.read();
-      log_d("Buffer ::" + cmdBuffer + "::");
-    }
-    // Check size of command-buffer
-    if (cmdBuffer.length() > MAX_COMMAND_BUFFER_SZIE) {
-      cmdBuffer = "";
-      log_d("Clear Buffer!");
-    } else {
-      while (-1 != cmdBuffer.indexOf(COMMAND_DELIMETER)) {
-        int found = cmdBuffer.indexOf(COMMAND_DELIMETER);
-        if (found != -1) {
-          String cmd = cmdBuffer.substring(0, found);
-          cmdBuffer = cmdBuffer.substring(found + COMMAND_DELIMETER_SIZE);
-          log_d("<=  %s ===", cmd);
-          process(cmd);
-        }
-      }
-    }
-
-    bufferSetUntil = now + 1000;
-  }
-}
-
-void ackCommand(const String &cmd) {
-  cmdSerial.printf("ACK.");
-  cmdSerial.printf(COMMAND_DELIMETER);
-  cmdSerial.flush();
-
-  log_d("=> ACK : %s", cmd);
+  commandRouterLoop();
 }
 
 void process(const String &cmd) {
