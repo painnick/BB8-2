@@ -20,18 +20,15 @@ void setup() {
 
   commandRouterBegin(process);
 
-  initSoftAP();// Test
-  startCameraServer();// Test
-  blinkWifiLed();// Test
+//  initSoftAP();// Test
+//  startCameraServer();// Test
+//  blinkWifiLed();// Test
+//  randomLight(true);
 }
 
 void loop() {
   auto now = millis();
   auto isEnd = loopLed(now);
-  if (isEnd) {
-    log_w("NO MORE LED Action!");
-    delay(1000);
-  }
   if (isEnd && isAPOn()) {
     log_d("Recall Blink LED");
     blinkWifiLed();
