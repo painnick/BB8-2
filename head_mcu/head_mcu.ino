@@ -23,7 +23,11 @@ void setup() {
 //  initSoftAP();// Test
 //  startCameraServer();// Test
 //  blinkWifiLed();// Test
-//  randomLight(true);
+
+//  randomLight(true);// Test
+
+  clearWifiLed(true);
+  clearShiftRegister(true);
 }
 
 void loop() {
