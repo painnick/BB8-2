@@ -5,7 +5,6 @@
 typedef struct {
   unsigned long endMs;
   byte val1;
-  byte val2;
 } SR_ACTION;
 
 enum ShiftRegisterMode {
