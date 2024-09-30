@@ -18,8 +18,7 @@ void commandRouterBegin(CommandCallback cb) {
 unsigned long lastTime = 0;
 unsigned long bufferSetUntil = 0;
 String cmdBuffer = "";
-void commandRouterLoop() {
-  unsigned long now = millis();
+void commandRouterLoop(unsigned long now) {
   if (now - lastTime > 1000 * 10) {
     lastTime = now;
     cmdSerial.printf("Keep from HEAD");

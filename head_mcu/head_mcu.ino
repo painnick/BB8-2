@@ -47,7 +47,7 @@ void loop() {
       lastWifiLedChecked = now;
     }
   }
-  commandRouterLoop();
+  commandRouterLoop(now);
   loopShiftRegister(now);
 }
 
