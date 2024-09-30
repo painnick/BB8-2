@@ -5,3 +5,4 @@
 
 void initSoftAP();
 void closeSoftAP();
+bool isAPOn();

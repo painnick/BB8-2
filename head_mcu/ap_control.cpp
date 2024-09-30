@@ -24,6 +24,8 @@ const char *password = "aaaa1111";
 #define SOFT_AP_NM_ADDRESS_3 255
 #define SOFT_AP_NM_ADDRESS_4 0
 
+bool _isAPOn = false;
+
 void initSoftAP() {
   WiFi.disconnect();
   WiFi.mode(WIFI_AP);
@@ -34,9 +36,17 @@ void initSoftAP() {
   WiFi.softAP(SOFT_AP_SSID /*, SOFT_AP_PASSWORD */);
   WiFi.setSleep(false);
 
-  log_i("SoftAP setup");
+  _isAPOn = true;
+
+  log_i("Turn on SoftAP");
 }
 
 void closeSoftAP() {
   WiFi.softAPdisconnect(true);
+  _isAPOn = false;
+  log_i("Turn off SoftAP");
+}
+
+bool isAPOn() {
+  return _isAPOn;
 }
