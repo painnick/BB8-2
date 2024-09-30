@@ -6,6 +6,8 @@
 
 #include "pins.h"
 
+#define SR_TAG "SR"
+
 #define RANDOM_INTERVAL_MS 300
 
 ShiftRegisterMode mode{FIXED};

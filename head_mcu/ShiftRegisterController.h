@@ -1,9 +1,6 @@
 #pragma once
 
 #include <Arduino.h>
-#include <CircularBuffer.hpp>
-
-#define SR_TAG "SR"
 
 typedef struct {
   unsigned long endMs;
