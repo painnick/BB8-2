@@ -23,8 +23,6 @@
 #include "img_converters.h"
 #include "sdkconfig.h"
 
-#define ARDUHAL_LOG_LEVEL ARDUHAL_LOG_LEVEL_WARN
-
 typedef struct {
   httpd_req_t *req;
   size_t len;
@@ -706,5 +704,11 @@ void startCameraServer() {
   log_i("Starting stream server on port: '%d'", config.server_port);
   if (httpd_start(&stream_httpd, &config) == ESP_OK) {
     httpd_register_uri_handler(stream_httpd, &stream_uri);
+  }
+}
+
+void stopCameraServer() {
+  if (camera_httpd != NULL) {
+    httpd_stop(camera_httpd);
   }
 }
