@@ -31,7 +31,6 @@ bool loopLed(unsigned long now) {
 
   switch (ledMode) {
     case LedMode::LED_MODE_FIXED:
-      ESP_LOGD(LED_TAG, "FIXED");
       if (ledChanged) {
         ESP_LOGD(LED_TAG, "FIXED. Changed");
         internalLedSet(ledDuty);
