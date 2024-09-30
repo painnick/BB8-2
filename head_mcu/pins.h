@@ -37,3 +37,7 @@
 
 #define WIFI_LED_PIN 4 // Flash
 #define WIFI_LED_CH 3
+
+#define SR_DATA_PIN 2
+#define SR_LATCH_PIN 12
+#define SR_CLOCK_PIN 13

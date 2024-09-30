@@ -6,6 +6,7 @@
 #include "camera_control.h"
 #include "pins.h"
 #include "command_router.h"
+#include "ShiftRegisterController.h"
 
 #define ARDUHAL_LOG_LEVEL ARDUHAL_LOG_LEVEL_WARN
 
@@ -20,6 +21,9 @@ int WifiLedIndex = WIFI_LED_INDEX_SIZE / 2;
 
 void setup() {
   ledcAttachChannel(WIFI_LED_PIN, 1000, 8, WIFI_LED_CH);
+
+  initShiftRegister();
+  setShiftRegister(0xFF);
 
   initCamera();
 
@@ -44,6 +48,7 @@ void loop() {
     }
   }
   commandRouterLoop();
+  loopShiftRegister(now);
 }
 
 
