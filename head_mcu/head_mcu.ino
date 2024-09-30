@@ -19,6 +19,10 @@ void setup() {
   initCamera();
 
   commandRouterBegin(process);
+
+  initSoftAP();// Test
+  startCameraServer();// Test
+  blinkWifiLed();// Test
 }
 
 void loop() {
