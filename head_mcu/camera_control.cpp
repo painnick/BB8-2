@@ -1,4 +1,4 @@
-#include "camera_controll.h"
+#include "camera_control.h"
 
 void initCamera() {
   camera_config_t config;

@@ -3,7 +3,7 @@
 #include <WiFi.h>
 
 #include "app_httpd.h"
-#include "camera_controll.h"
+#include "camera_control.h"
 
 #define ARDUHAL_LOG_LEVEL ARDUHAL_LOG_LEVEL_WARN
 
