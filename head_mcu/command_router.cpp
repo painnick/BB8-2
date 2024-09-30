@@ -65,4 +65,3 @@ void ackCommand(const String &cmd) {
 
   log_d("=> ACK : %s", cmd);
 }
-

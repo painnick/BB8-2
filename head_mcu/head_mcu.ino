@@ -1,12 +1,12 @@
 #include "esp32-hal-log.h"
 #include <Arduino.h>
 
+#include "ShiftRegisterController.h"
 #include "ap_control.h"
 #include "app_httpd.h"
 #include "camera_control.h"
-#include "pins.h"
 #include "command_router.h"
-#include "ShiftRegisterController.h"
+#include "pins.h"
 
 #define ARDUHAL_LOG_LEVEL ARDUHAL_LOG_LEVEL_WARN
 
@@ -50,8 +50,6 @@ void loop() {
   commandRouterLoop(now);
   loopShiftRegister(now);
 }
-
-
 
 void process(const String &cmd) {
   if (cmd == "WIFION") {

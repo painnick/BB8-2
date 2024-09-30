@@ -35,7 +35,7 @@
 
 // 16 PSRAM
 
-#define WIFI_LED_PIN 4 // Flash
+#define WIFI_LED_PIN 4// Flash
 #define WIFI_LED_CH 3
 
 #define SR_DATA_PIN 2
