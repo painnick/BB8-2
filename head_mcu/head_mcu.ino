@@ -1,5 +1,5 @@
-#include <Arduino.h>
 #include "esp_camera.h"
+#include <Arduino.h>
 #include <WiFi.h>
 
 //
@@ -25,17 +25,17 @@ const char *password = "aaaa1111";
 
 #define SOFT_AP_SSID "BB-8"
 #define SOFT_AP_PASSWORD "aaaa1111"
- 
+
 #define SOFT_AP_IP_ADDRESS_1 192
 #define SOFT_AP_IP_ADDRESS_2 168
 #define SOFT_AP_IP_ADDRESS_3 1
 #define SOFT_AP_IP_ADDRESS_4 100
- 
+
 #define SOFT_AP_GW_ADDRESS_1 192
 #define SOFT_AP_GW_ADDRESS_2 168
 #define SOFT_AP_GW_ADDRESS_3 1
 #define SOFT_AP_GW_ADDRESS_4 10
- 
+
 #define SOFT_AP_NM_ADDRESS_1 255
 #define SOFT_AP_NM_ADDRESS_2 255
 #define SOFT_AP_NM_ADDRESS_3 255
@@ -69,7 +69,7 @@ void setup() {
   config.pin_reset = RESET_GPIO_NUM;
   config.xclk_freq_hz = 20000000;
   config.frame_size = FRAMESIZE_UXGA;
-  config.pixel_format = PIXFORMAT_JPEG;  // for streaming
+  config.pixel_format = PIXFORMAT_JPEG;// for streaming
   //config.pixel_format = PIXFORMAT_RGB565; // for face detection/recognition
   config.grab_mode = CAMERA_GRAB_WHEN_EMPTY;
   config.fb_location = CAMERA_FB_IN_PSRAM;
@@ -103,9 +103,9 @@ void setup() {
   sensor_t *s = esp_camera_sensor_get();
   // initial sensors are flipped vertically and colors are a bit saturated
   if (s->id.PID == OV3660_PID) {
-    s->set_vflip(s, 1);        // flip it back
-    s->set_brightness(s, 1);   // up the brightness just a bit
-    s->set_saturation(s, -2);  // lower the saturation
+    s->set_vflip(s, 1);      // flip it back
+    s->set_brightness(s, 1); // up the brightness just a bit
+    s->set_saturation(s, -2);// lower the saturation
   }
   // drop down frame size for higher initial frame rate
   if (config.pixel_format == PIXFORMAT_JPEG) {
