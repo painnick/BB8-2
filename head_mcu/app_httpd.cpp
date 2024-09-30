@@ -13,13 +13,13 @@
 // limitations under the License.
 #include <Arduino.h>
 
-#include "camera_index.h"
 #include "esp32-hal-ledc.h"
 #include "esp32-hal-log.h"
 #include "esp_camera.h"
 #include "esp_http_server.h"
 #include "esp_timer.h"
 #include "fb_gfx.h"
+#include "html_pages.h"
 #include "img_converters.h"
 #include "sdkconfig.h"
 
