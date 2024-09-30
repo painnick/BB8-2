@@ -3,6 +3,8 @@
 #include <Arduino.h>
 #include <WiFi.h>
 
+#include "app_httpd.h"
+
 #define ARDUHAL_LOG_LEVEL ARDUHAL_LOG_LEVEL_WARN
 
 #define PIN_RX 15
@@ -51,9 +53,6 @@ const char *password = "aaaa1111";
 #define SOFT_AP_NM_ADDRESS_2 255
 #define SOFT_AP_NM_ADDRESS_3 255
 #define SOFT_AP_NM_ADDRESS_4 0
-
-void startCameraServer();
-void stopCameraServer();
 
 void initCamera() {
   camera_config_t config;
