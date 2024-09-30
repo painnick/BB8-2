@@ -70,24 +70,15 @@ void process(const String &cmd) {
       isWifiOn = false;
     }
     ackCommand(cmd);
-    //  } else if (cmd == "LED1ON") {
-    //    digitalWrite(PIN_LED1, HIGH);
-    //    ackCommand(cmd);
-    //  } else if (cmd == "LED1OFF") {
-    //    digitalWrite(PIN_LED1, LOW);
-    //    ackCommand(cmd);
-    //  } else if (cmd == "LED2ON") {
-    //    digitalWrite(PIN_LED2, HIGH);
-    //    ackCommand(cmd);
-    //  } else if (cmd == "LED2OFF") {
-    //    digitalWrite(PIN_LED2, LOW);
-    //    ackCommand(cmd);
-    //  } else if (cmd == "LED3ON") {
-    //    digitalWrite(PIN_LED3, HIGH);
-    //    ackCommand(cmd);
-    //  } else if (cmd == "LED3OFF") {
-    //    digitalWrite(PIN_LED3, LOW);
-    //    ackCommand(cmd);
+  } else if (cmd == "WARN") {
+    warningMessage();
+    ackCommand(cmd);
+  } else if (cmd == "RANDOM1") {
+    randomLight(true);
+    ackCommand(cmd);
+  } else if (cmd == "RANDOM2") {
+    randomLight(false);
+    ackCommand(cmd);
   } else {
     ackCommand("Unknown");
     log_w("Unhandled command : %s", cmd);
