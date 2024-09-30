@@ -93,11 +93,6 @@ void setup() {
     config.frame_size = FRAMESIZE_240X240;
   }
 
-#if defined(CAMERA_MODEL_ESP_EYE)
-  pinMode(13, INPUT_PULLUP);
-  pinMode(14, INPUT_PULLUP);
-#endif
-
   // camera init
   esp_err_t err = esp_camera_init(&config);
   if (err != ESP_OK) {
