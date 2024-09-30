@@ -36,7 +36,7 @@ void commandRouterLoop(unsigned long now) {
     // Append command-buffer
     while (cmdSerial.available()) {
       cmdBuffer += (char) cmdSerial.read();
-      log_d("Buffer ::" + cmdBuffer + "::");
+      log_d("Buffer ::%s::", cmdBuffer);
     }
     // Check size of command-buffer
     if (cmdBuffer.length() > MAX_COMMAND_BUFFER_SIZE) {
