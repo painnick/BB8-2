@@ -28,7 +28,7 @@
 // Select camera model
 // ===================
 // #define CAMERA_MODEL_AI_THINKER // Has PSRAM
-#include "camera_pins.h"
+#include "pins.h"
 
 // ===========================
 // Enter your WiFi credentials
