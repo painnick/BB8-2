@@ -2,24 +2,16 @@
 #include <Arduino.h>
 
 #include "ShiftRegisterController.h"
+#include "WifiLED.h"
 #include "ap_control.h"
 #include "app_httpd.h"
 #include "camera_control.h"
 #include "command_router.h"
-#include "pins.h"
-
-#define ARDUHAL_LOG_LEVEL ARDUHAL_LOG_LEVEL_WARN
-
-#define WIFI_LED_BRIGHT 31
-#define WIFI_LED_DURATION_MS 300
-#define WIFI_LED_INDEX_SIZE (1000 * 5 / WIFI_LED_DURATION_MS)
 
 void process(const String &cmd);
 
-int WifiLedIndex = WIFI_LED_INDEX_SIZE / 2;
-
 void setup() {
-  ledcAttachChannel(WIFI_LED_PIN, 1000, 8, WIFI_LED_CH);
+  initLed();
 
   initShiftRegister();
   setShiftRegister(0xFF);
@@ -29,15 +21,16 @@ void setup() {
   commandRouterBegin(process);
 }
 
-unsigned long lastWifiLedChecked = 0;
 void loop() {
   auto now = millis();
-  if (isAPOn()) {
-    if (now - lastWifiLedChecked > WIFI_LED_DURATION_MS) {
-      WifiLedIndex = (WifiLedIndex + 1) % WIFI_LED_INDEX_SIZE;
-      ledcWrite(WIFI_LED_PIN, WifiLedIndex == 0 ? WIFI_LED_BRIGHT : 0);
-      lastWifiLedChecked = now;
-    }
+  auto isEnd = loopLed(now);
+  if (isEnd) {
+    log_w("NO MORE LED Action!");
+    delay(1000);
+  }
+  if (isEnd && isAPOn()) {
+    log_d("Recall Blink LED");
+    blinkWifiLed();
   }
   commandRouterLoop(now);
   loopShiftRegister(now);
@@ -48,14 +41,14 @@ void process(const String &cmd) {
     if (!isAPOn()) {
       initSoftAP();
       startCameraServer();
-      ledcWrite(WIFI_LED_PIN, WIFI_LED_BRIGHT);
+      blinkWifiLed();
     }
     ackCommand(cmd);
   } else if (cmd == "WIFIOFF") {
     if (isAPOn()) {
       stopCameraServer();
       closeSoftAP();
-      ledcWrite(WIFI_LED_PIN, 0);
+      clearWifiLed(true);
     }
     ackCommand(cmd);
   } else if (cmd == "WARN") {
@@ -70,7 +63,7 @@ void process(const String &cmd) {
   } else if (cmd == "LIGHTOFF") {
     clearShiftRegister();
     ackCommand(cmd);
-  }else {
+  } else {
     ackCommand("Unknown");
     log_w("Unhandled command : %s", cmd);
   }
