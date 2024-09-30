@@ -20,6 +20,7 @@ enum Command : uint64_t {
 };
 
 extern String ToString(const Command &cmd);
+extern Command ToCommand(const String&cmd);
 
 static Command Commands[COMMAND_COUNT] = {
     Command::UNKNOWN,

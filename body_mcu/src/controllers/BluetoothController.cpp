@@ -3,6 +3,7 @@
 //
 
 #include "BluetoothController.h"
+#include "command.h"
 
 #include <utility>
 
@@ -24,24 +25,7 @@ Command BluetoothController::receive() {
     String btCmd = serial.readString();
     ESP_LOGD(BT_TAG, "BT >> %s", btCmd.c_str());
 
-    if (btCmd == "wake_up")
-      return Command::WAKE_UP;
-    else if (btCmd == "turn_left")
-      return Command::TURN_LEFT;
-    else if (btCmd == "turn_right")
-      return Command::TURN_RIGHT;
-    else if (btCmd == "play_music")
-      return Command::PLAY_MUSIC;
-    else if (btCmd == "fool")
-      return Command::FOOL;
-    else if (btCmd == "stop")
-      return Command::STOP;
-    else if (btCmd == "turn_on")
-      return Command::TURN_ON;
-    else if (btCmd == "turn_off")
-      return Command::TURN_OFF;
-    else if (btCmd == "where")
-      return Command::WHERE_ARE_YOU;
+    return ToCommand(btCmd);
   }
   return Command::UNKNOWN;
 }
