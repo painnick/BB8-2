@@ -33,33 +33,33 @@ void initShiftRegister() {
   pinMode(SR_CLOCK_PIN, OUTPUT);
 }
 
-void loopShiftRegister(unsigned long now, bool forceUpdate) {
+bool loopShiftRegister(unsigned long now, bool forceUpdate) {
+  bool isLastAction = false;
   switch (mode) {
     case ShiftRegisterMode::FIXED:
       if (forceUpdate || changed) {
+        ESP_LOGD(SR_TAG, "FIXED. Changed");
         internalSet(value1);
         changed = false;
       }
+      isLastAction = true;
       break;
     case ShiftRegisterMode::ACTIONS:
       if (actions.isEmpty()) {
         if (forceUpdate || changed) {
+          ESP_LOGD(SR_TAG, "Empty. But forced or changed");
           internalSet(value1);
         }
         changed = false;
       } else {
         SR_ACTION lastAction = actions.first();
         if (lastAction.endMs > now) {
-          ESP_LOGD(SR_TAG, "Shift First Action");
-          actions.shift();
-
-          if (!actions.isEmpty()) {
-            ESP_LOGD(SR_TAG, "Next Action");
-            SR_ACTION newAction = actions.first();
-            internalSet(newAction.val1);
-          }
+          ESP_LOGD(SR_TAG, "Do Action");
+          SR_ACTION newAction = actions.shift();
+          internalSet(newAction.val1);
         }
       }
+      isLastAction = actions.isEmpty();
       break;
     case ShiftRegisterMode::RANDOM:
       if (now - lastChecked > RANDOM_INTERVAL_MS) {
@@ -68,8 +68,11 @@ void loopShiftRegister(unsigned long now, bool forceUpdate) {
       }
       break;
     default:
+      ESP_LOGW(SR_TAG, "Unhandled Mode!");
       break;
   }
+
+  return isLastAction;
 }
 
 void setShiftRegister(byte newVal1) {

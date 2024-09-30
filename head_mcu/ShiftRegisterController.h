@@ -14,7 +14,7 @@ enum ShiftRegisterMode {
 };
 
 void initShiftRegister();
-void loopShiftRegister(unsigned long now, bool forceUpdate = false);
+bool loopShiftRegister(unsigned long now, bool forceUpdate = false);
 void setShiftRegister(byte newVal1);
 void shiftRegisterOn(int index);
 void shiftRegisterOff(int index);
