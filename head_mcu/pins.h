@@ -30,8 +30,10 @@
 #define HREF_GPIO_NUM 23
 #define PCLK_GPIO_NUM 22
 
-// 4 for flash led or 33 for normal led
-#define LED_GPIO_NUM 4
-
 #define PIN_RX 15
 #define PIN_TX 14
+
+// 16 PSRAM
+
+#define WIFI_LED_PIN 4 // Flash
+#define WIFI_LED_CH 3

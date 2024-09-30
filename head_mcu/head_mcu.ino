@@ -9,11 +9,18 @@
 
 #define ARDUHAL_LOG_LEVEL ARDUHAL_LOG_LEVEL_WARN
 
+#define WIFI_LED_BRIGHT 17
+#define WIFI_LED_DURATION_MS 200
+#define WIFI_LED_INDEX_SIZE (1000 * 5 / WIFI_LED_DURATION_MS)
+
 void process(const String &cmd);
 
 bool isWifiOn = true;
+int WifiLedIndex = WIFI_LED_INDEX_SIZE / 2;
 
 void setup() {
+  ledcAttachChannel(WIFI_LED_PIN, 1000, 8, WIFI_LED_CH);
+
   initCamera();
 
   commandRouterBegin(process);
@@ -21,19 +28,32 @@ void setup() {
   if (isWifiOn) {
     initSoftAP();
     startCameraServer();
+    ledcWrite(WIFI_LED_PIN, WIFI_LED_BRIGHT);
     log_i("Camera Ready! Use 'http://%s' to connect", WiFi.softAPIP());
   }
 }
 
+unsigned long lastWifiLedChecked = 0;
 void loop() {
+  auto now = millis();
+  if (isWifiOn) {
+    if (now - lastWifiLedChecked > WIFI_LED_DURATION_MS) {
+      WifiLedIndex = (WifiLedIndex + 1) % WIFI_LED_INDEX_SIZE;
+      ledcWrite(WIFI_LED_PIN, WifiLedIndex == 0 ? WIFI_LED_BRIGHT : 0);
+      lastWifiLedChecked = now;
+    }
+  }
   commandRouterLoop();
 }
+
+
 
 void process(const String &cmd) {
   if (cmd == "WIFION") {
     if (!isWifiOn) {
       initSoftAP();
       startCameraServer();
+      ledcWrite(WIFI_LED_PIN, WIFI_LED_BRIGHT);
       isWifiOn = true;
     }
     ackCommand(cmd);
@@ -41,6 +61,7 @@ void process(const String &cmd) {
     if (isWifiOn) {
       stopCameraServer();
       closeSoftAP();
+      ledcWrite(WIFI_LED_PIN, 0);
       isWifiOn = false;
     }
     ackCommand(cmd);
