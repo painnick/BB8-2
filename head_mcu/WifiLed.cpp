@@ -40,7 +40,6 @@ bool loopLed(unsigned long now) {
       isLastAction = true;
       break;
     case LedMode::LED_MODE_ACTIONS:
-
       if (ledActions.isEmpty()) {
         if (ledChanged) {
           ESP_LOGD(LED_TAG, "Empty. But Changed");
