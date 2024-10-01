@@ -422,6 +422,7 @@ class DFMiniMp3 {
 
     _lastSendSpace = sendSpaceNeeded;
 
+#ifndef DISABLE_MP3_DEBUG_LOG
 #ifdef USE_MH2024K16SS
     ESP_LOGV(DFPLAYER_TAG,
              "==> STR:%02X VER:%02X LEN:%02X CMD:%02X ACK:%02X PAR1:%02X PAR2:%02X END:%02X",
@@ -446,6 +447,7 @@ class DFMiniMp3 {
              packet.hiByteCheckSum,
              packet.lowByteCheckSum,
              packet.endCode);
+#endif
 #endif
 
     _serial.write(reinterpret_cast<uint8_t *>(&packet), sizeof(packet));
@@ -494,7 +496,9 @@ class DFMiniMp3 {
       return false;
     }
 
+#ifndef DISABLE_MP3_DEBUG_LOG
     ESP_LOGV(DFPLAYER_TAG, "<== CMD:%02X PAR1:%02X PAR2:%02X", in.command, in.hiByteArgument, in.lowByteArgument);
+#endif
     *command = in.command;
     *argument = ((in.hiByteArgument << 8) | in.lowByteArgument);
 
@@ -511,7 +515,9 @@ class DFMiniMp3 {
         if (command != 0 && command == replyCommand) {
           return replyArg;
         } else {
+#ifndef DISABLE_MP3_DEBUG_LOG
           ESP_LOGV(DFPLAYER_TAG, "replyCommand %02X", replyCommand);
+#endif
           switch (replyCommand) {
             case 0x3c:// usb
             case 0x4b:// usb on MH2024K-16SS
