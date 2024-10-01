@@ -65,3 +65,11 @@ void ackCommand(const String &cmd) {
 
   log_d("=> ACK : %s", cmd);
 }
+
+void sendCommand(const String &cmd) {
+  cmdSerial.printf(cmd.c_str());
+  cmdSerial.printf(COMMAND_DELIMITER);
+  cmdSerial.flush();
+
+  log_d("<= Send : %s", cmd);
+}

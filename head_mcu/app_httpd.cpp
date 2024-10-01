@@ -23,6 +23,8 @@
 #include "img_converters.h"
 #include "sdkconfig.h"
 
+#include "command_router.h"
+
 typedef struct {
   httpd_req_t *req;
   size_t len;
@@ -612,6 +614,32 @@ static esp_err_t index_handler(httpd_req_t *req) {
   }
 }
 
+static esp_err_t turn_left_handler(httpd_req_t *req) {
+  char *buf = NULL;
+
+  if (parse_get(req, &buf) != ESP_OK) {
+    return ESP_FAIL;
+  }
+
+  sendCommand("turn_left");
+
+  httpd_resp_set_hdr(req, "Access-Control-Allow-Origin", "*");
+  return httpd_resp_send(req, NULL, 0);
+}
+
+static esp_err_t turn_right_handler(httpd_req_t *req) {
+  char *buf = NULL;
+
+  if (parse_get(req, &buf) != ESP_OK) {
+    return ESP_FAIL;
+  }
+
+  sendCommand("turn_right");
+
+  httpd_resp_set_hdr(req, "Access-Control-Allow-Origin", "*");
+  return httpd_resp_send(req, NULL, 0);
+}
+
 void startCameraServer() {
   httpd_config_t config = HTTPD_DEFAULT_CONFIG();
   config.max_uri_handlers = 16;
@@ -682,6 +710,18 @@ void startCameraServer() {
       .handler = win_handler,
       .user_ctx = NULL};
 
+  httpd_uri_t turn_left_uri = {
+      .uri = "/left",
+      .method = HTTP_GET,
+      .handler = turn_left_handler,
+      .user_ctx = NULL};
+
+  httpd_uri_t turn_right_uri = {
+      .uri = "/right",
+      .method = HTTP_GET,
+      .handler = turn_right_handler,
+      .user_ctx = NULL};
+
   ra_filter_init(&ra_filter, 20);
 
   log_i("Starting web server on port: '%d'", config.server_port);
@@ -697,6 +737,9 @@ void startCameraServer() {
     httpd_register_uri_handler(camera_httpd, &greg_uri);
     httpd_register_uri_handler(camera_httpd, &pll_uri);
     httpd_register_uri_handler(camera_httpd, &win_uri);
+
+    httpd_register_uri_handler(camera_httpd, &turn_left_uri);
+    httpd_register_uri_handler(camera_httpd, &turn_right_uri);
   }
 
   config.server_port += 1;
