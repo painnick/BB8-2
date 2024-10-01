@@ -19,11 +19,9 @@ unsigned long lastTime = 0;
 unsigned long bufferSetUntil = 0;
 String cmdBuffer = "";
 void commandRouterLoop(unsigned long now) {
-  if (now - lastTime > 1000 * 10) {
+  if (now - lastTime > 1000 * 30) {
     lastTime = now;
-    cmdSerial.printf("Keep from HEAD");
-    cmdSerial.printf(COMMAND_DELIMITER);
-    cmdSerial.flush();
+    sendCommand("KeepAlive");
     log_d("=> Keep from HEAD");
   }
 
