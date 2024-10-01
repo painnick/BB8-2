@@ -8,6 +8,8 @@ String ToString(const Command &cmd) {
       return "Unknown";
     case Command::WAKE_UP:
       return "WAKE_UP";
+    case Command::BYE:
+      return "BYE";
     case Command::TURN_LEFT:
       return "TURN_LEFT";
     case Command::TURN_RIGHT:
@@ -43,6 +45,8 @@ String ToString(const Command &cmd) {
 Command ToCommand(const String&cmd) {
   if (cmd == "wake_up")
     return Command::WAKE_UP;
+  else if (cmd == "bye")
+    return Command::BYE;
   else if (cmd == "turn_left")
     return Command::TURN_LEFT;
   else if (cmd == "turn_right")

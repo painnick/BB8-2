@@ -9,6 +9,7 @@ class BluetoothController;
 enum Command : uint64_t {
   UNKNOWN = 0x43434343,
   WAKE_UP = 0x00000001,
+  BYE = 0x00000002,
   TURN_LEFT = 0x01000100,
   TURN_RIGHT = 0x01000200,
   PLAY_MUSIC = 0x70000000,
@@ -26,11 +27,12 @@ enum Command : uint64_t {
 };
 
 extern String ToString(const Command &cmd);
-extern Command ToCommand(const String&cmd);
+extern Command ToCommand(const String &cmd);
 
 static Command Commands[COMMAND_COUNT] = {
     Command::UNKNOWN,
     Command::WAKE_UP,
+    Command::BYE,
     Command::TURN_LEFT,
     Command::TURN_RIGHT,
     Command::PLAY_MUSIC,
@@ -39,7 +41,6 @@ static Command Commands[COMMAND_COUNT] = {
     Command::TURN_ON,
     Command::TURN_OFF,
     Command::WHERE_ARE_YOU,
-
 
     Command::HEAD_MOVE_OPPOSITE,
     Command::HEAD_MOVE_RANDOM,

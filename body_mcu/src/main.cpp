@@ -76,6 +76,11 @@ void processCommand(Command cmd) {
   switch (cmd) {
     case Command::WAKE_UP:
       playHello();
+      router.send("WIFION");
+      break;
+    case Command::BYE:
+      playBye();
+      router.send("WIFIOFF");
       break;
     case Command::TURN_LEFT:
       motorController.left(1000);
