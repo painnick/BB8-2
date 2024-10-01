@@ -10,7 +10,7 @@
 CommandCallback callback;
 
 void commandRouterBegin(CommandCallback cb) {
-  cmdSerial.begin(115200, SERIAL_8N1, PIN_RX, PIN_TX);
+  cmdSerial.begin(9600, SERIAL_8N1, PIN_RX, PIN_TX);
   callback = cb;
   log_i("Commander setup");
 }
