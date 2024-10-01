@@ -2,6 +2,8 @@
 #include <Arduino.h>
 #include <HardwareSerial.h>
 
+#define DISABLE_MP3_DEBUG_LOG
+
 #include "command.h"
 #include "controllers/BluetoothController.h"
 #include "controllers/CommandRouter.h"
