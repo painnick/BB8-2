@@ -615,29 +615,23 @@ static esp_err_t index_handler(httpd_req_t *req) {
 }
 
 static esp_err_t turn_left_handler(httpd_req_t *req) {
-  char *buf = NULL;
-
-  if (parse_get(req, &buf) != ESP_OK) {
-    return ESP_FAIL;
-  }
+//  log_i("Call turn_left_handler");
 
   sendCommand("turn_left");
 
+  httpd_resp_set_type(req, "text/html");
   httpd_resp_set_hdr(req, "Access-Control-Allow-Origin", "*");
-  return httpd_resp_send(req, NULL, 0);
+  return httpd_resp_send(req, "Left", 4);
 }
 
 static esp_err_t turn_right_handler(httpd_req_t *req) {
-  char *buf = NULL;
-
-  if (parse_get(req, &buf) != ESP_OK) {
-    return ESP_FAIL;
-  }
+//  log_i("Call turn_right_handler");
 
   sendCommand("turn_right");
 
+  httpd_resp_set_type(req, "text/html");
   httpd_resp_set_hdr(req, "Access-Control-Allow-Origin", "*");
-  return httpd_resp_send(req, NULL, 0);
+  return httpd_resp_send(req, "Right", 5);
 }
 
 void startCameraServer() {
