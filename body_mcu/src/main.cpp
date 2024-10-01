@@ -33,7 +33,8 @@ void setup() {
 
   router.begin(9600, SWSERIAL_8N1, HEAD_COMMAND_RX_PIN, HEAD_COMMAND_TX_PIN);
   router.init([=](const CommandRouter *router, const String &msg) {
-    ESP_LOGD(MAIN_TAG, "Router msg : %s", msg.c_str());
+    auto cmd = ToCommand(msg);
+    processCommand(cmd);
   });
 
   setupSound();
