@@ -5,10 +5,10 @@
 #include "command.h"
 #include "controllers/BluetoothController.h"
 #include "controllers/CommandRouter.h"
+#include "controllers/MotorController.h"
 #include "controllers/Mp3Controller.h"
 #include "controllers/ShiftRegisterController.h"
 #include "controllers/VoiceCommander.h"
-#include "controllers/MotorController.h"
 #include "pinmap.h"
 
 #define MAIN_TAG "Main"
@@ -75,6 +75,7 @@ void loop() {
 void processCommand(Command cmd) {
   switch (cmd) {
     case Command::WAKE_UP:
+      playHello();
       break;
     case Command::TURN_LEFT:
       motorController.left(1000);
@@ -82,10 +83,26 @@ void processCommand(Command cmd) {
     case Command::TURN_RIGHT:
       motorController.right(1000);
       break;
+    case Command::PLAY_MUSIC:
+      playMusic();
+      break;
+    case Command::FOOL:
+      playWhy();
+      router.send("WARN");
+      // TODO : Motor control
+      break;
     case Command::STOP:
       motorController.stop(0);
+      stopMusic();
       // TODO : ...
       break;
+    case Command::TURN_ON:
+      router.send("LIGHTON");
+      break;
+    case Command::TURN_OFF:
+      router.send("LIGHTOFF");
+      break;
+
     case Command::HEAD_MOVE_OPPOSITE:
       motorController.moveOpposite(2000);
       break;

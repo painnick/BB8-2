@@ -128,3 +128,13 @@ void playAlive() {
   ESP_LOGD(MP3_TAG, "Play Alive #%d", num);
   dfmp3.playMp3FolderTrack(num);
 }
+
+void playMusic() {
+  int num = random(4) + 1;
+  ESP_LOGD(MP3_TAG, "Play music 01 folder #%d", num);
+  dfmp3.playFolderTrack16(1, num);
+}
+
+void stopMusic() {
+  dfmp3.stop();
+}
