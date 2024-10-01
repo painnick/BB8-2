@@ -26,11 +26,6 @@ void commandRouterLoop(unsigned long now) {
   }
 
   if (cmdSerial.available()) {
-    if (now > bufferSetUntil) {
-      cmdBuffer = "";
-      log_w("Buffer Timeout");
-    }
-
     // Append command-buffer
     while (cmdSerial.available()) {
       cmdBuffer += (char) cmdSerial.read();
@@ -39,6 +34,7 @@ void commandRouterLoop(unsigned long now) {
     // Check size of command-buffer
     if (cmdBuffer.length() > MAX_COMMAND_BUFFER_SIZE) {
       cmdBuffer = "";
+      sendCommand("BufFull");
       log_d("Clear Buffer!");
     } else {
       while (-1 != cmdBuffer.indexOf(COMMAND_DELIMITER)) {
