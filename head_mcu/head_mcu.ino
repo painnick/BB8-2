@@ -65,10 +65,13 @@ void process(const String &cmd) {
   } else if (cmd == "RANDOM2") {
     randomLight(false);
     ackCommand(cmd);
+  } else if (cmd == "LIGHTON") {
+    setShiftRegister(0xFF);
+    ackCommand(cmd);
   } else if (cmd == "LIGHTOFF") {
     clearShiftRegister();
     ackCommand(cmd);
-  } else {
+  }else {
     ackCommand("Unknown");
     log_w("Unhandled command : %s", cmd);
   }
