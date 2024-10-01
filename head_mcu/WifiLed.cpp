@@ -19,7 +19,7 @@ CircularBuffer<LED_ACTION, 10> ledActions;
 
 void internalLedSet(uint32_t val1) {
   ledcWrite(WIFI_LED_PIN, val1);
-  ESP_LOGD(LED_TAG, "Set duty %u", val1);
+  // ESP_LOGD(LED_TAG, "Set duty %u", val1);
 }
 
 void initLed() {
@@ -32,7 +32,7 @@ bool loopLed(unsigned long now) {
   switch (ledMode) {
     case LedMode::LED_MODE_FIXED:
       if (ledChanged) {
-        ESP_LOGD(LED_TAG, "FIXED. Changed");
+        // ESP_LOGD(LED_TAG, "FIXED. Changed");
         internalLedSet(ledDuty);
         ledChanged = false;
       }
@@ -41,14 +41,14 @@ bool loopLed(unsigned long now) {
     case LedMode::LED_MODE_ACTIONS:
       if (ledActions.isEmpty()) {
         if (ledChanged) {
-          ESP_LOGD(LED_TAG, "Empty. But Changed");
+          // ESP_LOGD(LED_TAG, "Empty. But Changed");
           internalLedSet(ledDuty);
         }
         ledChanged = false;
       } else {
         LED_ACTION firstAction = ledActions.first();
         if (firstAction.endMs <= now) {
-          ESP_LOGD(LED_TAG, "Do Action");
+          // ESP_LOGD(LED_TAG, "Do Action");
           LED_ACTION newAction = ledActions.shift();
           internalLedSet(newAction.val1);
         }
@@ -56,7 +56,7 @@ bool loopLed(unsigned long now) {
       isLastAction = ledActions.isEmpty();
       break;
     default:
-      ESP_LOGW(LED_TAG, "Unhandled Mode!");
+      // ESP_LOGW(LED_TAG, "Unhandled Mode!");
       break;
   }
 
@@ -67,23 +67,23 @@ void appendLedAction(LED_ACTION action) {
   ledMode = LedMode::LED_MODE_ACTIONS;
 
   if (ledActions.isEmpty()) {
-    ESP_LOGD(LED_TAG, "Add First Action! %ul %02X", action.endMs, action.val1);
+    // ESP_LOGD(LED_TAG, "Add First Action! %ul %02X", action.endMs, action.val1);
     ledActions.push(action);
     //    internalLedSet(action.val1);
   } else if (ledActions.isFull()) {
 
-    ESP_LOGW(LED_TAG, "Action queue is FULL!");
+    // ESP_LOGW(LED_TAG, "Action queue is FULL!");
 
   } else {
     LED_ACTION firstAction = ledActions.last();
     if (firstAction.endMs >= action.endMs) {
 
-      ESP_LOGW(LED_TAG, "The previous request ends later!");
+      // ESP_LOGW(LED_TAG, "The previous request ends later!");
 
     } else {
       ledActions.push(action);
 
-      ESP_LOGD(LED_TAG, "Add new Action %ul %02x", action.endMs, action.val1);
+      // ESP_LOGD(LED_TAG, "Add new Action %ul %02x", action.endMs, action.val1);
     }
   }
 }
@@ -97,7 +97,7 @@ void clearWifiLed(bool fixed) {
 }
 
 void blinkWifiLed() {
-  ESP_LOGI(LED_TAG, "Blink WIFI LED");
+  // ESP_LOGI(LED_TAG, "Blink WIFI LED");
 
   unsigned long now = millis();
 
