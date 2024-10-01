@@ -72,20 +72,19 @@ void loop() {
   motorController.loop(now);
 }
 
-
 void processCommand(Command cmd) {
   switch (cmd) {
     case Command::WAKE_UP:
-      bt.println("WakeUp!");
       break;
-    case Command::HEAD_MOVE_LEFT:
+    case Command::TURN_LEFT:
       motorController.left(1000);
       break;
-    case Command::HEAD_MOVE_RIGHT:
+    case Command::TURN_RIGHT:
       motorController.right(1000);
       break;
-    case Command::HEAD_MOVE_STOP:
+    case Command::STOP:
       motorController.stop(0);
+      // TODO : ...
       break;
     case Command::HEAD_MOVE_OPPOSITE:
       motorController.moveOpposite(2000);

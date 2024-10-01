@@ -40,9 +40,7 @@ static Command Commands[COMMAND_COUNT] = {
     Command::TURN_OFF,
     Command::WHERE_ARE_YOU,
 
-    Command::HEAD_MOVE_LEFT,
-    Command::HEAD_MOVE_RIGHT,
-    Command::HEAD_MOVE_STOP,
+
     Command::HEAD_MOVE_OPPOSITE,
     Command::HEAD_MOVE_RANDOM,
 };
