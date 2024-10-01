@@ -2,7 +2,7 @@
 
 #include <Arduino.h>
 
-#define COMMAND_COUNT 10
+#define COMMAND_COUNT 15
 
 class BluetoothController;
 
@@ -17,6 +17,12 @@ enum Command : uint64_t {
   TURN_ON = 0x02000001,
   TURN_OFF = 0x02000002,
   WHERE_ARE_YOU = 0xFFFFFF01,
+
+  HEAD_MOVE_LEFT = 0x220001,
+  HEAD_MOVE_RIGHT = 0x220002,
+  HEAD_MOVE_STOP = 0x220003,
+  HEAD_MOVE_OPPOSITE = 0x220004,
+  HEAD_MOVE_RANDOM = 0x220005,
 };
 
 extern String ToString(const Command &cmd);
@@ -33,6 +39,10 @@ static Command Commands[COMMAND_COUNT] = {
     Command::TURN_ON,
     Command::TURN_OFF,
     Command::WHERE_ARE_YOU,
-};
 
-extern void processCommand(BluetoothController &bt, Command cmd);
+    Command::HEAD_MOVE_LEFT,
+    Command::HEAD_MOVE_RIGHT,
+    Command::HEAD_MOVE_STOP,
+    Command::HEAD_MOVE_OPPOSITE,
+    Command::HEAD_MOVE_RANDOM,
+};

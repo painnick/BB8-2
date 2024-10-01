@@ -8,6 +8,7 @@
 #include "controllers/Mp3Controller.h"
 #include "controllers/ShiftRegisterController.h"
 #include "controllers/VoiceCommander.h"
+#include "controllers/MotorController.h"
 #include "pinmap.h"
 
 #define MAIN_TAG "Main"
@@ -19,8 +20,13 @@ BluetoothController bt;
 ShiftRegisterController shiftRegister(SR_DATA_PIN, SR_LATCH_PIN, SR_CLOCK_PIN);
 SoftwareSerial cmdSerial;
 CommandRouter router(cmdSerial);
+MotorController motorController(MOTOR1_PIN, MOTOR2_PIN);
+
+void processCommand(Command cmd);
 
 void setup() {
+  motorController.init();
+
   vc02.begin(115200, SERIAL_8N1, VOICE_COMMAND_RX_PIN, VOICE_COMMAND_TX_PIN);
 
   bt.begin("BB-8");
@@ -45,13 +51,13 @@ void loop() {
   cmd = vc02.receive();
   if ((cmd & Command::UNKNOWN) != Command::UNKNOWN) {
     ESP_LOGD(MAIN_TAG, "VC Cmd : %s", ToString(cmd).c_str());
-    processCommand(bt, cmd);
+    processCommand(cmd);
   }
 
   cmd = bt.receive();
   if ((cmd & Command::UNKNOWN) != Command::UNKNOWN) {
     ESP_LOGD(MAIN_TAG, "BT Cmd : %s", ToString(cmd).c_str());
-    processCommand(bt, cmd);
+    processCommand(cmd);
   }
 
   auto now = millis();
@@ -63,4 +69,31 @@ void loop() {
   dfmp3.loop();
   shiftRegister.loop(now);
   router.loop();
+  motorController.loop(now);
+}
+
+
+void processCommand(Command cmd) {
+  switch (cmd) {
+    case Command::WAKE_UP:
+      bt.println("WakeUp!");
+      break;
+    case Command::HEAD_MOVE_LEFT:
+      motorController.left(1000);
+      break;
+    case Command::HEAD_MOVE_RIGHT:
+      motorController.right(1000);
+      break;
+    case Command::HEAD_MOVE_STOP:
+      motorController.stop(0);
+      break;
+    case Command::HEAD_MOVE_OPPOSITE:
+      motorController.moveOpposite(2000);
+      break;
+    case Command::HEAD_MOVE_RANDOM:
+      motorController.randomMove(2000);
+      break;
+    default:
+      break;
+  }
 }

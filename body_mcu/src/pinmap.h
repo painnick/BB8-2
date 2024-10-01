@@ -19,3 +19,6 @@
 #define SR_DATA_PIN 25
 #define SR_LATCH_PIN 26
 #define SR_CLOCK_PIN 27
+
+#define MOTOR1_PIN 22
+#define MOTOR2_PIN 23
