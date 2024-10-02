@@ -1,0 +1,91 @@
+{
+  "log": 2,
+  "audio_stream": {
+    "time_out": 16,
+    "channels": 2,
+    "stack_size": 4,
+    "rate": 16000,
+    "bits": 16,
+    "frame": 16,
+    "out_frame": 16,
+    "save_enable": 0,
+    "save_path": "."
+  },
+  "uploader": {
+    "enable": 0
+  },
+  "ssp": {
+    "config_path": "",
+    "total_chs": 2,
+    "aec_enable": 0,
+    "aec_model": 0,
+    "samples": 256,
+    "mic_rules": "1",
+    "save_enable": 0,
+    "save_path": ""
+  },
+  "kws_lp": {
+    "log": 1,
+    "engine_buffer_size": 40,
+    "default_mode": 0,
+    "stack_size": 3,
+    "ring_buffer_size": 4,
+    "timeout": 600,
+    "start_end_time_enable": 1,
+    "auto_clear_when_start": 0,
+    "auto_clear_when_result": 1,
+    "bunch_frame_num": 12,
+    "save_enable": 0,
+    "save_path": ".",
+    "wakeup": {
+      "fa": "0.4",
+      "fa_second": "0.8",
+      "fa_sleep": "0.05",
+      "time_to_sleep": 300,
+      "time_second_wakeup": 5,
+      "wuws": [
+        {
+          "wuw": "你好魔方",
+          "fa_table": [
+            14.4,
+            13.98,
+            12.95,
+            12.57,
+            11.31,
+            10.0,
+            9.11,
+            8.3,
+            7.59,
+            6.41
+          ]
+        }
+      ]
+    },
+    "command": {
+      "command_tag": "ivm",
+      "fa": "0.8",
+      "command_custom": [
+        {
+          "word": "开机",
+          "fa": "0.05"
+        },
+        {
+          "word": "关机",
+          "fa": "0.2"
+        }
+      ],
+      "fa_table": [
+        9.29,
+        7.35,
+        5.64,
+        5.02,
+        3.36,
+        1.77,
+        0.87,
+        0.2,
+        -0.26,
+        -1.39
+      ]
+    }
+  }
+}
