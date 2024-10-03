@@ -11,6 +11,7 @@
 #include "controllers/Mp3Controller.h"
 #include "controllers/ShiftRegisterController.h"
 #include "controllers/VoiceCommander.h"
+#include "controllers/StateLedController.h"
 #include "pinmap.h"
 
 #define MAIN_TAG "Main"
@@ -23,7 +24,9 @@ ShiftRegisterController shiftRegister(SR_DATA_PIN, SR_LATCH_PIN, SR_CLOCK_PIN);
 SoftwareSerial cmdSerial;
 CommandRouter router(cmdSerial);
 MotorController motorController(MOTOR1_PIN, MOTOR2_PIN);
+StateLedController stateLed(WIFI_EYE_PIN, WIFI_EYE_CH);
 
+bool isListening = false;
 bool moveHeadToFront = false;
 bool isWifiOn = false;
 
@@ -38,11 +41,11 @@ void setup() {
 
   router.begin(9600, SWSERIAL_8N1, HEAD_COMMAND_RX_PIN, HEAD_COMMAND_TX_PIN);
   router.init([=](const CommandRouter *router, const String &msg) {
-    if (msg == "WIFIISON")
+    if (msg == "WIFIISON") {
       isWifiOn = true;
-    else if (msg == "WIFIISOFF")
+    } else if (msg == "WIFIISOFF") {
       isWifiOn = false;
-    if ((msg == "ACK") || (msg == "InitCMD") || (msg == "SETUP") || (msg == "BufFull")) {
+    } else if ((msg == "ACK") || (msg == "InitCMD") || (msg == "SETUP") || (msg == "BufFull")) {
       // Skip
     } else {
       auto cmd = ToCommand(msg);
@@ -106,6 +109,11 @@ void loop() {
       motorController.stop(1000);
     }
   }
+
+  auto isEnd = stateLed.loop(now);
+  if (isEnd && !isListening) {
+    stateLed.blink();
+  }
 }
 
 void processCommand(Command cmd) {
@@ -120,8 +128,12 @@ void processCommand(Command cmd) {
   }
   switch (cmd) {
     case Command::WAKE_UP:router.send("WIFION");
+      isListening = true;
+      stateLed.on();
       break;
     case Command::BYE:router.send("WIFIOFF");
+      isListening = false;
+      stateLed.blink();
       break;
     case Command::TURN_LEFT:moveHeadToFront = false;
       motorController.left(1000);
