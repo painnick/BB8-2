@@ -78,11 +78,9 @@ void loop() {
 void processCommand(Command cmd) {
   switch (cmd) {
     case Command::WAKE_UP:
-      playHello();
       router.send("WIFION");
       break;
     case Command::BYE:
-      playBye();
       router.send("WIFIOFF");
       break;
     case Command::TURN_LEFT:
@@ -95,7 +93,6 @@ void processCommand(Command cmd) {
       playMusic();
       break;
     case Command::FOOL:
-      playWhy();
       router.send("WARN");
       // TODO : Motor control
       break;
@@ -116,6 +113,9 @@ void processCommand(Command cmd) {
       break;
     case Command::HEAD_MOVE_RANDOM:
       motorController.randomMove(2000);
+      break;
+    case Command::UNKNOWN:
+      playFail();
       break;
     default:
       break;
