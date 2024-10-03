@@ -83,6 +83,16 @@ void loop() {
 
 void processCommand(Command cmd) {
   switch (cmd) {
+    case Command::NOT_COMMAND:
+    case Command::NO_COMMAND:
+    case Command::UNKNOWN:
+      // Do not update lastAliveSoundChecked
+      break;
+    default:
+      lastAliveSoundChecked = millis();
+      break;
+  }
+  switch (cmd) {
     case Command::WAKE_UP:router.send("WIFION");
       break;
     case Command::BYE:router.send("WIFIOFF");
