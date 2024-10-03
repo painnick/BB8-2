@@ -58,7 +58,7 @@ void commandRouterLoop(unsigned long now) {
 }
 
 void ackCommand(const String &cmd) {
-  cmdSerial.printf("ACK.");
+  cmdSerial.printf("ACK");
   cmdSerial.printf(COMMAND_DELIMITER);
   cmdSerial.flush();
 

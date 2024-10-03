@@ -42,7 +42,7 @@ void setup() {
       isWifiOn = true;
     else if (msg == "WIFIISOFF")
       isWifiOn = false;
-    if ((msg == "ACK.") || (msg == "InitCMD") || (msg == "SETUP") || (msg == "BufFull")) {
+    if ((msg == "ACK") || (msg == "InitCMD") || (msg == "SETUP") || (msg == "BufFull")) {
       // Skip
     } else {
       auto cmd = ToCommand(msg);
