@@ -60,6 +60,11 @@ void setup() {
 
   moveHeadToFront = true;
   motorController.randomMove(5000);
+  auto hallVal = analogRead(HALL_SENSOR_PIN);
+  if (hallVal != 0) {
+    moveHeadToFront = true;
+    motorController.randomMove(5000);
+  }
 
   shiftRegister.set(0xFF, 0xFF);
 }
