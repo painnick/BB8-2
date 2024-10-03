@@ -58,8 +58,6 @@ void setup() {
   delay(1000 * 3);
   playWelcome();
 
-  moveHeadToFront = true;
-  motorController.randomMove(5000);
   auto hallVal = analogRead(HALL_SENSOR_PIN);
   if (hallVal != 0) {
     moveHeadToFront = true;
