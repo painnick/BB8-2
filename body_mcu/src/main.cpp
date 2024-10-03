@@ -65,6 +65,8 @@ void setup() {
   }
 
   shiftRegister.set(0xFF, 0xFF);
+
+  router.send("WIFIOFF");
 }
 
 uint32_t lastAliveSoundChecked = 0;
