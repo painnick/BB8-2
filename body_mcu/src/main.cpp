@@ -24,6 +24,8 @@ SoftwareSerial cmdSerial;
 CommandRouter router(cmdSerial);
 MotorController motorController(MOTOR1_PIN, MOTOR2_PIN);
 
+bool moveHeadToFront = false;
+
 void processCommand(Command cmd);
 
 void setup() {
@@ -46,6 +48,9 @@ void setup() {
   setDefaultVolume();
   delay(1000 * 3);
   playWelcome();
+
+  moveHeadToFront = true;
+  motorController.randomMove(5000);
 
   shiftRegister.set(0xFF, 0xFF);
 }
@@ -79,6 +84,14 @@ void loop() {
   shiftRegister.loop(now);
   router.loop();
   motorController.loop(now);
+
+  if(moveHeadToFront) {
+    auto hallVal = analogRead(HALL_SENSOR_PIN);
+    if(hallVal == 0) {
+      moveHeadToFront = false;
+      motorController.stop(1000);
+    }
+  }
 }
 
 void processCommand(Command cmd) {
@@ -88,33 +101,48 @@ void processCommand(Command cmd) {
     case Command::UNKNOWN:
       // Do not update lastAliveSoundChecked
       break;
-    default:
-      lastAliveSoundChecked = millis();
+    default:lastAliveSoundChecked = millis();
       break;
   }
   switch (cmd) {
-    case Command::WAKE_UP:router.send("WIFION");
+    case Command::WAKE_UP:
+      router.send("WIFION");
       break;
-    case Command::BYE:router.send("WIFIOFF");
+    case Command::BYE:
+      router.send("WIFIOFF");
       break;
-    case Command::TURN_LEFT:motorController.left(1000);
+    case Command::TURN_LEFT:
+      moveHeadToFront = false;
+      motorController.left(1000);
       break;
-    case Command::TURN_RIGHT:motorController.right(1000);
+    case Command::TURN_RIGHT:
+      moveHeadToFront = false;
+      motorController.right(1000);
       break;
-    case Command::PLAY_MUSIC:playMusic();
+    case Command::PLAY_MUSIC:
+      playMusic();
       break;
-    case Command::FOOL:router.send("WARN");
+    case Command::FOOL:
+      router.send("WARN");
       // TODO : Motor control
       break;
-    case Command::STOP:motorController.stop(0);
+    case Command::STOP:
+      motorController.stop(0);
       stopMusic();
       // TODO : ...
       break;
-    case Command::TURN_ON:router.send("LIGHTON");
+    case Command::TURN_ON:
+      router.send("LIGHTON");
       break;
-    case Command::TURN_OFF:router.send("LIGHTOFF");
+    case Command::TURN_OFF:
+      router.send("LIGHTOFF");
       break;
-    case Command::UNKNOWN:playFail();
+    case Command::UNKNOWN:
+      playFail();
+      break;
+    case Command::WHERE_ARE_YOU:
+      moveHeadToFront = true;
+      motorController.randomMove(1000 * 10);
       break;
     default:break;
   }

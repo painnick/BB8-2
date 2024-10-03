@@ -22,3 +22,5 @@
 
 #define MOTOR1_PIN 22
 #define MOTOR2_PIN 23
+
+#define HALL_SENSOR_PIN 36
