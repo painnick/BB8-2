@@ -26,8 +26,7 @@ Command VoiceCommander::receive() {
       return Command::UNKNOWN;
     }
 
-    uint64_t read_data =
-        buffer[3] + (buffer[2] << 8) + (buffer[1] << 16) + (buffer[0] << 24);
+    uint64_t read_data = buffer[3] + (buffer[2] << 8) + (buffer[1] << 16) + (buffer[0] << 24);
 
     ESP_LOGD(VC_TAG, "Read 0x%08X", read_data);
 
@@ -40,7 +39,7 @@ Command VoiceCommander::receive() {
     }
 
     ESP_LOGW(VC_TAG, "Not Found.");
-  }
-
-  return Command::UNKNOWN;
+    return Command::UNKNOWN;
+  } else
+    return Command::NO_COMMAND;
 }

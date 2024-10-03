@@ -26,24 +26,15 @@ String ToString(const Command &cmd) {
       return "TURN_OFF";
     case Command::WHERE_ARE_YOU:
       return "WHERE_ARE_YOU";
-
-    case Command::HEAD_MOVE_LEFT:
-      return "HEAD_MOVE_LEFT";
-    case Command::HEAD_MOVE_RIGHT:
-      return "HEAD_MOVE_RIGHT";
-    case Command::HEAD_MOVE_STOP:
-      return "HEAD_MOVE_STOP";
-    case Command::HEAD_MOVE_OPPOSITE:
-      return "HEAD_MOVE_OPPOSITE";
-    case Command::HEAD_MOVE_RANDOM:
-      return "HEAD_MOVE_RANDOM";
     default:
-      return "Not found";
+      return "Unhandled Command";
   }
 }
 
 Command ToCommand(const String&cmd) {
-  if (cmd == "wake_up")
+  if( (cmd == "ACK.") || (cmd == "KeepAlive") || (cmd == "InitCMD") || (cmd == "SETUP") || (cmd == "BufFull"))
+    return Command::NO_COMMAND;
+  else if (cmd == "wake_up")
     return Command::WAKE_UP;
   else if (cmd == "bye")
     return Command::BYE;
@@ -63,16 +54,6 @@ Command ToCommand(const String&cmd) {
     return Command::TURN_OFF;
   else if (cmd == "where")
     return Command::WHERE_ARE_YOU;
-  else if (cmd == "head_move_left")
-    return Command::HEAD_MOVE_LEFT;
-  else if (cmd == "head_move_right")
-    return Command::HEAD_MOVE_RIGHT;
-  else if (cmd == "head_move_stop")
-    return Command::HEAD_MOVE_STOP;
-  else if (cmd == "head_move_opposite")
-    return Command::HEAD_MOVE_OPPOSITE;
-  else if (cmd == "head_move_random")
-    return Command::HEAD_MOVE_RANDOM;
   else
     return Command::UNKNOWN;
 }

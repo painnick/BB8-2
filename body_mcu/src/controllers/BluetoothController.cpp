@@ -14,8 +14,7 @@ void BluetoothController::begin(String name) {
       case ESP_SPP_SRV_OPEN_EVT:
         // TODO. Send Command list
         break;
-      default:
-        break;
+      default:break;
     }
   });
 }
@@ -26,8 +25,8 @@ Command BluetoothController::receive() {
     ESP_LOGD(BT_TAG, "BT >> %s", btCmd.c_str());
 
     return ToCommand(btCmd);
-  }
-  return Command::UNKNOWN;
+  } else
+    return Command::NO_COMMAND;
 }
 
 void BluetoothController::println(const char c[]) { serial.println(c); }

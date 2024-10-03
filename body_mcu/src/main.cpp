@@ -36,7 +36,10 @@ void setup() {
   router.begin(9600, SWSERIAL_8N1, HEAD_COMMAND_RX_PIN, HEAD_COMMAND_TX_PIN);
   router.init([=](const CommandRouter *router, const String &msg) {
     auto cmd = ToCommand(msg);
-    processCommand(cmd);
+    if ((cmd & Command::NOT_COMMAND) != Command::NOT_COMMAND) {
+      ESP_LOGD(MAIN_TAG, "Router Cmd : %s", ToString(cmd).c_str());
+      processCommand(cmd);
+    }
   });
 
   setupSound();
@@ -48,19 +51,22 @@ void setup() {
 }
 
 uint32_t lastAliveSoundChecked = 0;
+
 void loop() {
   Command cmd;
 
   cmd = vc02.receive();
-  if ((cmd & Command::UNKNOWN) != Command::UNKNOWN) {
+  if ((cmd & Command::NO_COMMAND) != Command::NO_COMMAND) {
     ESP_LOGD(MAIN_TAG, "VC Cmd : %s", ToString(cmd).c_str());
-    processCommand(cmd);
+    if ((cmd & Command::NOT_COMMAND) != Command::NOT_COMMAND)
+      processCommand(cmd);
   }
 
   cmd = bt.receive();
-  if ((cmd & Command::UNKNOWN) != Command::UNKNOWN) {
+  if ((cmd & Command::NO_COMMAND) != Command::NO_COMMAND) {
     ESP_LOGD(MAIN_TAG, "BT Cmd : %s", ToString(cmd).c_str());
-    processCommand(cmd);
+    if ((cmd & Command::NOT_COMMAND) != Command::NOT_COMMAND)
+      processCommand(cmd);
   }
 
   auto now = millis();
@@ -77,47 +83,29 @@ void loop() {
 
 void processCommand(Command cmd) {
   switch (cmd) {
-    case Command::WAKE_UP:
-      router.send("WIFION");
+    case Command::WAKE_UP:router.send("WIFION");
       break;
-    case Command::BYE:
-      router.send("WIFIOFF");
+    case Command::BYE:router.send("WIFIOFF");
       break;
-    case Command::TURN_LEFT:
-      motorController.left(1000);
+    case Command::TURN_LEFT:motorController.left(1000);
       break;
-    case Command::TURN_RIGHT:
-      motorController.right(1000);
+    case Command::TURN_RIGHT:motorController.right(1000);
       break;
-    case Command::PLAY_MUSIC:
-      playMusic();
+    case Command::PLAY_MUSIC:playMusic();
       break;
-    case Command::FOOL:
-      router.send("WARN");
+    case Command::FOOL:router.send("WARN");
       // TODO : Motor control
       break;
-    case Command::STOP:
-      motorController.stop(0);
+    case Command::STOP:motorController.stop(0);
       stopMusic();
       // TODO : ...
       break;
-    case Command::TURN_ON:
-      router.send("LIGHTON");
+    case Command::TURN_ON:router.send("LIGHTON");
       break;
-    case Command::TURN_OFF:
-      router.send("LIGHTOFF");
+    case Command::TURN_OFF:router.send("LIGHTOFF");
       break;
-
-    case Command::HEAD_MOVE_OPPOSITE:
-      motorController.moveOpposite(2000);
+    case Command::UNKNOWN:playFail();
       break;
-    case Command::HEAD_MOVE_RANDOM:
-      motorController.randomMove(2000);
-      break;
-    case Command::UNKNOWN:
-      playFail();
-      break;
-    default:
-      break;
+    default:break;
   }
 }
