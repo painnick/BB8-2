@@ -3,6 +3,8 @@
 
 #include "pins.h"
 
+#include "ap_control.h"
+
 #define COMMAND_DELIMITER "/|"
 #define COMMAND_DELIMITER_SIZE 2
 #define MAX_COMMAND_BUFFER_SIZE 50
@@ -21,7 +23,10 @@ String cmdBuffer = "";
 void commandRouterLoop(unsigned long now) {
   if (now - lastTime > 1000 * 30) {
     lastTime = now;
-    sendCommand("KeepAlive");
+    if(isAPOn())
+      sendCommand("WIFIISON");
+    else
+      sendCommand("WIFIISOFF");
     log_d("=> Keep from HEAD");
   }
 
