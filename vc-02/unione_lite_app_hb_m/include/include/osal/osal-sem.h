@@ -9,20 +9,6 @@
 
 #include "osal/osal-types.h"
 
-#if defined(_WIN32) || defined(_WIN64)
-#define _WINDOWS
-#endif
-
-#ifndef _WINDOWS
-#define OSAL_EXPORT __attribute__((visibility("default")))
-#else
-#ifdef DLL_EXPORT
-#define OSAL_EXPORT __declspec(dllexport)
-#else
-#define OSAL_EXPORT __declspec(dllimport)
-#endif
-#endif
-
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -37,7 +23,7 @@ typedef void* OsalSemHandle;
  * @Return: 成功：OSAL_OK
  *          失败：OSAL_FAILED
  */
-OSAL_EXPORT int32_t OsalSemInit(OsalSemHandle* sem, int32_t value);
+int32_t OsalSemInit(OsalSemHandle* sem, int32_t value);
 
 /*
  * @Description: 信号量 Post
@@ -46,7 +32,7 @@ OSAL_EXPORT int32_t OsalSemInit(OsalSemHandle* sem, int32_t value);
  * @Return: 成功：OSAL_OK
  *          失败：OSAL_FAILED
  */
-OSAL_EXPORT int32_t OsalSemPost(OsalSemHandle sem);
+int32_t OsalSemPost(OsalSemHandle sem);
 
 /*
  * @Description: 信号量 Wait
@@ -55,7 +41,7 @@ OSAL_EXPORT int32_t OsalSemPost(OsalSemHandle sem);
  * @Return: 成功：OSAL_OK
  *          失败：OSAL_FAILED
  */
-OSAL_EXPORT int32_t OsalSemWait(OsalSemHandle sem);
+int32_t OsalSemWait(OsalSemHandle sem);
 
 /*
  * @Description: 超时信号量 Wait
@@ -65,8 +51,7 @@ OSAL_EXPORT int32_t OsalSemWait(OsalSemHandle sem);
  * @Return: 成功：OSAL_OK
  *          失败：OSAL_FAILED
  */
-OSAL_EXPORT int32_t OsalSemTimedWait(OsalSemHandle sem,
-                                     uint32_t wait_milliseconds);
+int32_t OsalSemTimedWait(OsalSemHandle sem, uint32_t wait_milliseconds);
 
 /*
  * @Description: 信号量销毁
@@ -75,7 +60,7 @@ OSAL_EXPORT int32_t OsalSemTimedWait(OsalSemHandle sem,
  * @Return: 成功：OSAL_OK
  *          失败：OSAL_FAILED
  */
-OSAL_EXPORT int32_t OsalSemDestroy(OsalSemHandle sem);
+int32_t OsalSemDestroy(OsalSemHandle sem);
 
 #ifdef __cplusplus
 }

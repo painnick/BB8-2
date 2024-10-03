@@ -9,20 +9,6 @@
 
 #include "osal/osal-types.h"
 
-#if defined(_WIN32) || defined(_WIN64)
-#define _WINDOWS
-#endif
-
-#ifndef _WINDOWS
-#define OSAL_EXPORT __attribute__((visibility("default")))
-#else
-#ifdef DLL_EXPORT
-#define OSAL_EXPORT __declspec(dllexport)
-#else
-#define OSAL_EXPORT __declspec(dllimport)
-#endif
-#endif
-
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -33,7 +19,7 @@ extern "C" {
  * @Output params:
  * @Return:
  */
-OSAL_EXPORT void OsalAssert(int32_t expression);
+void OsalAssert(int32_t expression);
 
 #ifdef __cplusplus
 }

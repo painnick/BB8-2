@@ -58,7 +58,6 @@ extern "C" {
   (((AIK_MAIN_ENGINE & 0xFF) << 24) | ((AIK_SUBTYPE_LIP & 0xFF) << 16))
 #define AIK_ID_LIP_SET_FRAMES (AIK_ID_LIP | (uint16_t)0x01)
 #define AIK_ID_LIP_GET_FRAMES (AIK_ID_LIP | (uint16_t)0x02)
-#define AIK_ID_LIP_RESET_PRE_STATUS (AIK_ID_LIP | (uint16_t)0x03)
 
 /* ID of SSP */
 #define AIK_ID_SSP \
@@ -102,11 +101,6 @@ extern "C" {
 #define AIK_ID_KWS_LP_SET_MODEL (AIK_ID_KWS_LP | (uint16_t)0x0007)
 #define AIK_ID_KWS_LP_SET_GRAMMAR (AIK_ID_KWS_LP | (uint16_t)0x0008)
 #define AIK_ID_KWS_LP_SET_SAVE_PATH (AIK_ID_KWS_LP | (uint16_t)0x0009)
-#define AIK_ID_KWS_LP_SET_TIMEOUT (AIK_ID_KWS_LP | (uint16_t)0x000a)
-#define AIK_ID_KWS_LP_CLEAR_TICKS (AIK_ID_KWS_LP | (uint16_t)0x000b)
-#define AIK_ID_KWS_LP_SET_UPDATE_GRAMMAR (AIK_ID_KWS_LP | (uint16_t)0x000c)
-#define AIK_ID_KWS_LP_SET_SHARED_BUFFER (AIK_ID_KWS_LP | (uint16_t)0x000d)
-#define AIK_ID_KWS_LP_SET_SHARED_SIZE (AIK_ID_KWS_LP | (uint16_t)0x000e)
 
 #define AIK_ID_KWS_STD \
   (((AIK_MAIN_ENGINE & 0xFF) << 24) | ((AIK_SUBTYPE_KWS_STD & 0xFF) << 16))

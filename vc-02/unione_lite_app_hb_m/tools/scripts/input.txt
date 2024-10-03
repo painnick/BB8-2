@@ -1,16 +1,15 @@
 It is already the maximum volume
 It is already the minimum volume
-I am here
-what can I do for you
+Wake up
 I'm going to sleep.
-See you next time
-Hello everyone
-Turn left
+Good bye
+Boot
+Turn Left
 Turn Right
-Play music
+Play Music
 I'm not a fool
 Stop
 Turn on the light
 Turn off the light
 I'm here!
-See you later
+Help me

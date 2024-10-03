@@ -1,21 +1,14 @@
-v4.0.4_ssp
+v3.3.4
 1. feature:
   1、支持通过UART升级固件功能，升级使用HB-M_DownloadTool工具
 2. bugfix:
 3. perf:
 4. requirement:
 
-v4.0.1
+v3.3.3
 1. feature:
 2. bugfix:
   2.1 修复gpio pulse timer未初始化问题
-3. perf:
-4. requirement:
-
-v4.0.0
-1. feature:
-  1.1 集成AIS v2.4.2，支持SSP稳态噪声降噪功能
-2. bugfix:
 3. perf:
 4. requirement:
 

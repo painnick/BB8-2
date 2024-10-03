@@ -9,20 +9,6 @@
 
 #include "osal/osal-types.h"
 
-#if defined(_WIN32) || defined(_WIN64)
-#define _WINDOWS
-#endif
-
-#ifndef _WINDOWS
-#define OSAL_EXPORT __attribute__((visibility("default")))
-#else
-#ifdef DLL_EXPORT
-#define OSAL_EXPORT __declspec(dllexport)
-#else
-#define OSAL_EXPORT __declspec(dllimport)
-#endif
-#endif
-
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -37,7 +23,7 @@ typedef void* OsalMutexHandle;
  * @Return: 成功：OSAL_OK
  *          失败：OSAL_FAILED
  */
-OSAL_EXPORT int32_t OsalMutexInit(OsalMutexHandle* mutex);
+int32_t OsalMutexInit(OsalMutexHandle* mutex);
 
 /*
  * @Description: 互斥锁 Lock
@@ -46,7 +32,7 @@ OSAL_EXPORT int32_t OsalMutexInit(OsalMutexHandle* mutex);
  * @Return: 成功：OSAL_OK
  *          失败：OSAL_FAILED
  */
-OSAL_EXPORT int32_t OsalMutexLock(OsalMutexHandle mutex);
+int32_t OsalMutexLock(OsalMutexHandle mutex);
 
 /*
  * @Description: 互斥锁 Unlock
@@ -55,7 +41,7 @@ OSAL_EXPORT int32_t OsalMutexLock(OsalMutexHandle mutex);
  * @Return: 成功：OSAL_OK
  *          失败：OSAL_FAILED
  */
-OSAL_EXPORT int32_t OsalMutexUnlock(OsalMutexHandle mutex);
+int32_t OsalMutexUnlock(OsalMutexHandle mutex);
 
 /*
  * @Description: 互斥锁销毁
@@ -64,7 +50,7 @@ OSAL_EXPORT int32_t OsalMutexUnlock(OsalMutexHandle mutex);
  * @Return: 成功：OSAL_OK
  *          失败：OSAL_FAILED
  */
-OSAL_EXPORT int32_t OsalMutexDestroy(OsalMutexHandle mutex);
+int32_t OsalMutexDestroy(OsalMutexHandle mutex);
 
 #ifdef __cplusplus
 }

@@ -9,20 +9,6 @@
 
 #include "osal/osal-types.h"
 
-#if defined(_WIN32) || defined(_WIN64)
-#define _WINDOWS
-#endif
-
-#ifndef _WINDOWS
-#define OSAL_EXPORT __attribute__((visibility("default")))
-#else
-#ifdef DLL_EXPORT
-#define OSAL_EXPORT __declspec(dllexport)
-#else
-#define OSAL_EXPORT __declspec(dllimport)
-#endif
-#endif
-
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -34,7 +20,6 @@ extern "C" {
 #define OSAL_RDWR (0x1 << 3)
 #define OSAL_TRUNC (0x1 << 4)
 #define OSAL_APPEND (0x1 << 5)
-#define OSAL_BINARY (0x1 << 6)
 
 #define OSAL_SEEK_SET 1
 #define OSAL_SEEK_END 2
@@ -46,7 +31,7 @@ extern "C" {
  * @Output params: 略
  * @Return: 略
  */
-OSAL_EXPORT int32_t OsalPrintf(const char* format, ...);
+int32_t OsalPrintf(const char* format, ...);
 
 /*
  * @Description: 同 fprintf
@@ -54,7 +39,7 @@ OSAL_EXPORT int32_t OsalPrintf(const char* format, ...);
  * @Output params: 略
  * @Return: 略
  */
-OSAL_EXPORT int32_t OsalFprintf(void* stream, const char* format, ...);
+int32_t OsalFprintf(void* stream, const char* format, ...);
 
 /*
  * @Description: 同 sprintf
@@ -62,7 +47,7 @@ OSAL_EXPORT int32_t OsalFprintf(void* stream, const char* format, ...);
  * @Output params: 略
  * @Return: 略
  */
-OSAL_EXPORT int32_t OsalSprintf(char* str, const char* format, ...);
+int32_t OsalSprintf(char* str, const char* format, ...);
 
 /*
  * @Description: 同 snprintf
@@ -70,8 +55,7 @@ OSAL_EXPORT int32_t OsalSprintf(char* str, const char* format, ...);
  * @Output params: 略
  * @Return: 略
  */
-OSAL_EXPORT int32_t OsalSnprintf(char* str, size_t size, const char* format,
-                                 ...);
+int32_t OsalSnprintf(char* str, size_t size, const char* format, ...);
 
 /*
  * @Description: 同 vprintf
@@ -79,7 +63,7 @@ OSAL_EXPORT int32_t OsalSnprintf(char* str, size_t size, const char* format,
  * @Output params:
  * @Return:
  */
-OSAL_EXPORT int32_t OsalVprintf(const char* format, va_list ap);
+int32_t OsalVprintf(const char* format, va_list ap);
 
 /*
  * @Description: 同 open
@@ -87,7 +71,7 @@ OSAL_EXPORT int32_t OsalVprintf(const char* format, va_list ap);
  * @Output params:
  * @Return:
  */
-OSAL_EXPORT int32_t OsalOpen(const char* path_name, int32_t flags, ...);
+int32_t OsalOpen(const char* path_name, int32_t flags, ...);
 
 /*
  * @Description: 同 write
@@ -95,7 +79,7 @@ OSAL_EXPORT int32_t OsalOpen(const char* path_name, int32_t flags, ...);
  * @Output params:
  * @Return:
  */
-OSAL_EXPORT osal_ssize_t OsalWrite(int32_t fd, const void* buf, size_t count);
+osal_ssize_t OsalWrite(int32_t fd, const void* buf, size_t count);
 
 /*
  * @Description: 同 read
@@ -103,7 +87,7 @@ OSAL_EXPORT osal_ssize_t OsalWrite(int32_t fd, const void* buf, size_t count);
  * @Output params:
  * @Return:
  */
-OSAL_EXPORT osal_ssize_t OsalRead(int32_t fd, void* buf, size_t count);
+osal_ssize_t OsalRead(int32_t fd, void* buf, size_t count);
 
 /*
  * @Description: 同 cloes
@@ -111,7 +95,7 @@ OSAL_EXPORT osal_ssize_t OsalRead(int32_t fd, void* buf, size_t count);
  * @Output params:
  * @Return:
  */
-OSAL_EXPORT int32_t OsalClose(int32_t fd);
+int32_t OsalClose(int32_t fd);
 
 /*
  * @Description: 同 lseek
@@ -119,7 +103,7 @@ OSAL_EXPORT int32_t OsalClose(int32_t fd);
  * @Output params:
  * @Return:
  */
-OSAL_EXPORT osal_off_t OsalSeek(int32_t fd, osal_off_t offset, int32_t whence);
+osal_off_t OsalSeek(int32_t fd, osal_off_t offset, int32_t whence);
 
 /*
  * @Description: 同 remove
@@ -127,7 +111,7 @@ OSAL_EXPORT osal_off_t OsalSeek(int32_t fd, osal_off_t offset, int32_t whence);
  * @Output params:
  * @Return:
  */
-OSAL_EXPORT int32_t OsalRemove(const char* path_name);
+int32_t OsalRemove(const char* path_name);
 
 /*
  * @Description: 同 sync
@@ -135,7 +119,7 @@ OSAL_EXPORT int32_t OsalRemove(const char* path_name);
  * @Output params:
  * @Return:
  */
-OSAL_EXPORT int32_t OsalSync(int32_t fd);
+int32_t OsalSync(int32_t fd);
 
 /*
  * @Description: 读取指定路径文件内容到 buf, 使用后 free
@@ -144,7 +128,7 @@ OSAL_EXPORT int32_t OsalSync(int32_t fd);
  * @Return: 成功：OSAL_OK
  *          失败：OSAL_FAILED
  */
-OSAL_EXPORT int32_t OsalReadFileToBuffer(const char* file_path, char** buf);
+int32_t OsalReadFileToBuffer(const char* file_path, char** buf);
 
 #ifdef __cplusplus
 }

@@ -222,7 +222,7 @@ const uni_s32 events[] = {ID(AUDIO_PLAY_END_EVENT),
   uni_list_init(&g_session_manager.session_list);
   g_session_manager.active_session = NULL;
   BbWrite(BB_KEY_EVENT_ID, INVALID_EVENT_ID_EVENT_INVALID);
-  g_session_manager.event_list = EventListCreate(_event_callback, 4096);
+  g_session_manager.event_list = EventListCreate(_event_callback, 2048);
   EventRouteSubscribe(_session_manage_schedule,
                       sizeof(events) / sizeof(events[0]), events);
   //g_session_manager.black_list = BlackListCreate(64);

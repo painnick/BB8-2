@@ -34,12 +34,10 @@ typedef enum AikEvent {
   AIK_EVENT_ASR_NETWORK_ERROR = 9,
   /* 在线识别超时 */
   AIK_EVENT_ASR_TIMEOUT = 10,
-  /* Datacallback 数据类型为降噪后录音 */
+  /* Datacallback 数据类型为录音数据 */
   AIK_EVENT_AUDIO_DATA = 11,
   /* Heartbeat */
   AIK_EVENT_HEARTBEAT = 12,
-  /* 在线语音识别可变结果 */
-  AIK_EVENT_ASR_VARIABLE_RESULT = 13,
 
   /* 人脸检测结果 */
   AIK_EVENT_FACE_DETECT = 201,
@@ -71,10 +69,6 @@ typedef enum AikEvent {
   AIK_EVENT_LIP_MOVING = 214,
   /* 唇动超时 */
   AIK_EVENT_LIP_TIMEOUT = 215,
-  /* 人脸嘴部遮挡 */
-  AIK_EVENT_LIP_FACE_MASK = 216,
-  /* 人脸嘴部无遮挡 */
-  AIK_EVENT_LIP_FACE_NO_MASK = 217,
   /* END */
   AIK_EVENT_END
 } AikEvent;

@@ -41,8 +41,8 @@ typedef enum {
  */
 typedef enum {
   UNI_MODE0,      /* B7/B6 */
-  UNI_MODE1,      /* B2/B3 */
-  UNI_MODE2       /* B0/B1 */
+  UNI_MODE1,      /* B0/B1 */
+  UNI_MODE2       /* B2/B3 */
 } UartPinMode;
 
 /**

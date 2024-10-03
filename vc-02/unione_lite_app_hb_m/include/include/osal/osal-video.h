@@ -9,20 +9,6 @@
 
 #include "osal/osal-types.h"
 
-#if defined(_WIN32) || defined(_WIN64)
-#define _WINDOWS
-#endif
-
-#ifndef _WINDOWS
-#define OSAL_EXPORT __attribute__((visibility("default")))
-#else
-#ifdef DLL_EXPORT
-#define OSAL_EXPORT __declspec(dllexport)
-#else
-#define OSAL_EXPORT __declspec(dllimport)
-#endif
-#endif
-
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -98,8 +84,7 @@ typedef struct OsalVideoConfig {
  * @Return: 成功：OSAL_OK
  *          失败：OSAL_FAILED
  */
-OSAL_EXPORT int32_t OsalVideoOpen(OsalVideoConfig* config,
-                                  OsalVideoHandle* handle);
+int32_t OsalVideoOpen(OsalVideoConfig* config, OsalVideoHandle* handle);
 
 /*
  * @Description: 开始抓取图片
@@ -107,7 +92,7 @@ OSAL_EXPORT int32_t OsalVideoOpen(OsalVideoConfig* config,
  * @Output params:
  * @Return:
  */
-OSAL_EXPORT int32_t OsalVideoStartCapturing(OsalVideoHandle handle);
+int32_t OsalVideoStartCapturing(OsalVideoHandle handle);
 
 /*
  * @Description: 读取一帧
@@ -117,8 +102,8 @@ OSAL_EXPORT int32_t OsalVideoStartCapturing(OsalVideoHandle handle);
  * @Output params:
  * @Return:
  */
-OSAL_EXPORT int32_t OsalVideoReadImage(OsalVideoHandle handle, uint8_t* image,
-                                       uint32_t len);
+int32_t OsalVideoReadImage(OsalVideoHandle handle, uint8_t* image,
+                           uint32_t len);
 
 /*
  * @Description: 停止抓取
@@ -126,7 +111,7 @@ OSAL_EXPORT int32_t OsalVideoReadImage(OsalVideoHandle handle, uint8_t* image,
  * @Output params:
  * @Return:
  */
-OSAL_EXPORT int32_t OsalVideoStopCapturing(OsalVideoHandle handle);
+int32_t OsalVideoStopCapturing(OsalVideoHandle handle);
 
 /*
  * @Description: 关闭设备
@@ -134,7 +119,7 @@ OSAL_EXPORT int32_t OsalVideoStopCapturing(OsalVideoHandle handle);
  * @Output params:
  * @Return:
  */
-OSAL_EXPORT int32_t OsalVideoClose(OsalVideoHandle handle);
+int32_t OsalVideoClose(OsalVideoHandle handle);
 
 #ifdef __cplusplus
 }

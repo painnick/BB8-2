@@ -12,20 +12,6 @@
 #include "osal/osal-thread.h"
 #include "osal/osal-types.h"
 
-#if defined(_WIN32) || defined(_WIN64)
-#define _WINDOWS
-#endif
-
-#ifndef _WINDOWS
-#define OSAL_EXPORT __attribute__((visibility("default")))
-#else
-#ifdef DLL_EXPORT
-#define OSAL_EXPORT __declspec(dllexport)
-#else
-#define OSAL_EXPORT __declspec(dllimport)
-#endif
-#endif
-
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -76,8 +62,8 @@ typedef struct {
  * @Return: 成功：OSAL_OK
  *          失败：OSAL_FAILED
  */
-OSAL_EXPORT int32_t OsalThreadPoolInitialize(int32_t thread_number,
-                                             OsalThreadPool** thread_pool);
+int32_t OsalThreadPoolInitialize(int32_t thread_number,
+                                 OsalThreadPool** thread_pool);
 
 /*
  * @Description: 线程池任务添加
@@ -88,9 +74,9 @@ OSAL_EXPORT int32_t OsalThreadPoolInitialize(int32_t thread_number,
  * @Return: 成功：OSAL_OK
  *          失败：OSAL_FAILED
  */
-OSAL_EXPORT int32_t OsalThreadPoolAddJob(OsalThreadPool* thread_pool,
-                                         void* (*ThreadFunction)(void*),
-                                         void* function_parameters);
+int32_t OsalThreadPoolAddJob(OsalThreadPool* thread_pool,
+                             void* (*ThreadFunction)(void*),
+                             void* function_parameters);
 
 /*
  * @Description: 线程池释放
@@ -99,7 +85,7 @@ OSAL_EXPORT int32_t OsalThreadPoolAddJob(OsalThreadPool* thread_pool,
  * @Return: 成功：OSAL_OK
  *          失败：OSAL_FAILED
  */
-OSAL_EXPORT int32_t OsalThreadPoolDestroy(OsalThreadPool* thread_pool);
+int32_t OsalThreadPoolDestroy(OsalThreadPool* thread_pool);
 
 #ifdef __cplusplus
 }

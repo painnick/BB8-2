@@ -10,20 +10,6 @@
 #include "osal/osal-mutex.h"
 #include "osal/osal-types.h"
 
-#if defined(_WIN32) || defined(_WIN64)
-#define _WINDOWS
-#endif
-
-#ifndef _WINDOWS
-#define OSAL_EXPORT __attribute__((visibility("default")))
-#else
-#ifdef DLL_EXPORT
-#define OSAL_EXPORT __declspec(dllexport)
-#else
-#define OSAL_EXPORT __declspec(dllimport)
-#endif
-#endif
-
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -48,8 +34,8 @@ typedef struct {
  * @Return: 成功：OSAL_OK
  *          失败：OSAL_FAILDE
  */
-OSAL_EXPORT int32_t OsalRingBufferCreate(OsalRingBuffer** ring_buffer,
-                                         uint32_t size, uint32_t thread_lock);
+int32_t OsalRingBufferCreate(OsalRingBuffer** ring_buffer, uint32_t size,
+                             uint32_t thread_lock);
 
 /*
  * @Description: 销毁环形缓冲
@@ -58,7 +44,7 @@ OSAL_EXPORT int32_t OsalRingBufferCreate(OsalRingBuffer** ring_buffer,
  * @Return：成功：OSAL_OK
  *          失败：OSAL_FAILED
  */
-OSAL_EXPORT int32_t OsalRingBufferDestroy(OsalRingBuffer* ring_buffer);
+int32_t OsalRingBufferDestroy(OsalRingBuffer* ring_buffer);
 
 /*
  * @Description: 清空环形缓冲
@@ -67,7 +53,7 @@ OSAL_EXPORT int32_t OsalRingBufferDestroy(OsalRingBuffer* ring_buffer);
  * @Return：成功：OSAL_OK
  *          失败：OSAL_FAILED
  */
-OSAL_EXPORT int32_t OsalRingBufferClear(OsalRingBuffer* ring_buffer);
+int32_t OsalRingBufferClear(OsalRingBuffer* ring_buffer);
 
 /*
  * @Description: 获取环形缓冲空闲空间大小
@@ -76,7 +62,7 @@ OSAL_EXPORT int32_t OsalRingBufferClear(OsalRingBuffer* ring_buffer);
  * @Return: 成功：空闲空间大小
  *          失败：OSAL_FAILED
  */
-OSAL_EXPORT int32_t OsalRingBufferGetFreeSize(OsalRingBuffer* ring_buffer);
+int32_t OsalRingBufferGetFreeSize(OsalRingBuffer* ring_buffer);
 
 /*
  * @Description: 获取环形缓冲数据空间大小
@@ -85,7 +71,7 @@ OSAL_EXPORT int32_t OsalRingBufferGetFreeSize(OsalRingBuffer* ring_buffer);
  * @Return: 成功：数据空间大小
  *          失败：OSAL_FAILED
  */
-OSAL_EXPORT int32_t OsalRingBufferGetDataSize(OsalRingBuffer* ring_buffer);
+int32_t OsalRingBufferGetDataSize(OsalRingBuffer* ring_buffer);
 
 /*
  * @Description: 往环形缓冲写数据
@@ -96,9 +82,8 @@ OSAL_EXPORT int32_t OsalRingBufferGetDataSize(OsalRingBuffer* ring_buffer);
  * @Return: 成功：写入的字节数
  *          失败：OSAL_FAILED
  */
-OSAL_EXPORT int32_t OsalRingBufferWrite(OsalRingBuffer* ring_buffer,
-                                        const uint8_t* buf,
-                                        uint32_t write_size);
+int32_t OsalRingBufferWrite(OsalRingBuffer* ring_buffer, const uint8_t* buf,
+                            uint32_t write_size);
 /*
  * @Description: 从环形缓冲读数据
  * @Input params: ring_buffer：环形缓冲
@@ -108,8 +93,8 @@ OSAL_EXPORT int32_t OsalRingBufferWrite(OsalRingBuffer* ring_buffer,
  * @Return: 成功：读到的字节数
  *          失败：OSAL_FAILED
  */
-OSAL_EXPORT int32_t OsalRingBufferRead(OsalRingBuffer* ring_buffer,
-                                       uint8_t* buf, uint32_t read_size);
+int32_t OsalRingBufferRead(OsalRingBuffer* ring_buffer, uint8_t* buf,
+                           uint32_t read_size);
 
 /*
  * @Description: 从环形缓冲读数据,不更新读指针位置
@@ -120,8 +105,8 @@ OSAL_EXPORT int32_t OsalRingBufferRead(OsalRingBuffer* ring_buffer,
  * @Return: 成功：读到的字节数
  *          失败：OSAL_FAILED
  */
-OSAL_EXPORT int32_t OsalRingBufferPeek(OsalRingBuffer* ring_buffer,
-                                       uint8_t* buf, uint32_t read_size);
+int32_t OsalRingBufferPeek(OsalRingBuffer* ring_buffer, uint8_t* buf,
+                           uint32_t read_size);
 
 #ifdef __cplusplus
 }

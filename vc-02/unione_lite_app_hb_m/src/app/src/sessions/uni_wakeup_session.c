@@ -194,12 +194,9 @@ static Result _response_pcm(char *command, char *pcm) {
   user_event_context_t context = {{0}};
   LOGT(WAKEUP_SESSION_TAG, "playing pcm: %s", pcm);
   /* User event send from app layer, because of maybe need some process */
-  if (uni_user_meeting_is_subscribe(USER_AUDIO_PLAY_START)) {
-    context.audio_play.type = AUDIO_PLAY_REPLY;
-    context.audio_play.file_name = _creat_buf_save_str(pcm);
-    uni_user_meeting_send_event(USER_AUDIO_PLAY_START, &context);
-  }
-  RecogStop();
+  context.audio_play.type = AUDIO_PLAY_REPLY;
+  context.audio_play.file_name = _creat_buf_save_str(pcm);
+  uni_user_meeting_send_event(USER_AUDIO_PLAY_START, &context);
   return MediaPlayerStart(PLAYER_PCM, pcm);
 }
 

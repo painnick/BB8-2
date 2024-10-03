@@ -1,7 +1,7 @@
 #ifndef __UNI_CUST_CONFIG_H__
 #define __UNI_CUST_CONFIG_H__
 
-#define UNI_ASR_TIMEOUT           600    //ASR timeout Xs
+#define UNI_ASR_TIMEOUT           60    //ASR timeout Xs
 
 #define UNI_MIC_ARRY_TYPE_LINER   0
 #define UNI_MIC_ARRY_TYPE_CIRCLE  1
@@ -14,9 +14,9 @@
 
 #define LOCAL_TONE_MAX_VOLUME      "[101]"
 #define LOCAL_TONE_MIN_VOLUME      "[102]"
-#define DEFAULT_PCM_WAKEUP        "[103, 104]"
-#define DEFAULT_PCM_ASR_TIMEOUT   "[105]"
-#define DEFAULT_PCM_SLEEP         "[106]"
-#define DEFAULT_PCM_WELCOME       "[107]"
+#define DEFAULT_PCM_WAKEUP        "[103]"
+#define DEFAULT_PCM_ASR_TIMEOUT   "[104]"
+#define DEFAULT_PCM_SLEEP         "[105]"
+#define DEFAULT_PCM_WELCOME       "[106]"
 
 #endif /*__UNI_CUST_CONFIG_H__*/

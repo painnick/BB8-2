@@ -10,20 +10,6 @@
 #include "osal/osal-mutex.h"
 #include "osal/osal-types.h"
 
-#if defined(_WIN32) || defined(_WIN64)
-#define _WINDOWS
-#endif
-
-#ifndef _WINDOWS
-#define OSAL_EXPORT __attribute__((visibility("default")))
-#else
-#ifdef DLL_EXPORT
-#define OSAL_EXPORT __declspec(dllexport)
-#else
-#define OSAL_EXPORT __declspec(dllimport)
-#endif
-#endif
-
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -47,7 +33,7 @@ typedef struct OsalQueue {
  * @Return: 成功：队列实例
  *          失败：NULL
  */
-OSAL_EXPORT OsalQueue* OsalQueueCreate(int32_t capacity);
+OsalQueue* OsalQueueCreate(int32_t capacity);
 
 /*
  * @Description: 销毁队列
@@ -55,7 +41,7 @@ OSAL_EXPORT OsalQueue* OsalQueueCreate(int32_t capacity);
  * @Output params:
  * @Return:
  */
-OSAL_EXPORT void OsalQueueDestroy(OsalQueue* queue);
+void OsalQueueDestroy(OsalQueue* queue);
 
 /*
  * @Description: 获取队列大小
@@ -64,7 +50,7 @@ OSAL_EXPORT void OsalQueueDestroy(OsalQueue* queue);
  * @Return: 成功：size 大小
  *          失败：OSAL_FAILED
  */
-OSAL_EXPORT int32_t OsalQueueSize(OsalQueue* queue);
+int32_t OsalQueueSize(OsalQueue* queue);
 
 /*
  * @Description: 判断队列是否满
@@ -73,7 +59,7 @@ OSAL_EXPORT int32_t OsalQueueSize(OsalQueue* queue);
  * @Return: 满：OSAL_QUEUE_FULL
  *          未满：其他
  */
-OSAL_EXPORT int32_t OsalQueueIsFull(OsalQueue* queue);
+int32_t OsalQueueIsFull(OsalQueue* queue);
 
 /*
  * @Description: 入队
@@ -83,7 +69,7 @@ OSAL_EXPORT int32_t OsalQueueIsFull(OsalQueue* queue);
  * @Return: 成功：OSAL_OK
  *          失败：OSAL_FAILED
  */
-OSAL_EXPORT int32_t OsalQueuePush(OsalQueue* queue, void* data);
+int32_t OsalQueuePush(OsalQueue* queue, void* data);
 
 /*
  * @Description: 出队
@@ -92,7 +78,7 @@ OSAL_EXPORT int32_t OsalQueuePush(OsalQueue* queue, void* data);
  * @Return: 成功：队列数据
  *          失败：NULL
  */
-OSAL_EXPORT void* OsalQueuePop(OsalQueue* queue);
+void* OsalQueuePop(OsalQueue* queue);
 
 #ifdef __cplusplus
 }

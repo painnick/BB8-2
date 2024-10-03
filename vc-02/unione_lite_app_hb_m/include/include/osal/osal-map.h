@@ -10,20 +10,6 @@
 #include "osal/osal-rbtree.h"
 #include "osal/osal-types.h"
 
-#if defined(_WIN32) || defined(_WIN64)
-#define _WINDOWS
-#endif
-
-#ifndef _WINDOWS
-#define OSAL_EXPORT __attribute__((visibility("default")))
-#else
-#ifdef DLL_EXPORT
-#define OSAL_EXPORT __declspec(dllexport)
-#else
-#define OSAL_EXPORT __declspec(dllimport)
-#endif
-#endif
-
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -79,7 +65,7 @@ typedef struct {
  * @Return: 成功：OSAL_OK
  *          失败：OSAL_FAILED
  */
-OSAL_EXPORT int32_t OsalMapCreate(OsalMap** map, OsalMapKeyType key_type);
+int32_t OsalMapCreate(OsalMap** map, OsalMapKeyType key_type);
 
 /*
  * @Description: 插入节点
@@ -91,8 +77,8 @@ OSAL_EXPORT int32_t OsalMapCreate(OsalMap** map, OsalMapKeyType key_type);
  * @Return: 成功：OSAL_OK
  *          失败：OSAL_FAILED
  */
-OSAL_EXPORT int32_t OsalMapInsert(OsalMap* map, void* key, uint32_t key_length,
-                                  OsalMapValue data);
+int32_t OsalMapInsert(OsalMap* map, void* key, uint32_t key_length,
+                      OsalMapValue data);
 
 /*
  * @Description: 根据 key 搜索节点
@@ -103,8 +89,8 @@ OSAL_EXPORT int32_t OsalMapInsert(OsalMap* map, void* key, uint32_t key_length,
  * @Return: 成功：OSAL_OK
  *          失败：OSAL_FAILED
  */
-OSAL_EXPORT int32_t OsalMapSearch(const OsalMap* map, void* key,
-                                  uint32_t key_length, OsalMapValue* data);
+int32_t OsalMapSearch(const OsalMap* map, void* key, uint32_t key_length,
+                      OsalMapValue* data);
 
 /*
  * @Description: 删除 key 指向的节点
@@ -115,8 +101,8 @@ OSAL_EXPORT int32_t OsalMapSearch(const OsalMap* map, void* key,
  * @Return: 成功：OSAL_OK
  *          失败：OSAL_FAILED
  */
-OSAL_EXPORT int32_t OsalMapDelete(OsalMap* map, void* key, uint32_t key_length,
-                                  OsalMapValue* data);
+int32_t OsalMapDelete(OsalMap* map, void* key, uint32_t key_length,
+                      OsalMapValue* data);
 
 /*
  * @Description: 替换 Map 中的节点
@@ -128,9 +114,8 @@ OSAL_EXPORT int32_t OsalMapDelete(OsalMap* map, void* key, uint32_t key_length,
  * @Return: 成功：OSAL_OK
  *          失败：OSAL_FAILED
  */
-OSAL_EXPORT int32_t OsalMapReplace(OsalMap* map, void* key, uint32_t key_length,
-                                   OsalMapValue replace_data,
-                                   OsalMapValue* data);
+int32_t OsalMapReplace(OsalMap* map, void* key, uint32_t key_length,
+                       OsalMapValue replace_data, OsalMapValue* data);
 
 /*
  * @Description: 释放 Map
@@ -139,7 +124,7 @@ OSAL_EXPORT int32_t OsalMapReplace(OsalMap* map, void* key, uint32_t key_length,
  * @Return: 成功：OSAL_OK
  *          失败：OSAL_FAILED
  */
-OSAL_EXPORT int32_t OsalMapRelease(OsalMap* map);
+int32_t OsalMapRelease(OsalMap* map);
 
 /*
  * @Description: 获取 Map 中节点个数
@@ -148,7 +133,7 @@ OSAL_EXPORT int32_t OsalMapRelease(OsalMap* map);
  * @Return: 成功：节点个数
  *          失败：OSAL_FAILED
  */
-OSAL_EXPORT int32_t OsalMapGetSize(OsalMap* map);
+int32_t OsalMapGetSize(OsalMap* map);
 
 /*
  * @Description: 获取 Map 中首个节点
@@ -157,7 +142,7 @@ OSAL_EXPORT int32_t OsalMapGetSize(OsalMap* map);
  * @Return: 成功：首个节点
  *          失败：NULL
  */
-OSAL_EXPORT OsalMapNode* OsalMapGetFirstNode(OsalMap* map);
+OsalMapNode* OsalMapGetFirstNode(OsalMap* map);
 
 /*
  * @Description: 获取当前节点的下一个节点
@@ -166,7 +151,7 @@ OSAL_EXPORT OsalMapNode* OsalMapGetFirstNode(OsalMap* map);
  * @Return: 成功：下一个节点
  *          失败：NULL
  */
-OSAL_EXPORT OsalMapNode* OsalMapGetNextNode(OsalMapNode* cur_node);
+OsalMapNode* OsalMapGetNextNode(OsalMapNode* cur_node);
 
 #ifdef __cplusplus
 }

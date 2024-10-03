@@ -14,20 +14,6 @@
 #include "osal/osal-time.h"
 #include "osal/osal-types.h"
 
-#if defined(_WIN32) || defined(_WIN64)
-#define _WINDOWS
-#endif
-
-#ifndef _WINDOWS
-#define OSAL_EXPORT __attribute__((visibility("default")))
-#else
-#ifdef DLL_EXPORT
-#define OSAL_EXPORT __declspec(dllexport)
-#else
-#define OSAL_EXPORT __declspec(dllimport)
-#endif
-#endif
-
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -107,7 +93,7 @@ typedef struct OsalLogInfo {
  * @Return: 成功：OSAL_OK
  *          失败：OSAL_FAILED
  */
-OSAL_EXPORT int32_t OsalLogInit(void);
+int32_t OsalLogInit(void);
 
 /*
  * @Description: Log 模块释放资源
@@ -115,7 +101,7 @@ OSAL_EXPORT int32_t OsalLogInit(void);
  * @Output params:
  * @Return:
  */
-OSAL_EXPORT void OsalLogRelease(void);
+void OsalLogRelease(void);
 
 /*
  * @Description: 设置 Log 打印等级
@@ -123,7 +109,7 @@ OSAL_EXPORT void OsalLogRelease(void);
  * @Output params:
  * @Return:
  */
-OSAL_EXPORT void OsalLogSetLevel(uint32_t level);
+void OsalLogSetLevel(uint32_t level);
 
 /*
  * @Description: 合成一条完整 log, 并发送队列
@@ -135,9 +121,8 @@ OSAL_EXPORT void OsalLogSetLevel(uint32_t level);
  * @Output params:
  * @Return:
  */
-OSAL_EXPORT void OsalLogDump(OsalLogLevel level, const char* module,
-                             const char* function, uint32_t line,
-                             const char* format, ...);
+void OsalLogDump(OsalLogLevel level, const char* module, const char* function,
+                 uint32_t line, const char* format, ...);
 
 /*
  * 为了避免在 release 产品中 log 相关代码增加 binary

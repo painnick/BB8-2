@@ -9,20 +9,6 @@
 
 #include "osal/osal-types.h"
 
-#if defined(_WIN32) || defined(_WIN64)
-#define _WINDOWS
-#endif
-
-#ifndef _WINDOWS
-#define OSAL_EXPORT __attribute__((visibility("default")))
-#else
-#ifdef DLL_EXPORT
-#define OSAL_EXPORT __declspec(dllexport)
-#else
-#define OSAL_EXPORT __declspec(dllimport)
-#endif
-#endif
-
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -35,7 +21,7 @@ extern "C" {
  * @Output params:
  * @Return:
  */
-OSAL_EXPORT void* OsalMemset(void* mem, int32_t value, size_t len);
+void* OsalMemset(void* mem, int32_t value, size_t len);
 
 /*
  * @Description: 同 memcpy
@@ -45,7 +31,7 @@ OSAL_EXPORT void* OsalMemset(void* mem, int32_t value, size_t len);
  * @Output params: 无
  * @Return: 指向 dest 的指针
  */
-OSAL_EXPORT void* OsalMemcpy(void* dest, const void* src, size_t n);
+void* OsalMemcpy(void* dest, const void* src, size_t n);
 
 /*
  * @Description: 同 memmove
@@ -55,7 +41,7 @@ OSAL_EXPORT void* OsalMemcpy(void* dest, const void* src, size_t n);
  * @Output params: 无
  * @Return: 指向 dest 的指针
  */
-OSAL_EXPORT void* OsalMemmove(void* dest, const void* src, size_t n);
+void* OsalMemmove(void* dest, const void* src, size_t n);
 
 /*
  * @Description: 同 strcpy
@@ -64,7 +50,7 @@ OSAL_EXPORT void* OsalMemmove(void* dest, const void* src, size_t n);
  * @Output params: 无
  * @Return: 指向 dest 的指针
  */
-OSAL_EXPORT char* OsalStrcpy(char* dest, const char* src);
+char* OsalStrcpy(char* dest, const char* src);
 
 /*
  * @Description: 同 strncpy
@@ -74,7 +60,7 @@ OSAL_EXPORT char* OsalStrcpy(char* dest, const char* src);
  * @Output params: 无
  * @Return: 指向 dest 的指针
  */
-OSAL_EXPORT char* OsalStrncpy(char* dest, const char* src, size_t n);
+char* OsalStrncpy(char* dest, const char* src, size_t n);
 
 /*
  * @Description: 同 strstr
@@ -84,7 +70,7 @@ OSAL_EXPORT char* OsalStrncpy(char* dest, const char* src, size_t n);
  * @Return: 成功：子串首地址
  *          失败：NULL
  */
-OSAL_EXPORT char* OsalStrstr(const char* haystack, const char* needle);
+char* OsalStrstr(const char* haystack, const char* needle);
 
 /*
  * @Description: 同 strchr
@@ -94,7 +80,7 @@ OSAL_EXPORT char* OsalStrstr(const char* haystack, const char* needle);
  * @Return: 成功：匹配到 c 的位置的指针
  *          失败：NULL
  */
-OSAL_EXPORT char* OsalStrchr(const char* str, int32_t c);
+char* OsalStrchr(const char* str, int32_t c);
 
 /*
  * @Description: 同 strrchr
@@ -104,7 +90,7 @@ OSAL_EXPORT char* OsalStrchr(const char* str, int32_t c);
  * @Return: 成功：匹配到 c 的位置的指针
  *          失败：NULL
  */
-OSAL_EXPORT char* OsalStrrchr(const char* str, int32_t c);
+char* OsalStrrchr(const char* str, int32_t c);
 
 /*
  * @Description: 同 strlen
@@ -112,7 +98,7 @@ OSAL_EXPORT char* OsalStrrchr(const char* str, int32_t c);
  * @Output params: 无
  * @Return: 字符串长度
  */
-OSAL_EXPORT size_t OsalStrlen(const char* str);
+size_t OsalStrlen(const char* str);
 
 /*
  * @Description: 同 strcmp
@@ -120,7 +106,7 @@ OSAL_EXPORT size_t OsalStrlen(const char* str);
  * @Output params:
  * @Return:
  */
-OSAL_EXPORT int32_t OsalStrcmp(const char* s1, const char* s2);
+int32_t OsalStrcmp(const char* s1, const char* s2);
 
 /*
  * @Description: 同 strncmp
@@ -128,7 +114,7 @@ OSAL_EXPORT int32_t OsalStrcmp(const char* s1, const char* s2);
  * @Output params:
  * @Return:
  */
-OSAL_EXPORT int32_t OsalStrncmp(const char* s1, const char* s2, size_t n);
+int32_t OsalStrncmp(const char* s1, const char* s2, size_t n);
 
 /*
  * @Description: 同 memcmp
@@ -136,7 +122,7 @@ OSAL_EXPORT int32_t OsalStrncmp(const char* s1, const char* s2, size_t n);
  * @Output params:
  * @Return:
  */
-OSAL_EXPORT int32_t OsalMemcmp(const void* dest, const void* src, size_t n);
+int32_t OsalMemcmp(const void* dest, const void* src, size_t n);
 
 /*
  * @Description: 同 strcat
@@ -144,7 +130,7 @@ OSAL_EXPORT int32_t OsalMemcmp(const void* dest, const void* src, size_t n);
  * @Output params:
  * @Return:
  */
-OSAL_EXPORT char* OsalStrcat(char* dest, const char* src);
+char* OsalStrcat(char* dest, const char* src);
 
 /*
  * @Description: 同 strncat
@@ -152,23 +138,7 @@ OSAL_EXPORT char* OsalStrcat(char* dest, const char* src);
  * @Output params:
  * @Return:
  */
-OSAL_EXPORT char* OsalStrncat(char* dest, const char* src, size_t n);
-
-/*
- * @Description: 同 strtok
- * @Input params:
- * @Output params:
- * @Return:
- */
-OSAL_EXPORT char* OsalStrtok(char* str, const char* delim);
-
-/*
- * @Description: 同 strtok_r
- * @Input params:
- * @Output params:
- * @Return:
- */
-OSAL_EXPORT char* OsalStrtok_r(char* str, const char* delim, char** saveptr);
+char* OsalStrncat(char* dest, const char* src, size_t n);
 
 #ifdef __cplusplus
 }

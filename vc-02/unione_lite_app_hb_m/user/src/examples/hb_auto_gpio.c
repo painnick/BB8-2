@@ -22,11 +22,10 @@ const uart_data_t g_uart_buf[] = {
   {{0x01, 0x00, 0x02, 0x00}, 4}, //TurnRight
   {{0x70, 0x00, 0x00, 0x00}, 4}, //PlayMusic
   {{0x44, 0x44, 0x44, 0x44}, 4}, //Fool
-  {{0x00, 0x00, 0x00, 0x00}, 4}, //Stop
+  {{0x00, 0x00, 0x00, 0x03}, 4}, //Stop
   {{0x02, 0x00, 0x00, 0x01}, 4}, //TurnOn
   {{0x02, 0x00, 0x00, 0x02}, 4}, //TurnOff
-  {{0xFF, 0xFF, 0xFF, 0x01}, 4}, //Where
-  {{0x00, 0x00, 0x00, 0x02}, 4}, //Bye
+  {{0x03, 0x00, 0x00, 0x01}, 4}, //Where
 };
 
 static void _custom_setting_cb(USER_EVENT_TYPE event,
@@ -36,23 +35,21 @@ static void _custom_setting_cb(USER_EVENT_TYPE event,
     setting = &context->custom_setting;
     LOGT(TAG, "user command: %s", setting->cmd);
     if (0 == uni_strcmp(setting->cmd, "TurnLeft")) {
-      user_uart_send(g_uart_buf[2].data, g_uart_buf[1].len);
+      user_uart_send(g_uart_buf[2].data, g_uart_buf[2].len);
     } else if (0 == uni_strcmp(setting->cmd, "TurnRight")) {
-      user_uart_send(g_uart_buf[3].data, g_uart_buf[2].len);
+      user_uart_send(g_uart_buf[3].data, g_uart_buf[3].len);
     } else if (0 == uni_strcmp(setting->cmd, "PlayMusic")) {
-      user_uart_send(g_uart_buf[4].data, g_uart_buf[3].len);
+      user_uart_send(g_uart_buf[4].data, g_uart_buf[4].len);
     } else if (0 == uni_strcmp(setting->cmd, "Fool")) {
-      user_uart_send(g_uart_buf[5].data, g_uart_buf[4].len);
+      user_uart_send(g_uart_buf[5].data, g_uart_buf[5].len);
     } else if (0 == uni_strcmp(setting->cmd, "Stop")) {
-      user_uart_send(g_uart_buf[6].data, g_uart_buf[5].len);
+      user_uart_send(g_uart_buf[6].data, g_uart_buf[6].len);
     } else if (0 == uni_strcmp(setting->cmd, "TurnOn")) {
-      user_uart_send(g_uart_buf[7].data, g_uart_buf[6].len);
+      user_uart_send(g_uart_buf[7].data, g_uart_buf[7].len);
     } else if (0 == uni_strcmp(setting->cmd, "TurnOff")) {
-      user_uart_send(g_uart_buf[8].data, g_uart_buf[7].len);
+      user_uart_send(g_uart_buf[8].data, g_uart_buf[8].len);
     } else if (0 == uni_strcmp(setting->cmd, "Where")) {
-      user_uart_send(g_uart_buf[9].data, g_uart_buf[8].len);
-    } else if (0 == uni_strcmp(setting->cmd, "Bye")) {
-      user_uart_send(g_uart_buf[10].data, g_uart_buf[9].len);
+      user_uart_send(g_uart_buf[9].data, g_uart_buf[9].len);
     } else {
       LOGT(TAG, "Unconcerned command: %s", setting->cmd);
     }

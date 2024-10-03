@@ -9,20 +9,6 @@
 
 #include "osal/osal-types.h"
 
-#if defined(_WIN32) || defined(_WIN64)
-#define _WINDOWS
-#endif
-
-#ifndef _WINDOWS
-#define OSAL_EXPORT __attribute__((visibility("default")))
-#else
-#ifdef DLL_EXPORT
-#define OSAL_EXPORT __declspec(dllexport)
-#else
-#define OSAL_EXPORT __declspec(dllimport)
-#endif
-#endif
-
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -34,7 +20,7 @@ extern "C" {
  * @Return: 成功：内存首地址
  *          失败：NULL
  */
-OSAL_EXPORT void* OsalMalloc(size_t size);
+void* OsalMalloc(size_t size);
 
 /*
  * @Description: 释放内存
@@ -42,7 +28,7 @@ OSAL_EXPORT void* OsalMalloc(size_t size);
  * @Output params: 无
  * @Return: 空
  */
-OSAL_EXPORT void OsalFree(void* ptr);
+void OsalFree(void* ptr);
 
 #ifdef __cplusplus
 }

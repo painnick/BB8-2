@@ -9,22 +9,12 @@
 
 #include "osal/osal-types.h"
 
-#if defined(_WIN32) || defined(_WIN64)
-#define _WINDOWS
-#endif
-
-#ifndef _WINDOWS
-#define OSAL_EXPORT __attribute__((visibility("default")))
-#else
-#define OSAL_EXPORT __declspec(dllexport)
-#endif
-
 #ifdef __cplusplus
 extern "C" {
 #endif
 
 /* OSAL_AUDIO_TYPE_DEFINE */
-#define OSAL_AUDIO_TYPE_PLAY 0 /* 不支持 */
+#define OSAL_AUDIO_TYPE_PLAY 0
 #define OSAL_AUDIO_TYPE_RECORD 1
 
 /* 音频设备句柄 */
@@ -48,8 +38,8 @@ typedef struct {
  * @Return: 成功：OSAL_OK
  *          失败：OSAL_FAILED
  */
-OSAL_EXPORT int32_t OsalAudioOpen(OsalAudioConfig* audio_config,
-                                  OsalAudioHandle* audio_handle);
+int32_t OsalAudioOpen(OsalAudioConfig* audio_config,
+                      OsalAudioHandle* audio_handle);
 
 /*
  * @Description: 关闭录音 / 放音设备
@@ -58,7 +48,7 @@ OSAL_EXPORT int32_t OsalAudioOpen(OsalAudioConfig* audio_config,
  * @Return: 成功：OSAL_OK
  *          失败：OSAL_FAILED
  */
-OSAL_EXPORT int32_t OsalAudioClose(OsalAudioHandle audio_handle);
+int32_t OsalAudioClose(OsalAudioHandle audio_handle);
 
 /*
  * @Description: 从音频设备读取数据，用于录音
@@ -69,8 +59,8 @@ OSAL_EXPORT int32_t OsalAudioClose(OsalAudioHandle audio_handle);
  * @Return: 成功：读到的录音字节数
  *          失败：OSAL_FAILED
  */
-OSAL_EXPORT int32_t OsalAudioRead(OsalAudioHandle audio_handle, uint8_t* buf,
-                                  uint32_t size);
+int32_t OsalAudioRead(OsalAudioHandle audio_handle, uint8_t* buf,
+                      uint32_t size);
 
 /*
  * @Description: 开启音频（多用于开启录音）
@@ -79,7 +69,7 @@ OSAL_EXPORT int32_t OsalAudioRead(OsalAudioHandle audio_handle, uint8_t* buf,
  * @Return: 成功：OSAL_OK
  *          失败：OSAL_FAILED
  */
-OSAL_EXPORT int32_t OsalAudioStart(OsalAudioHandle audio_handle);
+int32_t OsalAudioStart(OsalAudioHandle audio_handle);
 
 /*
  * @Description: 停止音频（多用于停止录音）
@@ -88,7 +78,7 @@ OSAL_EXPORT int32_t OsalAudioStart(OsalAudioHandle audio_handle);
  * @Return: 成功：OSAL_OK
  *          失败：OSAL_FAILED
  */
-OSAL_EXPORT int32_t OsalAudioStop(OsalAudioHandle audio_handle);
+int32_t OsalAudioStop(OsalAudioHandle audio_handle);
 
 #ifdef __cplusplus
 }

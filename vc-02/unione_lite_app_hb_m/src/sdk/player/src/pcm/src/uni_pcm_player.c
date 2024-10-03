@@ -60,8 +60,6 @@ typedef struct {
   char          *decoder_buf;
 } AdpcmPlayer;
 
-extern char g_mp3_ais_share_buf[];
-
 static AdpcmPlayer g_adpcm_player;
 
 static uint32_t _fill_stream_callback(void *buffer, uint32_t length) {
@@ -279,7 +277,6 @@ Result PcmPlay(const char *files) {
     return E_FAILED;
   }
   LOGT(TAG, "Play pcm file : %s", files);
-  g_adpcm_player.decoder_buf = g_mp3_ais_share_buf;
   if (E_OK != _adpcm_play_internal(_get_next_play_file())) {
     LOGW(TAG, "pcm_play_internal failed");
     uni_pthread_mutex_unlock(g_adpcm_player.mutex);
@@ -322,6 +319,14 @@ Result PcmInit(void) {
     uni_sem_destroy(g_adpcm_player.sem);
     return E_FAILED;
   }
+  g_adpcm_player.decoder_buf = (char *)uni_malloc(DECODER_BUF_SIZE);
+  if (NULL == g_adpcm_player.decoder_buf) {
+    LOGE(TAG, "malloc failed");
+    uni_pthread_mutex_destroy(g_adpcm_player.mutex);
+    uni_sem_destroy(g_adpcm_player.sem);
+    uni_free(g_adpcm_player.pcm_buf);
+    return E_FAILED;
+  }
   g_adpcm_player.files = NULL;
   g_adpcm_player.play_num = 0;
   return E_OK;
@@ -332,6 +337,9 @@ void PcmFinal(void) {
   uni_sem_destroy(g_adpcm_player.sem);
   if (g_adpcm_player.pcm_buf) {
     uni_free(g_adpcm_player.pcm_buf);
+  }
+  if (g_adpcm_player.decoder_buf) {
+    uni_free(g_adpcm_player.decoder_buf);
   }
   if (g_adpcm_player.files) {
     uni_free(g_adpcm_player.files);

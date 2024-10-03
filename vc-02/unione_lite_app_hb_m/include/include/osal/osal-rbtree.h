@@ -94,22 +94,15 @@ static inline struct page * rb_insert_page_cache(struct inode * inode,
 #ifndef _LINUX_RBTREE_H
 #define _LINUX_RBTREE_H
 
-#if defined(_WIN32) || defined(_WIN64)
-// #ifdef _WIN32
+#ifdef _WIN32
 #else
 #define _C99
 #endif
 
 #include <stddef.h>
 
-#ifdef _WIN64
-typedef unsigned long long unsignedlong_t;
-#else
-typedef unsigned long unsignedlong_t;
-#endif
-
 struct rb_node {
-  unsignedlong_t rb_parent_color;
+  unsigned long rb_parent_color;
 #define RB_RED 0
 #define RB_BLACK 1
   struct rb_node* rb_right;
@@ -140,7 +133,7 @@ static
 #endif
     void
     rb_set_parent(struct rb_node* rb, struct rb_node* p) {
-  rb->rb_parent_color = (rb->rb_parent_color & 3) | (unsignedlong_t)p;
+  rb->rb_parent_color = (rb->rb_parent_color & 3) | (unsigned long)p;
 }
 static
 #ifdef _C99
@@ -217,7 +210,7 @@ static
     void
     rb_link_node(struct rb_node* node, struct rb_node* parent,
                  struct rb_node** rb_link) {
-  node->rb_parent_color = (unsignedlong_t)parent;
+  node->rb_parent_color = (unsigned long)parent;
   node->rb_left = node->rb_right = NULL;
 
   *rb_link = node;

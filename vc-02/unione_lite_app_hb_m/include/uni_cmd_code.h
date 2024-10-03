@@ -17,7 +17,7 @@ const cmd_code_map_t g_cmd_code_arry[] = {
   {0x7, "TurnOn"},
   {0x8, "TurnOff"},
   {0x9, "Where"},
-  {0xa, "Bye"},
+  {0xa, "Help"},
 };
 
 #endif

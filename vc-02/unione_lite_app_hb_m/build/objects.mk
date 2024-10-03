@@ -4,5 +4,4 @@
 
 USER_OBJS :=
 
-LIBS := -lual-aik -lkws -lUniMicArray -lumd_op -lual-osal -ldsp -lunihal -lm
-
+LIBS := -lbargein -lual-aik -lengine -lual-osal -lfft_fix_mfcc_nrd -lmatrix_op -ldsp -lunihal -lm

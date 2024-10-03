@@ -199,7 +199,6 @@ static Result _response_pcm(const char *command, const char *pcm) {
     context.audio_play.file_name = _creat_buf_save_str(pcm);
     uni_user_meeting_send_event(USER_AUDIO_PLAY_START, &context);
   }
-  RecogStop();
   return MediaPlayerStart(PLAYER_PCM, pcm);
 }
 

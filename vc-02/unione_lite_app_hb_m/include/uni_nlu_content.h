@@ -18,21 +18,21 @@ enum {
   eCMD_TurnOn,
   eCMD_TurnOff,
   eCMD_Where,
-  eCMD_Bye,
+  eCMD_Help,
 };
 
 const char* const g_nlu_content_str[] = {
-[eCMD_wakeup_uni] = "{\"asr\":\"hello\",\"cmd\":\"wakeup_uni\",\"pcm\":\"[103, 104]\"}",
-[eCMD_exitUni] = "{\"asr\":\"Go to sleep\",\"cmd\":\"exitUni\",\"pcm\":\"[106]\"}",
-[eCMD_TurnLeft] = "{\"asr\":\"turn left\",\"cmd\":\"TurnLeft\",\"pcm\":\"[108]\"}",
-[eCMD_TurnRight] = "{\"asr\":\"turn right\",\"cmd\":\"TurnRight\",\"pcm\":\"[109]\"}",
-[eCMD_PlayMusic] = "{\"asr\":\"play music\",\"cmd\":\"PlayMusic\",\"pcm\":\"[110]\"}",
-[eCMD_Fool] = "{\"asr\":\"fool\",\"cmd\":\"Fool\",\"pcm\":\"[111]\"}",
-[eCMD_Stop] = "{\"asr\":\"stop\",\"cmd\":\"Stop\",\"pcm\":\"[112]\"}",
-[eCMD_TurnOn] = "{\"asr\":\"turn on the light\",\"cmd\":\"TurnOn\",\"pcm\":\"[113]\"}",
-[eCMD_TurnOff] = "{\"asr\":\"turn off the light\",\"cmd\":\"TurnOff\",\"pcm\":\"[114]\"}",
-[eCMD_Where] = "{\"asr\":\"where are you\",\"cmd\":\"Where\",\"pcm\":\"[115]\"}",
-[eCMD_Bye] = "{\"asr\":\"good bye\",\"cmd\":\"Bye\",\"pcm\":\"[116]\"}",
+[eCMD_wakeup_uni] = "{\"asr\":\"hello\",\"cmd\":\"wakeup_uni\",\"pcm\":\"[103]\"}",
+[eCMD_exitUni] = "{\"asr\":\"Good bye\",\"cmd\":\"exitUni\",\"pcm\":\"[105]\"}",
+[eCMD_TurnLeft] = "{\"asr\":\"turn left\",\"cmd\":\"TurnLeft\",\"pcm\":\"[107]\"}",
+[eCMD_TurnRight] = "{\"asr\":\"turn right\",\"cmd\":\"TurnRight\",\"pcm\":\"[108]\"}",
+[eCMD_PlayMusic] = "{\"asr\":\"play music\",\"cmd\":\"PlayMusic\",\"pcm\":\"[109]\"}",
+[eCMD_Fool] = "{\"asr\":\"fool\",\"cmd\":\"Fool\",\"pcm\":\"[110]\"}",
+[eCMD_Stop] = "{\"asr\":\"stop\",\"cmd\":\"Stop\",\"pcm\":\"[111]\"}",
+[eCMD_TurnOn] = "{\"asr\":\"turn on the light\",\"cmd\":\"TurnOn\",\"pcm\":\"[112]\"}",
+[eCMD_TurnOff] = "{\"asr\":\"turn off the light\",\"cmd\":\"TurnOff\",\"pcm\":\"[113]\"}",
+[eCMD_Where] = "{\"asr\":\"where are you\",\"cmd\":\"Where\",\"pcm\":\"[114]\"}",
+[eCMD_Help] = "{\"asr\":\"help me\",\"cmd\":\"Help\",\"pcm\":\"[115]\"}",
 };
 
 /*TODO perf sort by hashcode O(logN), now version O(N)*/
@@ -40,8 +40,8 @@ const uni_nlu_content_mapping_t g_nlu_content_mapping[] = {
   {99162322U/*hello*/, eCMD_wakeup_uni, NULL},
   {95268U/*b b*/, eCMD_wakeup_uni, NULL},
   {3136U/*bb*/, eCMD_wakeup_uni, NULL},
-  {3502236238U/*hello bb*/, eCMD_wakeup_uni, NULL},
-  {4275161354U/*Go to sleep*/, eCMD_exitUni, NULL},
+  {2185382187U/*Good bye*/, eCMD_exitUni, NULL},
+  {3249002476U/*See you next time*/, eCMD_exitUni, NULL},
   {4112307658U/*turn left*/, eCMD_TurnLeft, NULL},
   {3317767U/*left*/, eCMD_TurnLeft, NULL},
   {2933146809U/*turn right*/, eCMD_TurnRight, NULL},
@@ -54,10 +54,8 @@ const uni_nlu_content_mapping_t g_nlu_content_mapping[] = {
   {279435475U/*turn off the light*/, eCMD_TurnOff, NULL},
   {132657996U/*turn off*/, eCMD_TurnOff, NULL},
   {3565949466U/*where are you*/, eCMD_Where, NULL},
-  {2120738059U/*good bye*/, eCMD_Bye, NULL},
-  {339501756U/*bye bye*/, eCMD_Bye, NULL},
-  {1969601234U/*see you*/, eCMD_Bye, NULL},
-  {2225387253U/*good night*/, eCMD_Bye, NULL},
+  {3441723743U/*find me*/, eCMD_Where, NULL},
+  {805757655U/*help me*/, eCMD_Help, NULL},
 };
 
 #endif

@@ -27,6 +27,7 @@
 #include "uni_event_list.h"
 #include "uni_recog_service.h"
 
+#define SYNC_OPERATION
 #define UNI_RECOG_ENG_CTRL_TAG            "recog_eng_ctrl"
 
 typedef enum {
@@ -52,6 +53,10 @@ typedef struct EngineCallbackNode_{
 } EngineCallbackNode;
 
 static EngineControlState g_engine_state = ENGINE_STATE_IDLE;
+#ifndef SYNC_OPERATION
+static EventList *g_engine_event_list = NULL;
+#endif
+
 static EngineCallbackNode *g_before_start_cb_list = NULL;
 static EngineCallbackNode *g_after_start_cb_list = NULL;
 static EngineCallbackNode *g_before_cancel_cb_list = NULL;
@@ -175,7 +180,11 @@ static void _engine_cb_execute(EngineCallbackNode *cb_list,
   }
 }
 
+#ifdef SYNC_OPERATION
 static Result _engine_process(Event *event) {
+#else
+static void _engine_process(Event *event) {
+#endif
   Result rc = E_FAILED;
   uni_s32 old_state = g_engine_state;
   EngineParam *param = (EngineParam *)event->content.info;
@@ -224,7 +233,9 @@ static Result _engine_process(Event *event) {
        _state2string(old_state),
        _state2string(g_engine_state),
        _event2string(event->type));
+#ifdef SYNC_OPERATION
   return rc;
+#endif
 }
 
 VuiHandle EngineCreate(EventHandler event_handler) {
@@ -252,7 +263,12 @@ Result EngineStart(VuiHandle vui, Scene *scene) {
   param->vui = vui;
   param->scene = scene;
   event.content.info = (char *)param;
+#ifdef SYNC_OPERATION
   return _engine_process(&event);
+#else
+  EventListAdd(g_engine_event_list, &event);
+  return E_OK;
+#endif
 }
 
 Result EngineCancel(VuiHandle vui) {
@@ -265,7 +281,12 @@ Result EngineCancel(VuiHandle vui) {
   }
   param->vui = vui;
   event.content.info = (char *)param;
+#ifdef SYNC_OPERATION
   return _engine_process(&event);
+#else
+  EventListAdd(g_engine_event_list, &event, EVENT_LIST_PRIORITY_MEDIUM);
+  return E_OK;
+#endif
 }
 
 Result EngineStop(VuiHandle vui) {
@@ -278,7 +299,12 @@ Result EngineStop(VuiHandle vui) {
   }
   param->vui = vui;
   event.content.info = (char *)param;
+#ifdef SYNC_OPERATION
   return _engine_process(&event);
+#else
+  EventListAdd(g_engine_event_list, &event, EVENT_LIST_PRIORITY_MEDIUM);
+  return E_OK;
+#endif
 }
 
 Result EngineEnableTimeout(VuiHandle vui, uni_bool is_enable) {
@@ -292,6 +318,11 @@ Result EngineEnableTimeout(VuiHandle vui, uni_bool is_enable) {
   param->vui = vui;
   event.content.value_int = is_enable;
   event.content.info = (char *)param;
+#ifdef SYNC_OPERATION
   return _engine_process(&event);
+#else
+  EventListAdd(g_engine_event_list, &event, EVENT_LIST_PRIORITY_MEDIUM);
+  return E_OK;
+#endif
 }
 

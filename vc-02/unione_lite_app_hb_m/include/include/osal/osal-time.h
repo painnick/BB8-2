@@ -9,20 +9,6 @@
 
 #include "osal/osal-types.h"
 
-#if defined(_WIN32) || defined(_WIN64)
-#define _WINDOWS
-#endif
-
-#ifndef _WINDOWS
-#define OSAL_EXPORT __attribute__((visibility("default")))
-#else
-#ifdef DLL_EXPORT
-#define OSAL_EXPORT __declspec(dllexport)
-#else
-#define OSAL_EXPORT __declspec(dllimport)
-#endif
-#endif
-
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -63,10 +49,6 @@ typedef union OsalTimeStamp {
   } date;
   int64_t tm_msec; /* 1970年到现在的毫秒数 */
   int64_t ticks;   /* 时钟 Ticks*/
-  struct {
-    int64_t tm_sec;
-    int64_t tm_usec;
-  } ts;
 } OsalTimeStamp;
 
 /*
@@ -76,7 +58,7 @@ typedef union OsalTimeStamp {
  * @Return: 成功：OSAL_OK
  *          失败：OSAL_FAILED
  */
-OSAL_EXPORT int32_t OsalTimeGetStamp(OsalTimeStamp* stamp);
+int32_t OsalTimeGetStamp(OsalTimeStamp* stamp);
 
 /*
  * @Description: 获取毫秒数,多用于实施率统计
@@ -84,15 +66,7 @@ OSAL_EXPORT int32_t OsalTimeGetStamp(OsalTimeStamp* stamp);
  * @Output params:
  * @Return:
  */
-OSAL_EXPORT int32_t OsalTimeGetMs(OsalTimeStamp* stamp);
-
-/*
- * @Description: 获取微秒数,多用于实施率统计
- * @Input params:
- * @Output params:
- * @Return:
- */
-OSAL_EXPORT int64_t OsalTimeGetUs(OsalTimeStamp* stamp);
+int32_t OsalTimeGetMs(OsalTimeStamp* stamp);
 
 /*
  * @Description: 时间戳差值
@@ -100,7 +74,7 @@ OSAL_EXPORT int64_t OsalTimeGetUs(OsalTimeStamp* stamp);
  * @Output params:
  * @Return: stamp1 - stamp2, 单位：ms
  */
-OSAL_EXPORT int64_t OsalTimeDiff(OsalTimeStamp* stamp1, OsalTimeStamp* stamp2);
+int64_t OsalTimeDiff(OsalTimeStamp* stamp1, OsalTimeStamp* stamp2);
 
 /*
  * @Description: 时间戳转换成 string
@@ -109,8 +83,7 @@ OSAL_EXPORT int64_t OsalTimeDiff(OsalTimeStamp* stamp1, OsalTimeStamp* stamp2);
  * @Output params:
  * @Return:
  */
-OSAL_EXPORT int32_t OsalTimeGetStampString(const OsalTimeStamp* stamp,
-                                           char* stamp_string);
+int32_t OsalTimeGetStampString(const OsalTimeStamp* stamp, char* stamp_string);
 
 #ifdef __cplusplus
 }

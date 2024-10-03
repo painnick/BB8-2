@@ -35,8 +35,6 @@
 
 #define VUI_TAG          "vui"
 
-#define SSP_SHARE_MEMORY_SIZE  (40 * 1024)
-
 typedef enum {
   VUI_RECOGN_INIT = 0,
   VUI_RECOGN_STOP,
@@ -50,15 +48,12 @@ typedef struct {
   AikHandle       aik;
   AikMode         mode;
   uni_bool        is_timeout;
-  char            *shared_buffer;
 } Vui;
 
 extern uint32_t AudioADCBuf[];
 extern uint32_t AudioADCBuf_size;
 
-volatile char g_mp3_ais_share_buf[SSP_SHARE_MEMORY_SIZE] = {0};
-
-static Vui g_vui = {NULL, VUI_RECOGN_INIT, 0, NULL, AIK_MODE_NULL, true, NULL};
+static Vui g_vui = {NULL, VUI_RECOGN_INIT, 0, NULL, AIK_MODE_NULL, true};
 
 static const char* _status_to_str(VuiRecognStatus status) {
   switch (status) {
@@ -171,7 +166,6 @@ Result VuiHandleDestroy(VuiHandle handle) {
 Result VuiRecognStart(VuiHandle handle, VuiRecognModel mode_id, uni_u32 timeout) {
   Vui *vui = (Vui *)handle;
   int ret = AIK_OK;
-  int32_t size = SSP_SHARE_MEMORY_SIZE;
   if (NULL == vui) {
     LOGE(VUI_TAG, "recogn start failed. handle=%p", handle);
     return E_FAILED;
@@ -186,11 +180,11 @@ Result VuiRecognStart(VuiHandle handle, VuiRecognModel mode_id, uni_u32 timeout)
   switch (mode_id) {
     case UNI_LP_WAKEUP:
       UalAikSet(vui->aik, AIK_ID_KWS_LP_SET_WAKEUP, NULL);
-      vui->mode = AIK_MODE_SSP_KWS_LP;
+      vui->mode = AIK_MODE_KWS_LP;
       break;
     case UNI_LP_LASR:
       UalAikSet(vui->aik, AIK_ID_KWS_LP_SET_COMMAND, NULL);
-      vui->mode = AIK_MODE_SSP_KWS_LP;
+      vui->mode = AIK_MODE_KWS_LP;
       break;
     case UNI_RASR_MODE:
       vui->mode = AIK_MODE_ASR;
@@ -199,7 +193,7 @@ Result VuiRecognStart(VuiHandle handle, VuiRecognModel mode_id, uni_u32 timeout)
       UalAikSet(vui->aik, AIK_ID_KWS_LP_SET_COMMAND, NULL);
       /* TODO: support KWS LP only now */
       //vui->mode = AIK_MODE_KWS_LP_ASR;
-      vui->mode = AIK_MODE_SSP_KWS_LP;
+      vui->mode = AIK_MODE_KWS_LP;
       break;
     default:
       LOGW(VUI_TAG, "unknow VUI mode: %d", mode_id);
@@ -207,9 +201,6 @@ Result VuiRecognStart(VuiHandle handle, VuiRecognModel mode_id, uni_u32 timeout)
   }
   /* clear ADC ringbuffer before AIK start to disacard mute record */
   uni_hal_record_dmarestart(ADC0_MODULE, AudioADCBuf, AudioADCBuf_size);
-  vui->shared_buffer = (char *)&g_mp3_ais_share_buf[0];
-  UalAikSet(vui->aik, AIK_ID_KWS_LP_SET_SHARED_SIZE, &size);
-  UalAikSet(vui->aik, AIK_ID_KWS_LP_SET_SHARED_BUFFER, vui->shared_buffer);
   ret = UalAikStart(vui->aik, vui->mode);
   if (AIK_OK != ret) {
     LOGE(VUI_TAG, "recogn start faild. mode_id=%d", mode_id);
