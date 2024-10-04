@@ -5,9 +5,9 @@
 #include "user_pwm.h"
 #include "user_timer.h"
 #include "user_uart.h"
-
-#include "uni_media_player.h"
-#include "uni_recog_preproc.h"
+#include "idle_detect.h"
+#include "user_asr.h"
+#include "uni_black_board.h"
 
 #define TAG "auto_gpio"
 
@@ -87,13 +87,13 @@ static void _register_event_callback(void) {
 }
 
 static void _hb_uart_recv(char *buf, int len) {
-  //  user_player_play(AUDIO_PLAY_MUSIC, "110");
-  RecogPreprocInit();
+  BbWrite(BB_KEY_IS_WAKEUP, 1);
+  IdleDetectServiceAccess();
 }
 
 int hb_auto_gpio(void) {
   MediaPlayerVolumeSet(3);
-
+  user_asr_timeout_disable();
   user_gpio_init();
   user_gpio_set_mode(GPIO_NUM_A25, GPIO_MODE_OUT);
   user_gpio_set_value(GPIO_NUM_A25, 0);
