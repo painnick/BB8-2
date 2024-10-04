@@ -31,6 +31,7 @@ class VoiceCommander {
              unsigned long timeout_ms = 20000UL,
              uint8_t rxfifo_full_thrhd = 112);
   Command receive();
+  void send(byte val);
 
  protected:
   HardwareSerial &serial;

@@ -95,6 +95,8 @@ void loop() {
   if (now - lastAliveSoundChecked > ALIVE_SOUND_INTERVAL_MS) {
     setDefaultVolume();
     playAlive();
+    if (isListening)
+      vc02.send(0xD3);
     lastAliveSoundChecked = now;
   }
   dfmp3.loop();

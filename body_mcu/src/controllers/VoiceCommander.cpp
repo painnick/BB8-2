@@ -43,3 +43,11 @@ Command VoiceCommander::receive() {
   } else
     return Command::NO_COMMAND;
 }
+
+void VoiceCommander::send(byte val1) {
+  char buffer[1];
+  buffer[0] = val1;
+  serial.write(buffer, 1);
+  serial.flush();
+  ESP_LOGD(VC_TAG, "Send 0x%02X", val1);
+}
