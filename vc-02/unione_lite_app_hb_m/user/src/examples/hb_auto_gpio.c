@@ -7,27 +7,28 @@
 #include "user_uart.h"
 
 #include "uni_media_player.h"
+#include "uni_recog_preproc.h"
 
 #define TAG "auto_gpio"
 
 #define UART_SEND_MAX      16
 
 typedef struct {
-  char  data[UART_SEND_MAX];
-  int   len;
-}uart_data_t;
+  char data[UART_SEND_MAX];
+  int len;
+} uart_data_t;
 
 const uart_data_t g_uart_buf[] = {
-  {{0x00, 0x00, 0x00, 0x01}, 4}, //wakeup_uni
-  {{0x00, 0x00, 0x00, 0x02}, 4}, //sleep_uni(INSERT)
-  {{0x01, 0x00, 0x01, 0x00}, 4}, //TurnLeft
-  {{0x01, 0x00, 0x02, 0x00}, 4}, //TurnRight
-  {{0x70, 0x00, 0x00, 0x00}, 4}, //PlayMusic
-  {{0x44, 0x44, 0x44, 0x44}, 4}, //Fool
-  {{0x00, 0x00, 0x00, 0x03}, 4}, //Stop
-  {{0x02, 0x00, 0x00, 0x01}, 4}, //TurnOn
-  {{0x02, 0x00, 0x00, 0x02}, 4}, //TurnOff
-  {{0x03, 0x00, 0x00, 0x01}, 4}, //Where
+    {{0x00, 0x00, 0x00, 0x01}, 4}, //wakeup_uni
+    {{0x00, 0x00, 0x00, 0x02}, 4}, //sleep_uni(INSERT)
+    {{0x01, 0x00, 0x01, 0x00}, 4}, //TurnLeft
+    {{0x01, 0x00, 0x02, 0x00}, 4}, //TurnRight
+    {{0x70, 0x00, 0x00, 0x00}, 4}, //PlayMusic
+    {{0x44, 0x44, 0x44, 0x44}, 4}, //Fool
+    {{0x00, 0x00, 0x00, 0x03}, 4}, //Stop
+    {{0x02, 0x00, 0x00, 0x01}, 4}, //TurnOn
+    {{0x02, 0x00, 0x00, 0x02}, 4}, //TurnOff
+    {{0x03, 0x00, 0x00, 0x01}, 4}, //Where
 };
 
 static void _custom_setting_cb(USER_EVENT_TYPE event,
@@ -60,7 +61,7 @@ static void _custom_setting_cb(USER_EVENT_TYPE event,
 }
 
 static void _goto_awakened_cb(USER_EVENT_TYPE event,
-                               user_event_context_t *context) {
+                              user_event_context_t *context) {
   event_goto_awakend_t *awkened = NULL;
   if (context) {
     awkened = &context->goto_awakend;
@@ -69,8 +70,8 @@ static void _goto_awakened_cb(USER_EVENT_TYPE event,
   }
 }
 
-static void _goto_sleeping_cb (USER_EVENT_TYPE event,
-                                     user_event_context_t *context) {
+static void _goto_sleeping_cb(USER_EVENT_TYPE event,
+                              user_event_context_t *context) {
   event_goto_sleeping_t *sleeping = NULL;
   if (context) {
     sleeping = &context->goto_sleeping;
@@ -83,6 +84,11 @@ static void _register_event_callback(void) {
   user_event_subscribe_event(USER_CUSTOM_SETTING, _custom_setting_cb);
   user_event_subscribe_event(USER_GOTO_AWAKENED, _goto_awakened_cb);
   user_event_subscribe_event(USER_GOTO_SLEEPING, _goto_sleeping_cb);
+}
+
+static void _hb_uart_recv(char *buf, int len) {
+  //  user_player_play(AUDIO_PLAY_MUSIC, "110");
+  RecogPreprocInit();
 }
 
 int hb_auto_gpio(void) {
@@ -101,8 +107,11 @@ int hb_auto_gpio(void) {
   user_gpio_set_value(GPIO_NUM_B2, 0);
   user_gpio_set_mode(GPIO_NUM_B3, GPIO_MODE_OUT);
   user_gpio_set_value(GPIO_NUM_B3, 0);
-  user_uart_init(NULL);
+
+  user_uart_init(_hb_uart_recv);
+
   _register_event_callback();
+
   return 0;
 }
 
