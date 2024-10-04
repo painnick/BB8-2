@@ -6,6 +6,8 @@
 #include "user_timer.h"
 #include "user_uart.h"
 
+#include "uni_media_player.h"
+
 #define TAG "auto_gpio"
 
 #define UART_SEND_MAX      16
@@ -84,6 +86,8 @@ static void _register_event_callback(void) {
 }
 
 int hb_auto_gpio(void) {
+  MediaPlayerVolumeSet(3);
+
   user_gpio_init();
   user_gpio_set_mode(GPIO_NUM_A25, GPIO_MODE_OUT);
   user_gpio_set_value(GPIO_NUM_A25, 0);
