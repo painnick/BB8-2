@@ -87,8 +87,7 @@ static void _register_event_callback(void) {
 }
 
 static void _hb_uart_recv(char *buf, int len) {
-  BbWrite(BB_KEY_IS_WAKEUP, 1);
-  IdleDetectServiceAccess();
+// TODO.
 }
 
 int hb_auto_gpio(void) {
