@@ -16,8 +16,15 @@ const cmd_code_map_t g_cmd_code_arry[] = {
   {0x6, "Stop"},
   {0x7, "TurnOn"},
   {0x8, "TurnOff"},
-  {0x9, "Where"},
+  {0x9, "LookAtMe"},
   {0xa, "Help"},
+  {0xb, "WiFiOn"},
+  {0xc, "WiFiOff"},
+  {0xd, "BTOn"},
+  {0xe, "BTOff"},
+  {0xf, "VolumeUpUni"},
+  {0x10, "VolumeDownUni"},
+  {0x11, "ComeOn"},
 };
 
 #endif

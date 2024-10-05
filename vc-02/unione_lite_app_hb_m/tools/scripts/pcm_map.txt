@@ -1,6 +1,6 @@
 101.pcm    It is already the maximum volume
 102.pcm    It is already the minimum volume
-103.pcm    Wake up
+103.pcm    I am ready
 104.pcm    I'm going to sleep.
 105.pcm    Good bye
 106.pcm    Boot
@@ -11,5 +11,12 @@
 111.pcm    Stop
 112.pcm    Turn on the light
 113.pcm    Turn off the light
-114.pcm    I'm here!
-115.pcm    Help me
+114.pcm    I'm looking for you
+115.pcm    Please help me
+116.pcm    Turn on the Wi-Fi
+117.pcm    Turn off the Wi-Fi
+118.pcm    Turn on the bluetooth
+119.pcm    Turn off the bluetooth
+120.pcm    Volume up
+121.pcm    Volume down
+122.pcm    Yes, Sir!

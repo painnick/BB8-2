@@ -18,18 +18,59 @@ typedef struct {
   int len;
 } uart_data_t;
 
+/*
+  Bye=Bye|Good bye|See you|Sleep@Go to sleep
+  Stop=Stop@Stop
+  TurnLeft=Turn left|Left@Turn left
+  TurnRight=Turn right|Right@Turn right
+  LightOn=Turn on|Turn on the light@Turn on the light
+  LightOff=Turn off|Turn off the light@Turn off the light
+  BTOn=Bluetooth on|Turn on the Bluetooth@Turn on the Bluetooth
+  BTOff=Bluetooth off|Turn off the Bluetooth@Turn off the Bluetooth
+  APOn=AP on|Turn on the AP@Turn on the AP
+  APOff=AP off|Turn off the AP@Turn off the AP
+  PlayMusic=Play music@Play music
+  Fool=Fool|Stupid@Fool
+  LookAtMe=Look at me|Hey!@Where are you?
+  Attention=Attention@Yes, Sir!
+*/
+
 const uart_data_t g_uart_buf[] = {
-    {{0x00, 0x00, 0x00, 0x01}, 4}, //wakeup_uni
-    {{0x00, 0x00, 0x00, 0x02}, 4}, //sleep_uni(INSERT)
-    {{0x01, 0x00, 0x01, 0x00}, 4}, //TurnLeft
-    {{0x01, 0x00, 0x02, 0x00}, 4}, //TurnRight
-    {{0x70, 0x00, 0x00, 0x00}, 4}, //PlayMusic
-    {{0x44, 0x44, 0x44, 0x44}, 4}, //Fool
-    {{0x00, 0x00, 0x00, 0x03}, 4}, //Stop
-    {{0x02, 0x00, 0x00, 0x01}, 4}, //TurnOn
-    {{0x02, 0x00, 0x00, 0x02}, 4}, //TurnOff
-    {{0x03, 0x00, 0x00, 0x01}, 4}, //Where
+    {{0x01}, 1}, //wakeup_uni
+    {{0x02}, 1}, //sleep_uni(INSERT)
+    {{0x03}, 1}, //Stop
+
+    {{0x11}, 1}, //TurnLeft
+    {{0x12}, 1}, //TurnRight
+
+    {{0x41}, 1}, //TurnOn
+    {{0x42}, 1}, //TurnOff
+
+    {{0x51}, 1}, //WiFiOn
+    {{0x52}, 1}, //WiFiOff
+    {{0x53}, 1}, //BTOn
+    {{0x54}, 1}, //BTOff
+
+    {{0x21}, 1}, //PlayMusic
+
+    {{0x31}, 1}, //Fool
+    {{0x32}, 1}, //LookAtMe
+    {{0x33}, 1}, //ComeOn
+
+
 };
+
+/* ========================================
+ * System
+ * 103 Awakened(I'm ready)
+ * 104 Sleeping(Go to sleep)
+ * 105 Exit(Good bye)
+ * 106 Service On(Booting message)
+ * ----------------------------------------
+ * User
+ * 107 Fool
+ * 108 ~ 111
+ * ======================================== */
 
 static void _custom_setting_cb(USER_EVENT_TYPE event,
                                user_event_context_t *context) {
@@ -37,26 +78,39 @@ static void _custom_setting_cb(USER_EVENT_TYPE event,
   if (context) {
     setting = &context->custom_setting;
     LOGT(TAG, "user command: %s", setting->cmd);
-    if (0 == uni_strcmp(setting->cmd, "TurnLeft")) {
+    if (0 == uni_strcmp(setting->cmd, "Stop")) {
       user_uart_send(g_uart_buf[2].data, g_uart_buf[2].len);
-    } else if (0 == uni_strcmp(setting->cmd, "TurnRight")) {
+    } else if (0 == uni_strcmp(setting->cmd, "TurnLeft")) {
       user_uart_send(g_uart_buf[3].data, g_uart_buf[3].len);
-    } else if (0 == uni_strcmp(setting->cmd, "PlayMusic")) {
+    } else if (0 == uni_strcmp(setting->cmd, "TurnRight")) {
       user_uart_send(g_uart_buf[4].data, g_uart_buf[4].len);
-    } else if (0 == uni_strcmp(setting->cmd, "Fool")) {
+    } else if (0 == uni_strcmp(setting->cmd, "PlayMusic")) {
       user_uart_send(g_uart_buf[5].data, g_uart_buf[5].len);
-    } else if (0 == uni_strcmp(setting->cmd, "Stop")) {
+      return;
+    } else if (0 == uni_strcmp(setting->cmd, "Fool")) {
       user_uart_send(g_uart_buf[6].data, g_uart_buf[6].len);
-    } else if (0 == uni_strcmp(setting->cmd, "TurnOn")) {
+      user_player_reply_list_random("[107]");
+      return;
+    } else if (0 == uni_strcmp(setting->cmd, "LookAtMe")) {
       user_uart_send(g_uart_buf[7].data, g_uart_buf[7].len);
-    } else if (0 == uni_strcmp(setting->cmd, "TurnOff")) {
+    } else if (0 == uni_strcmp(setting->cmd, "ComeOn")) {
       user_uart_send(g_uart_buf[8].data, g_uart_buf[8].len);
-    } else if (0 == uni_strcmp(setting->cmd, "Where")) {
+    } else if (0 == uni_strcmp(setting->cmd, "TurnOn")) {
       user_uart_send(g_uart_buf[9].data, g_uart_buf[9].len);
+    } else if (0 == uni_strcmp(setting->cmd, "TurnOff")) {
+      user_uart_send(g_uart_buf[10].data, g_uart_buf[10].len);
+    } else if (0 == uni_strcmp(setting->cmd, "WiFiOn")) {
+      user_uart_send(g_uart_buf[11].data, g_uart_buf[11].len);
+    } else if (0 == uni_strcmp(setting->cmd, "WiFiOff")) {
+      user_uart_send(g_uart_buf[12].data, g_uart_buf[12].len);
+    } else if (0 == uni_strcmp(setting->cmd, "BTOn")) {
+      user_uart_send(g_uart_buf[13].data, g_uart_buf[13].len);
+    } else if (0 == uni_strcmp(setting->cmd, "BTOff")) {
+      user_uart_send(g_uart_buf[14].data, g_uart_buf[14].len);
     } else {
       LOGT(TAG, "Unconcerned command: %s", setting->cmd);
     }
-    user_player_reply_list_random(setting->reply_files);
+    user_player_reply_list_random("[108,109,110,111]");
   }
 }
 
@@ -66,7 +120,7 @@ static void _goto_awakened_cb(USER_EVENT_TYPE event,
   if (context) {
     awkened = &context->goto_awakend;
     user_uart_send(g_uart_buf[0].data, g_uart_buf[0].len);
-    user_player_reply_list_random(awkened->reply_files);
+    user_player_reply_list_random("[103]"); // 103.mp3
   }
 }
 
@@ -76,7 +130,7 @@ static void _goto_sleeping_cb(USER_EVENT_TYPE event,
   if (context) {
     sleeping = &context->goto_sleeping;
     user_uart_send(g_uart_buf[1].data, g_uart_buf[1].len);
-    user_player_reply_list_random(sleeping->reply_files);
+    user_player_reply_list_random("[104]"); // 104.mp3
   }
 }
 
@@ -108,6 +162,8 @@ int hb_auto_gpio(void) {
   user_gpio_set_value(GPIO_NUM_B3, 0);
 
   user_uart_init(_hb_uart_recv);
+  uart_data_t ready = {{0x00}, 1};
+  user_uart_send(ready.data, ready.len);
 
   _register_event_callback();
 

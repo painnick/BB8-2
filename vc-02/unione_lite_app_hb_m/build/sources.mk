@@ -26,7 +26,7 @@ CCFLAGS        := -O1 -g3 -mcmodel=medium -Wall -mcpu=d1088-spu -c -fmessage-len
                   -fdata-sections -mext-dsp -mext-zol -MMD -MP
 
 CCFLAGS        += -DFUNC_OS_EN=1 -DFLASH_BOOT_EN=$(UART_UPDATE) \
-                  -DBUILD_DATE=\"2024100309\" -DBUILD_ID=\"181906\"
+                  -DBUILD_DATE=\"2024100515\" -DBUILD_ID=\"182230\"
 
 # The git version of mcu app
 APP_VERSION    := "v4.1.0"

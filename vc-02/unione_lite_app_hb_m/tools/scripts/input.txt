@@ -1,6 +1,6 @@
 It is already the maximum volume
 It is already the minimum volume
-Wake up
+I am ready
 I'm going to sleep.
 Good bye
 Boot
@@ -11,5 +11,12 @@ I'm not a fool
 Stop
 Turn on the light
 Turn off the light
-I'm here!
-Help me
+I'm looking for you
+Please help me
+Turn on the Wi-Fi
+Turn off the Wi-Fi
+Turn on the bluetooth
+Turn off the bluetooth
+Volume up
+Volume down
+Yes, Sir!
