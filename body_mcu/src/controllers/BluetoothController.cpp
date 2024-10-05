@@ -3,7 +3,6 @@
 //
 
 #include "BluetoothController.h"
-#include "command.h"
 
 #include <utility>
 

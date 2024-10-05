@@ -8,9 +8,6 @@
 #include <Arduino.h>
 #include <HardwareSerial.h>
 
-#include "../command.h"
-
-
 #ifndef BODY_MCU_VOICE_COMMANDER_H
 #define BODY_MCU_VOICE_COMMANDER_H
 

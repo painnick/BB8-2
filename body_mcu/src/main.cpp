@@ -4,7 +4,6 @@
 
 #define DISABLE_MP3_DEBUG_LOG
 
-#include "command.h"
 #include "controllers/BluetoothController.h"
 #include "controllers/HeadCommander.h"
 #include "controllers/MotorController.h"
@@ -29,8 +28,6 @@ StateLedController stateLed(WIFI_EYE_PIN, WIFI_EYE_CH);
 bool isListening = false;
 bool moveHeadToFront = false;
 bool isWifiOn = false;
-
-void processCommand(Command cmd);
 
 void setup() {
   motorController.init();
@@ -232,65 +229,5 @@ void loop() {
   auto isEnd = stateLed.loop(now);
   if (isEnd && !isListening) {
     stateLed.blink();
-  }
-}
-
-void processCommand(Command cmd) {
-  switch (cmd) {
-    case NOT_COMMAND:
-    case NO_COMMAND:
-    case UNKNOWN:
-      // Do not update lastAliveSoundChecked
-      break;
-    default:
-      lastAliveSoundChecked = millis();
-      break;
-  }
-  switch (cmd) {
-    case WAKE_UP:
-      head.send(HEAD_WIFI_ON);
-      isListening = true;
-      stateLed.on();
-      break;
-    case BYE:
-      head.send(HEAD_WIFI_OFF);
-      isListening = false;
-      stateLed.blink();
-      break;
-    case TURN_LEFT:
-      moveHeadToFront = false;
-      motorController.left(1000);
-      break;
-    case TURN_RIGHT:
-      moveHeadToFront = false;
-      motorController.right(1000);
-      break;
-    case PLAY_MUSIC:
-      playMusic();
-      break;
-    case FOOL:
-      head.send(HEAD_WARN);
-      // TODO : Motor control
-      break;
-    case STOP:
-      motorController.stop(0);
-      stopMusic();
-      // TODO : ...
-      break;
-    case TURN_ON:
-      head.send(HEAD_LIGHT_ON);
-      break;
-    case TURN_OFF:
-      head.send(HEAD_LIGHT_OFF);
-      break;
-    case UNKNOWN:
-      playFail();
-      break;
-    case WHERE_ARE_YOU:
-      moveHeadToFront = true;
-      motorController.randomMove(1000 * 10);
-      break;
-    default:
-      break;
   }
 }

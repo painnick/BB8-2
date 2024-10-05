@@ -7,8 +7,6 @@
 
 #include "SoftwareSerial.h"
 
-#include "../command.h"
-
 #define HEAD_TAG "HEAD"
 
 class HeadCommander;

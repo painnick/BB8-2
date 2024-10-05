@@ -8,8 +8,6 @@
 #include "BluetoothSerial.h"
 #include <Arduino.h>
 
-#include "command.h"
-
 class BluetoothController;
 
 enum BluetoothCommandType {
