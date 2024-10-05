@@ -73,6 +73,10 @@ void VoiceCommander::loop() {
     ESP_LOGD(VC_TAG, "Read 0x%02X", buffer);
 
     auto commandType = ToVoiceCommandType(buffer[0]);
+    if (commandType == VC02_WAKE_UP)
+      isListening = true;
+    else if (commandType == VC02_SLEEP)
+      isListening = false;
     proc(this, commandType);
   }
 }

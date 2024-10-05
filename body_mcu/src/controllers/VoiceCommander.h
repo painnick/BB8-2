@@ -65,6 +65,8 @@ class VoiceCommander {
 
   void send(byte val);
 
+  bool isListening = true;
+
  protected:
   HardwareSerial &serial;
   VoiceCommanderCallback proc;

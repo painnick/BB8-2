@@ -26,18 +26,15 @@ HeadCommander head(cmdSerial);
 MotorController motorController(MOTOR1_PIN, MOTOR2_PIN);
 StateLedController stateLed(WIFI_EYE_PIN, WIFI_EYE_CH);
 
-bool isListening = false;
 bool moveHeadToFront = false;
 
 void DoWakeUp() {
   head.send(HEAD_WIFI_ON);
-  isListening = true;
   stateLed.on();
 }
 
 void DoSleep() {
   head.send(HEAD_WIFI_OFF);
-  isListening = false;
   stateLed.blink();
 }
 
@@ -276,7 +273,7 @@ void loop() {
 
   auto now = millis();
   if (now - lastAliveSoundChecked > ALIVE_SOUND_INTERVAL_MS) {
-    if (isListening)
+    if (vc02.isListening)
       vc02.send(VC02_KEEPALIVE);
     lastAliveSoundChecked = now;
   }
@@ -294,7 +291,7 @@ void loop() {
   }
 
   auto isEnd = stateLed.loop(now);
-  if (isEnd && !isListening) {
+  if (isEnd && !vc02.isListening) {
     stateLed.blink();
   }
 }
