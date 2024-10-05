@@ -3,33 +3,29 @@
 //
 
 #include "HeadCommander.h"
+#include "../../../head_mcu/message.h"
 
 #define COMMAND_DELIMITER "/|"
 #define COMMAND_DELIMITER_SIZE 2
 #define MAX_COMMAND_BUFFER_SIZE 50
 
 static const HeadCommandInfo headCommands[] = {
-    {HEAD_UNKNOWN, "UNKNOWN", "Unknown"},
-    {HEAD_ACK, "ACK", "Ack"},
-    {HEAD_LOG, "LOG", "Log"},
-    {HEAD_WIFI_ON, "WIFION", "WiFiOn"},
-    {HEAD_WIFI_OFF, "WIFIOFF", "WiFiOff"},
-    {HEAD_WARN, "WARN", "Warn"},
-    {HEAD_RANDOM_LIGHT1, "RANDOM1", "RandomLight1"},
-    {HEAD_RANDOM_LIGHT2, "RANDOM2", "RandomLight2"},
-    {HEAD_LIGHT_ON, "LIGHTON", "LightOn"},
-    {HEAD_LIGHT_OFF, "LIGHTOFF", "LightOff"},
-    {HEAD_TURN_LEFT, "TURNLEFT", "TurnLeft"},
-    {HEAD_TURN_RIGHT, "TURNRIGHT", "TurnRight"},
-    {HEAD_WIFI_IS_ON, "WIFIISON", "WiFiIsOn"},
-    {HEAD_WIFI_IS_OFF, "WIFIISOFF", "WiFiIsOff"},
-};
-
-static const String logMessages[] = {
-    "INITCMD",
-    "SETUP",
-    "BUFFULL"
-};
+    {HEAD_UNKNOWN, CMD_UNKNOWN, "Unknown"},
+    {HEAD_ACK, CMD_ACK, "Ack"},
+    {HEAD_LOG, CMD_LOGMSG, "Log"},
+    {HEAD_WIFI_ON, CMD_WIFI_ON, "WiFiOn"},
+    {HEAD_WIFI_OFF, CMD_WIFI_OFF, "WiFiOff"},
+    {HEAD_WARN, CMD_WARN, "Warn"},
+    {HEAD_RANDOM_LIGHT1, CMD_RANDOM1, "RandomLight1"},
+    {HEAD_RANDOM_LIGHT2, CMD_RANDOM2, "RandomLight2"},
+    {HEAD_LIGHT_ON, CMD_LIGHT_ON, "LightOn"},
+    {HEAD_LIGHT_OFF, CMD_LIGHT_OFF, "LightOff"},
+    {HEAD_TURN_LEFT, CMD_TURN_LEFT, "TurnLeft"},
+    {HEAD_TURN_RIGHT, CMD_TURN_RIGHT, "TurnRight"},
+    {HEAD_WIFI_IS_ON, CMD_WIFI_IS_ON, "WiFiIsOn"},
+    {HEAD_WIFI_IS_OFF, CMD_WIFI_IS_OFF, "WiFiIsOff"},
+    {HEAD_BT_ON, CMD_BLUETOOTH_ON, "BluetoothOn"},
+    {HEAD_BT_OFF, CMD_BLUETOOTH_OFF, "BluetoothOff"},};
 
 String ToString(const HeadCommandInfo &cmd) {
   for (const auto &headCommand : headCommands) {
@@ -48,9 +44,12 @@ String ToMessage(HeadCommandType cmdType) {
 }
 
 HeadCommandType ToHeadCommandType(String &msg) {
-  for (const auto &logMsg : logMessages) {
-    if (msg == logMsg)
-      return HEAD_LOG;
+  if (msg.indexOf(CMD_ACK) == 0) {
+    return HEAD_ACK;
+  }
+
+  if (msg.indexOf(CMD_LOGMSG) == 0) {
+    return HEAD_LOG;
   }
 
   for (const auto &headCommand : headCommands) {

@@ -3,23 +3,24 @@
 //
 
 #include "BluetoothController.h"
+#include "../../../head_mcu/message.h"
 
 #include <utility>
 
 #define BT_TAG "BLUETOOTH"
 
 static const BluetoothCommandInfo btCommands[] = {
-    {BT_UNKNOWN, "UNKNOWN", "Unknown"},
-    {BT_ACK, "ACK", "Ack"},
-    {BT_WIFI_ON, "WIFION", "WiFiOn"},
-    {BT_WIFI_OFF, "WIFIOFF", "WiFiOff"},
-    {BT_WARN, "WARN", "Warn"},
-    {BT_RANDOM_LIGHT1, "RANDOM1", "RandomLight1"},
-    {BT_RANDOM_LIGHT2, "RANDOM2", "RandomLight2"},
-    {BT_LIGHT_ON, "LIGHTON", "LightOn"},
-    {BT_LIGHT_OFF, "LIGHTOFF", "LightOff"},
-    {BT_TURN_LEFT, "TURNLEFT", "TurnLeft"},
-    {BT_TURN_RIGHT, "TURNRIGHT", "TurnRight"},
+    {BT_UNKNOWN, CMD_UNKNOWN, "Unknown"},
+    {BT_ACK, CMD_ACK, "Ack"},
+    {BT_WIFI_ON, CMD_WIFI_ON, "WiFiOn"},
+    {BT_WIFI_OFF, CMD_WIFI_OFF, "WiFiOff"},
+    {BT_WARN, CMD_WARN, "Warn"},
+    {BT_RANDOM_LIGHT1, CMD_RANDOM1, "RandomLight1"},
+    {BT_RANDOM_LIGHT2, CMD_RANDOM2, "RandomLight2"},
+    {BT_LIGHT_ON, CMD_LIGHT_ON, "LightOn"},
+    {BT_LIGHT_OFF, CMD_LIGHT_OFF, "LightOff"},
+    {BT_TURN_LEFT, CMD_TURN_LEFT, "TurnLeft"},
+    {BT_TURN_RIGHT, CMD_TURN_RIGHT, "TurnRight"},
 };
 
 String ToString(const BluetoothCommandInfo &cmd) {
@@ -39,6 +40,9 @@ String ToMessage(BluetoothCommandType cmdType) {
 }
 
 BluetoothCommandType ToBluetoothCommandType(String &msg) {
+  if (msg.indexOf(CMD_ACK) == 0) {
+    return BT_ACK;
+  }
   for (const auto &btCommand : btCommands) {
     if (msg.indexOf(btCommand.msg) != -1)
       return btCommand.commandType;

@@ -26,6 +26,8 @@ enum HeadCommandType {
   HEAD_TURN_RIGHT,
   HEAD_WIFI_IS_ON,
   HEAD_WIFI_IS_OFF,
+  HEAD_BT_ON,
+  HEAD_BT_OFF,
 };
 
 typedef struct {
