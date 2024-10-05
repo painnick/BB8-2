@@ -10,16 +10,52 @@
 
 #include "command.h"
 
-#define BT_TAG "BLUETOOTH"
+class BluetoothController;
+
+enum BluetoothCommandType {
+  BT_UNKNOWN,
+  BT_HELP,
+  BT_ACK,
+  BT_WIFI_ON,
+  BT_WIFI_OFF,
+  BT_WARN,
+  BT_RANDOM_LIGHT1,
+  BT_RANDOM_LIGHT2,
+  BT_LIGHT_ON,
+  BT_LIGHT_OFF,
+  BT_TURN_LEFT,
+  BT_TURN_RIGHT,
+};
+
+typedef struct {
+  BluetoothCommandType commandType;
+  String msg;
+  String desc;
+} BluetoothCommandInfo;
+
+String ToString(const BluetoothCommandInfo &cmd);
+
+BluetoothCommandType ToBluetoothCommandType(String &msg);
+
+typedef std::function<void(BluetoothController *controller,
+                           BluetoothCommandType commandType,
+                           String &msg)> BluetoothControllerCallback;
 
 class BluetoothController {
  public:
+  void init(BluetoothControllerCallback callback);
+
   void begin(String name);
-  Command receive();
+
+  void loop();
+
   void println(const char c[]);
+
+  void printHelp();
 
  protected:
   BluetoothSerial serial;
+  BluetoothControllerCallback proc;
 };
 
 #endif// BODY_MCU_BLUETOOTH_CONTROLLER_H

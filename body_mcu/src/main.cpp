@@ -38,27 +38,34 @@ void setup() {
   vc02.begin(115200, SERIAL_8N1, VOICE_COMMAND_RX_PIN, VOICE_COMMAND_TX_PIN);
   vc02.init([=](const VoiceCommander *cmd, const VoiceCommandType cmdType) {
     switch (cmdType) {
-      case VC02_WAKE_UP:head.send(HEAD_WIFI_ON);
+      case VC02_WAKE_UP:
+        head.send(HEAD_WIFI_ON);
         isListening = true;
         stateLed.on();
         break;
-      case VC02_SLEEP:head.send(HEAD_WIFI_OFF);
+      case VC02_SLEEP:
+        head.send(HEAD_WIFI_OFF);
         isListening = false;
         stateLed.blink();
         break;
-      case VC02_STOP:motorController.stop(0);
+      case VC02_STOP:
+        motorController.stop(0);
         stopMusic();
         // TODO : ...
         break;
-      case VC02_TURN_LEFT:moveHeadToFront = false;
+      case VC02_TURN_LEFT:
+        moveHeadToFront = false;
         motorController.left(1000);
         break;
-      case VC02_TURN_RIGHT:moveHeadToFront = false;
+      case VC02_TURN_RIGHT:
+        moveHeadToFront = false;
         motorController.left(1000);
         break;
-      case VC02_TURN_ON_LIGHT:head.send(HEAD_LIGHT_ON);
+      case VC02_TURN_ON_LIGHT:
+        head.send(HEAD_LIGHT_ON);
         break;
-      case VC02_TURN_OFF_LIGHT:head.send(HEAD_LIGHT_OFF);
+      case VC02_TURN_OFF_LIGHT:
+        head.send(HEAD_LIGHT_OFF);
         break;
       case VC02_TURN_ON_AP:
         // TODO
@@ -72,24 +79,69 @@ void setup() {
       case VC02_TURN_OFF_BLUETOOTH:
         // TODO
         break;
-      case VC02_PLAY_MUSIC:playMusic();
+      case VC02_PLAY_MUSIC:
+        playMusic();
         break;
-      case VC02_FOOL:head.send(HEAD_WARN);
+      case VC02_FOOL:
+        head.send(HEAD_WARN);
         // TODO : Motor control
         break;
       case VC02_LOOK_AT_ME:
         // TODO
         break;
-      case VC02_ATTENTION:moveHeadToFront = true;
+      case VC02_ATTENTION:
+        moveHeadToFront = true;
         motorController.randomMove(1000 * 10);
         break;
       case VC02_UNKNOWN:
-      default:playFail();
+      default:
+        playFail();
         break;
     }
   });
 
   bt.begin("BB-8");
+  bt.init([=](BluetoothController *controller, BluetoothCommandType cmdType, String &msg) {
+    switch (cmdType) {
+      case BT_HELP:
+        controller->printHelp();
+        break;
+      case BT_ACK:
+        // Do nothing
+        break;
+      case BT_WIFI_ON:
+        // TODO
+        break;
+      case BT_WIFI_OFF:
+        // TODO
+        break;
+      case BT_WARN:
+        // TODO
+        break;
+      case BT_RANDOM_LIGHT1:
+        // TODO
+        break;
+      case BT_RANDOM_LIGHT2:
+        // TODO
+        break;
+      case BT_LIGHT_ON:
+        // TODO
+        break;
+      case BT_LIGHT_OFF:
+        // TODO
+        break;
+      case BT_TURN_LEFT:
+        // TODO
+        break;
+      case BT_TURN_RIGHT:
+        // TODO
+        break;
+      case BT_UNKNOWN:
+      default:
+        playFail();
+        break;
+    }
+  });
 
   head.begin(9600, SWSERIAL_8N1, HEAD_COMMAND_RX_PIN, HEAD_COMMAND_TX_PIN);
   head.init([=](const HeadCommander *router, HeadCommandType cmdType) {
@@ -123,12 +175,15 @@ void setup() {
       case HEAD_TURN_RIGHT:
         // TODO
         break;
-      case HEAD_WIFI_IS_ON:isWifiOn = true;
+      case HEAD_WIFI_IS_ON:
+        isWifiOn = true;
         break;
-      case HEAD_WIFI_IS_OFF:isWifiOn = false;
+      case HEAD_WIFI_IS_OFF:
+        isWifiOn = false;
         break;
       case HEAD_UNKNOWN:
-      default:playFail();
+      default:
+        playFail();
         break;
     }
   });
@@ -153,19 +208,10 @@ uint32_t lastAliveSoundChecked = 0;
 
 void loop() {
   vc02.loop();
-
-  Command cmd;
-  cmd = bt.receive();
-  if ((cmd & NO_COMMAND) != NO_COMMAND) {
-    ESP_LOGD(MAIN_TAG, "BT Cmd : %s", ToString(cmd).c_str());
-    if ((cmd & NOT_COMMAND) != NOT_COMMAND)
-      processCommand(cmd);
-  }
+  bt.loop();
 
   auto now = millis();
   if (now - lastAliveSoundChecked > ALIVE_SOUND_INTERVAL_MS) {
-    setDefaultVolume();
-    playAlive();
     if (isListening)
       vc02.send(0xD3);
     lastAliveSoundChecked = now;
@@ -196,42 +242,55 @@ void processCommand(Command cmd) {
     case UNKNOWN:
       // Do not update lastAliveSoundChecked
       break;
-    default:lastAliveSoundChecked = millis();
+    default:
+      lastAliveSoundChecked = millis();
       break;
   }
   switch (cmd) {
-    case WAKE_UP:head.send(HEAD_WIFI_ON);
+    case WAKE_UP:
+      head.send(HEAD_WIFI_ON);
       isListening = true;
       stateLed.on();
       break;
-    case BYE:head.send(HEAD_WIFI_OFF);
+    case BYE:
+      head.send(HEAD_WIFI_OFF);
       isListening = false;
       stateLed.blink();
       break;
-    case TURN_LEFT:moveHeadToFront = false;
+    case TURN_LEFT:
+      moveHeadToFront = false;
       motorController.left(1000);
       break;
-    case TURN_RIGHT:moveHeadToFront = false;
+    case TURN_RIGHT:
+      moveHeadToFront = false;
       motorController.right(1000);
       break;
-    case PLAY_MUSIC:playMusic();
+    case PLAY_MUSIC:
+      playMusic();
       break;
-    case FOOL:head.send(HEAD_WARN);
+    case FOOL:
+      head.send(HEAD_WARN);
       // TODO : Motor control
       break;
-    case STOP:motorController.stop(0);
+    case STOP:
+      motorController.stop(0);
       stopMusic();
       // TODO : ...
       break;
-    case TURN_ON:head.send(HEAD_LIGHT_ON);
+    case TURN_ON:
+      head.send(HEAD_LIGHT_ON);
       break;
-    case TURN_OFF:head.send(HEAD_LIGHT_OFF);
+    case TURN_OFF:
+      head.send(HEAD_LIGHT_OFF);
       break;
-    case UNKNOWN:playFail();
+    case UNKNOWN:
+      playFail();
       break;
-    case WHERE_ARE_YOU:moveHeadToFront = true;
+    case WHERE_ARE_YOU:
+      moveHeadToFront = true;
       motorController.randomMove(1000 * 10);
       break;
-    default:break;
+    default:
+      break;
   }
 }
