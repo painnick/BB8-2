@@ -1,5 +1,6 @@
 #include "esp32-hal-log.h"
 #include <Arduino.h>
+#include "message.h"
 
 #include "soc/soc.h"             // disable brownout problems
 #include "soc/rtc_cntl_reg.h"    // disable brownout problems
@@ -24,7 +25,7 @@ void setup() {
   initCamera();
 
   commandRouterBegin(process);
-  sendCommand("InitCMD");
+  logMessage("INITCMD");
 
   //  initSoftAP();// Test
   //  startCameraServer();// Test
@@ -34,7 +35,7 @@ void setup() {
 
   clearWifiLed(true);
   clearShiftRegister(true);
-  sendCommand("SETUP");
+  logMessage("SETUP");
 }
 
 void loop() {
@@ -50,27 +51,29 @@ void loop() {
 
 void process(const String &cmd) {
   bool isUnknown = false;
-  if (cmd == "WIFION") {
+  if (cmd == CMD_WIFI_ON) {
     if (!isAPOn()) {
       initSoftAP();
       startCameraServer();
       blinkWifiLed();
     }
-  } else if (cmd == "WIFIOFF") {
+    sendCommand(isAPOn() ? CMD_WIFI_IS_ON : CMD_WIFI_IS_OFF);
+  } else if (cmd == CMD_WIFI_OFF) {
     if (isAPOn()) {
       stopCameraServer();
       closeSoftAP();
       clearWifiLed(true);
     }
-  } else if (cmd == "WARN") {
+    sendCommand(isAPOn() ? CMD_WIFI_IS_ON : CMD_WIFI_IS_OFF);
+  } else if (cmd == CMD_FOOL) {
     warningMessage();
-  } else if (cmd == "RANDOM1") {
+  } else if (cmd == CMD_RANDOM1) {
     randomLight(true);
-  } else if (cmd == "RANDOM2") {
+  } else if (cmd == CMD_RANDOM2) {
     randomLight(false);
-  } else if (cmd == "LIGHTON") {
+  } else if (cmd == CMD_LIGHT_ON) {
     setShiftRegister(0xFF);
-  } else if (cmd == "LIGHTOFF") {
+  } else if (cmd == CMD_LIGHT_OFF) {
     clearShiftRegister();
   } else {
     isUnknown = true;
@@ -78,7 +81,7 @@ void process(const String &cmd) {
   }
 
   if (isUnknown)
-    sendCommand("Unknown");
+    sendCommand(CMD_UNKNOWN);
   else
     ackCommand(cmd);
 }

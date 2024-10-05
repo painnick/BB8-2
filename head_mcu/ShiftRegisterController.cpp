@@ -16,6 +16,8 @@ byte value1;
 byte lastValue1{};
 bool changed = false;
 unsigned long lastChecked{};
+int lastActionIndex = 0;
+int runningActionIndex = 0;
 
 CircularBuffer<SR_ACTION, 10> actions;
 
@@ -36,7 +38,7 @@ void initShiftRegister() {
 bool loopShiftRegister(unsigned long now, bool forceUpdate) {
   bool isLastAction = false;
   switch (mode) {
-    case ShiftRegisterMode::FIXED:
+    case ShiftRegisterMode::FIXED: {
       if (forceUpdate || changed) {
         ESP_LOGD(SR_TAG, "FIXED. Changed");
         internalSet(value1);
@@ -44,29 +46,35 @@ bool loopShiftRegister(unsigned long now, bool forceUpdate) {
       }
       isLastAction = true;
       break;
-    case ShiftRegisterMode::ACTIONS:
-      if (actions.isEmpty()) {
-        if (forceUpdate || changed) {
-          ESP_LOGD(SR_TAG, "Empty. But forced or changed");
-          internalSet(value1);
+    }
+    case ShiftRegisterMode::ACTIONS: {
+      SR_ACTION firstAction = actions.first();
+      if (now < firstAction.endMs) {
+        if (firstAction.idx != runningActionIndex) {
+          ESP_LOGD(SR_TAG, "Do First Action");
+          runningActionIndex = firstAction.idx;
+          internalSet(firstAction.val1);
         }
-        changed = false;
-      } else {
-        SR_ACTION lastAction = actions.first();
-        if (lastAction.endMs > now) {
-          ESP_LOGD(SR_TAG, "Do Action");
-          SR_ACTION newAction = actions.shift();
+      } else if (firstAction.endMs < now) {
+        ESP_LOGD(SR_TAG, "End First Action. And shift.");
+        actions.shift();
+
+        if (!actions.isEmpty()) {
+          ESP_LOGD(SR_TAG, "Do Next Action");
+          SR_ACTION newAction = actions.first();
+          runningActionIndex = newAction.idx;
           internalSet(newAction.val1);
         }
       }
-      isLastAction = actions.isEmpty();
       break;
-    case ShiftRegisterMode::RANDOM:
+    }
+    case ShiftRegisterMode::RANDOM: {
       if (now - lastChecked > RANDOM_INTERVAL_MS) {
         internalSet(random(256));
         lastChecked = now;
       }
       break;
+    }
     default:
       ESP_LOGW(SR_TAG, "Unhandled Mode!");
       break;
@@ -116,6 +124,9 @@ void clearShiftRegister(bool fixed) {
 }
 
 void appendShiftRegisterAction(SR_ACTION action) {
+  lastActionIndex = (lastActionIndex + 1) % 100;
+  action.idx = lastActionIndex;
+
   mode = ShiftRegisterMode::ACTIONS;
 
   if (actions.isEmpty()) {
@@ -147,9 +158,11 @@ void warningMessage() {
 
   mode = ShiftRegisterMode::ACTIONS;
 
-  appendShiftRegisterAction({.endMs = now + 300, .val1 = 0xFF});
-  appendShiftRegisterAction({.endMs = now + 600, .val1 = 0x00});
-  appendShiftRegisterAction({.endMs = now + 900, .val1 = 0xFF});
+  appendShiftRegisterAction({.endMs = now + 200, .val1 = 0xFF});
+  appendShiftRegisterAction({.endMs = now + 400, .val1 = 0x00});
+  appendShiftRegisterAction({.endMs = now + 600, .val1 = 0xFF});
+  appendShiftRegisterAction({.endMs = now + 800, .val1 = 0x00});
+  appendShiftRegisterAction({.endMs = now + 1000, .val1 = 0xFF});
   appendShiftRegisterAction({.endMs = now + 1200, .val1 = 0x00});
 }
 

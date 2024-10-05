@@ -3,6 +3,7 @@
 #include <Arduino.h>
 
 typedef struct {
+  int idx;
   unsigned long endMs;
   byte val1;
 } SR_ACTION;

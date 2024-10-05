@@ -2,6 +2,7 @@
 #include "esp32-hal-log.h"
 
 #include "pins.h"
+#include "message.h"
 
 #include "ap_control.h"
 
@@ -24,9 +25,9 @@ void commandRouterLoop(unsigned long now) {
   if (now - lastTime > 1000 * 30) {
     lastTime = now;
     if(isAPOn())
-      sendCommand("WIFIISON");
+      sendCommand(CMD_WIFI_IS_ON);
     else
-      sendCommand("WIFIISOFF");
+      sendCommand(CMD_WIFI_IS_OFF);
     log_d("=> Keep from HEAD");
   }
 
@@ -39,7 +40,7 @@ void commandRouterLoop(unsigned long now) {
     // Check size of command-buffer
     if (cmdBuffer.length() > MAX_COMMAND_BUFFER_SIZE) {
       cmdBuffer = "";
-      sendCommand("BufFull");
+      logMessage("BUFFULL");
       log_d("Clear Buffer!");
     } else {
       while (-1 != cmdBuffer.indexOf(COMMAND_DELIMITER)) {
@@ -57,8 +58,20 @@ void commandRouterLoop(unsigned long now) {
   }
 }
 
+void logMessage(const String &cmd) {
+  cmdSerial.printf(CMD_LOGMSG);
+  cmdSerial.printf("-");
+  cmdSerial.printf(cmd.c_str());
+  cmdSerial.printf(COMMAND_DELIMITER);
+  cmdSerial.flush();
+
+  log_d("=> Log : %s", cmd);
+}
+
 void ackCommand(const String &cmd) {
-  cmdSerial.printf("ACK");
+  cmdSerial.printf(CMD_ACK);
+  cmdSerial.printf("-");
+  cmdSerial.printf(cmd.c_str());
   cmdSerial.printf(COMMAND_DELIMITER);
   cmdSerial.flush();
 

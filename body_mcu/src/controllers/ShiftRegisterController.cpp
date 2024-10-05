@@ -33,14 +33,21 @@ void ShiftRegisterController::loop(unsigned long now, bool forceUpdate) {
         }
         changed = false;
       } else {
-        SR_ACTION lastAction = actions.first();
-        if (lastAction.endMs > now) {
-          ESP_LOGD(SR_TAG, "Shift First Action");
+        SR_ACTION firstAction = actions.first();
+        if (now < firstAction.endMs) {
+          if (firstAction.idx != runningActionIndex) {
+            ESP_LOGD(SR_TAG, "Do First Action");
+            runningActionIndex = firstAction.idx;
+            internalSet(firstAction.val1, firstAction.val2);
+          }
+        } else if (firstAction.endMs < now) {
+          ESP_LOGD(SR_TAG, "End First Action. And shift.");
           actions.shift();
 
           if (!actions.isEmpty()) {
-            ESP_LOGD(SR_TAG, "Next Action");
+            ESP_LOGD(SR_TAG, "Do Next Action");
             SR_ACTION newAction = actions.first();
+            runningActionIndex = newAction.idx;
             internalSet(newAction.val1, newAction.val2);
           }
         }
@@ -117,6 +124,9 @@ void ShiftRegisterController::clear() {
 }
 
 void ShiftRegisterController::append(SR_ACTION action) {
+  lastActionIndex = (lastActionIndex + 1) % 100;
+  action.idx = lastActionIndex;
+
   mode = ShiftRegisterMode::ACTIONS;
 
   if (actions.isEmpty()) {
@@ -157,9 +167,11 @@ void ShiftRegisterController::warningMessage() {
 
   mode = ShiftRegisterMode::ACTIONS;
 
-  append({.endMs = now + 300, .val1 = 0xFF, .val2 = 0xFF});
-  append({.endMs = now + 600, .val1 = 0x00, .val2 = 0x00});
-  append({.endMs = now + 900, .val1 = 0xFF, .val2 = 0xFF});
+  append({.endMs = now + 200, .val1 = 0xFF, .val2 = 0xFF});
+  append({.endMs = now + 400, .val1 = 0x00, .val2 = 0x00});
+  append({.endMs = now + 600, .val1 = 0xFF, .val2 = 0xFF});
+  append({.endMs = now + 800, .val1 = 0x00, .val2 = 0x00});
+  append({.endMs = now + 1000, .val1 = 0xFF, .val2 = 0xFF});
   append({.endMs = now + 1200, .val1 = 0x00, .val2 = 0x00});
 }
 

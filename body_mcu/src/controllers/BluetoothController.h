@@ -8,18 +8,63 @@
 #include "BluetoothSerial.h"
 #include <Arduino.h>
 
-#include "command.h"
+class BluetoothController;
 
-#define BT_TAG "BLUETOOTH"
+enum BluetoothCommandType {
+  BT_UNKNOWN,
+  BT_HELP,
+  BT_ACK,
+  BT_WAKE_UP,
+  BT_SLEEP,
+  BT_STOP,
+  BT_TURN_LEFT,
+  BT_TURN_RIGHT,
+  BT_LIGHT_ON,
+  BT_LIGHT_OFF,
+  BT_WIFI_ON,
+  BT_WIFI_OFF,
+  BT_PLAY_MUSIC,
+  BT_FOOL,
+  BT_LOOK_AT_ME,
+  BT_ATTENTION,
+};
+
+typedef struct {
+  BluetoothCommandType commandType;
+  String msg;
+  String desc;
+} BluetoothCommandInfo;
+
+String ToString(const BluetoothCommandInfo &cmd);
+
+BluetoothCommandType ToBluetoothCommandType(String &msg);
+
+typedef std::function<void(BluetoothController *controller,
+                           BluetoothCommandType commandType,
+                           String &msg)> BluetoothControllerCallback;
 
 class BluetoothController {
  public:
-  void begin(String name);
-  Command receive();
+  BluetoothController(String btName) : name(btName) {}
+
+  void init(BluetoothControllerCallback callback);
+
+  void begin();
+
+  void loop();
+
   void println(const char c[]);
 
+  void printHelp();
+
+  void close();
+
+  bool isBluetoothOn = false;
+
  protected:
+  String name;
   BluetoothSerial serial;
+  BluetoothControllerCallback proc;
 };
 
 #endif// BODY_MCU_BLUETOOTH_CONTROLLER_H
