@@ -2,21 +2,20 @@ It is already the maximum volume
 It is already the minimum volume
 I am ready
 I'm going to sleep.
-Good bye
+I am going to sleep
 Boot
-Turn Left
-Turn Right
-Play Music
-I'm not a fool
+Go to sleep
 Stop
+Turn left
+Turn right
 Turn on the light
 Turn off the light
-I'm looking for you
-Please help me
-Turn on the Wi-Fi
-Turn off the Wi-Fi
-Turn on the bluetooth
-Turn off the bluetooth
-Volume up
-Volume down
+Turn on the Bluetooth
+Turn off the Bluetooth
+Turn on the AP
+Turn off the AP
+Play music
+Fool
+Where are you?
 Yes, Sir!
+Wait a moment

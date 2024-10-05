@@ -1,7 +1,7 @@
 #ifndef __UNI_CUST_CONFIG_H__
 #define __UNI_CUST_CONFIG_H__
 
-#define UNI_ASR_TIMEOUT           60    //ASR timeout Xs
+#define UNI_ASR_TIMEOUT           23    //ASR timeout Xs
 
 #define UNI_MIC_ARRY_TYPE_LINER   0
 #define UNI_MIC_ARRY_TYPE_CIRCLE  1

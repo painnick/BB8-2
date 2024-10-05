@@ -2,21 +2,20 @@
 102.pcm    It is already the minimum volume
 103.pcm    I am ready
 104.pcm    I'm going to sleep.
-105.pcm    Good bye
+105.pcm    I am going to sleep
 106.pcm    Boot
-107.pcm    Turn Left
-108.pcm    Turn Right
-109.pcm    Play Music
-110.pcm    I'm not a fool
-111.pcm    Stop
-112.pcm    Turn on the light
-113.pcm    Turn off the light
-114.pcm    I'm looking for you
-115.pcm    Please help me
-116.pcm    Turn on the Wi-Fi
-117.pcm    Turn off the Wi-Fi
-118.pcm    Turn on the bluetooth
-119.pcm    Turn off the bluetooth
-120.pcm    Volume up
-121.pcm    Volume down
-122.pcm    Yes, Sir!
+107.pcm    Go to sleep
+108.pcm    Stop
+109.pcm    Turn left
+110.pcm    Turn right
+111.pcm    Turn on the light
+112.pcm    Turn off the light
+113.pcm    Turn on the Bluetooth
+114.pcm    Turn off the Bluetooth
+115.pcm    Turn on the AP
+116.pcm    Turn off the AP
+117.pcm    Play music
+118.pcm    Fool
+119.pcm    Where are you?
+120.pcm    Yes, Sir!
+121.pcm    Wait a moment

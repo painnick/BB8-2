@@ -38,17 +38,17 @@ Help=Help|Help me@Wait a moment
 
 const uart_data_t g_uart_buf[] = {
     {{0x01}, 1}, //wakeup_uni
-    {{0x02}, 1}, //sleep_uni(INSERT)
+    {{0x02}, 1}, //sleep_uni, Sleep
     {{0x03}, 1}, //Stop
 
     {{0x11}, 1}, //TurnLeft
     {{0x12}, 1}, //TurnRight
 
-    {{0x41}, 1}, //TurnOn
-    {{0x42}, 1}, //TurnOff
+    {{0x41}, 1}, //LightOn
+    {{0x42}, 1}, //LightOff
 
-    {{0x51}, 1}, //WiFiOn
-    {{0x52}, 1}, //WiFiOff
+    {{0x51}, 1}, //APOn
+    {{0x52}, 1}, //APOff
     {{0x53}, 1}, //BTOn
     {{0x54}, 1}, //BTOff
 
@@ -56,9 +56,7 @@ const uart_data_t g_uart_buf[] = {
 
     {{0x31}, 1}, //Fool
     {{0x32}, 1}, //LookAtMe
-    {{0x33}, 1}, //ComeOn
-
-
+    {{0x33}, 1}, //Attention
 };
 
 /* ========================================
@@ -71,6 +69,7 @@ const uart_data_t g_uart_buf[] = {
  * User
  * 107 Fool
  * 108 ~ 111
+ * 112 Help
  * ======================================== */
 
 static void _custom_setting_cb(USER_EVENT_TYPE event,
@@ -79,35 +78,41 @@ static void _custom_setting_cb(USER_EVENT_TYPE event,
   if (context) {
     setting = &context->custom_setting;
     LOGT(TAG, "user command: %s", setting->cmd);
-    if (0 == uni_strcmp(setting->cmd, "Stop")) {
+    if (0 == uni_strcmp(setting->cmd, "Sleep")) {
+      user_uart_send(g_uart_buf[1].data, g_uart_buf[1].len);
+    } else if (0 == uni_strcmp(setting->cmd, "Stop")) {
       user_uart_send(g_uart_buf[2].data, g_uart_buf[2].len);
     } else if (0 == uni_strcmp(setting->cmd, "TurnLeft")) {
       user_uart_send(g_uart_buf[3].data, g_uart_buf[3].len);
     } else if (0 == uni_strcmp(setting->cmd, "TurnRight")) {
       user_uart_send(g_uart_buf[4].data, g_uart_buf[4].len);
-    } else if (0 == uni_strcmp(setting->cmd, "PlayMusic")) {
+    } else if (0 == uni_strcmp(setting->cmd, "LightOn")) {
       user_uart_send(g_uart_buf[5].data, g_uart_buf[5].len);
+    } else if (0 == uni_strcmp(setting->cmd, "LightOff")) {
+      user_uart_send(g_uart_buf[6].data, g_uart_buf[6].len);
+    } else if (0 == uni_strcmp(setting->cmd, "APOn")) {
+      user_uart_send(g_uart_buf[7].data, g_uart_buf[7].len);
+    } else if (0 == uni_strcmp(setting->cmd, "APOff")) {
+      user_uart_send(g_uart_buf[8].data, g_uart_buf[8].len);
+    } else if (0 == uni_strcmp(setting->cmd, "BTOn")) {
+      user_uart_send(g_uart_buf[9].data, g_uart_buf[9].len);
+    } else if (0 == uni_strcmp(setting->cmd, "BTOff")) {
+      user_uart_send(g_uart_buf[10].data, g_uart_buf[10].len);
+    } else if (0 == uni_strcmp(setting->cmd, "PlayMusic")) {
+      // TODO : Send 0x3FFCA4E7
+      user_uart_send(g_uart_buf[11].data, g_uart_buf[11].len);
       return;
     } else if (0 == uni_strcmp(setting->cmd, "Fool")) {
-      user_uart_send(g_uart_buf[6].data, g_uart_buf[6].len);
+      user_uart_send(g_uart_buf[12].data, g_uart_buf[12].len);
       user_player_reply_list_random("[107]");
       return;
     } else if (0 == uni_strcmp(setting->cmd, "LookAtMe")) {
-      user_uart_send(g_uart_buf[7].data, g_uart_buf[7].len);
-    } else if (0 == uni_strcmp(setting->cmd, "ComeOn")) {
-      user_uart_send(g_uart_buf[8].data, g_uart_buf[8].len);
-    } else if (0 == uni_strcmp(setting->cmd, "TurnOn")) {
-      user_uart_send(g_uart_buf[9].data, g_uart_buf[9].len);
-    } else if (0 == uni_strcmp(setting->cmd, "TurnOff")) {
-      user_uart_send(g_uart_buf[10].data, g_uart_buf[10].len);
-    } else if (0 == uni_strcmp(setting->cmd, "WiFiOn")) {
-      user_uart_send(g_uart_buf[11].data, g_uart_buf[11].len);
-    } else if (0 == uni_strcmp(setting->cmd, "WiFiOff")) {
-      user_uart_send(g_uart_buf[12].data, g_uart_buf[12].len);
-    } else if (0 == uni_strcmp(setting->cmd, "BTOn")) {
       user_uart_send(g_uart_buf[13].data, g_uart_buf[13].len);
-    } else if (0 == uni_strcmp(setting->cmd, "BTOff")) {
+    } else if (0 == uni_strcmp(setting->cmd, "Attention")) {
       user_uart_send(g_uart_buf[14].data, g_uart_buf[14].len);
+    } else if (0 == uni_strcmp(setting->cmd, "Help")) {
+      user_player_reply_list_random("[112]");
+      return;
     } else {
       LOGT(TAG, "Unconcerned command: %s", setting->cmd);
     }
@@ -142,9 +147,10 @@ static void _register_event_callback(void) {
 }
 
 static void _hb_uart_recv(char *buf, int len) {
- if (buf[0] == 0x04) { // KeepAlive
-   user_player_reply_list_random("[108,109,110,111]");
- }
+  // TODO. Do not call on playing music
+  if (buf[0] == 0x04) { // KeepAlive
+    user_player_reply_list_random("[108,109,110,111]");
+  }
 }
 
 int hb_auto_gpio(void) {

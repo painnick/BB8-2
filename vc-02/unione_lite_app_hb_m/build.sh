@@ -1,8 +1,6 @@
 #!/bin/bash
 set -e
 
-cd /unione_lite_app_hb_m
-
 TOP=$(cd $(dirname $0) && pwd)
 DATE=$(date +%Y%m%d%H)
 echo $DATE
