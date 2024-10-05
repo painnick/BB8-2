@@ -87,6 +87,12 @@ void HeadCommander::loop() {
           ESP_LOGV(HEAD_TAG, "(HEAD) <= %s", cmd.c_str());
 
           auto cmdType = ToHeadCommandType(cmd);
+
+          if(cmdType == HEAD_WIFI_IS_ON) {
+            isWifiOn = true;
+          } else if(cmdType == HEAD_WIFI_IS_OFF) {
+            isWifiOn = false;
+          }
           proc(this, cmdType);
         }
       }

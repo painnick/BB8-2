@@ -28,7 +28,6 @@ StateLedController stateLed(WIFI_EYE_PIN, WIFI_EYE_CH);
 
 bool isListening = false;
 bool moveHeadToFront = false;
-bool isWifiOn = false;
 
 void DoWakeUp() {
   head.send(HEAD_WIFI_ON);
@@ -243,10 +242,8 @@ void setup() {
         DoTurnHeadRight();
         break;
       case HEAD_WIFI_IS_ON:
-        isWifiOn = true;
         break;
       case HEAD_WIFI_IS_OFF:
-        isWifiOn = false;
         break;
       case HEAD_UNKNOWN:
       default:

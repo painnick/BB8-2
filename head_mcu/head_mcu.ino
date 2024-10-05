@@ -57,12 +57,14 @@ void process(const String &cmd) {
       startCameraServer();
       blinkWifiLed();
     }
+    sendCommand(isAPOn() ? CMD_WIFI_IS_ON : CMD_WIFI_IS_OFF);
   } else if (cmd == CMD_WIFI_OFF) {
     if (isAPOn()) {
       stopCameraServer();
       closeSoftAP();
       clearWifiLed(true);
     }
+    sendCommand(isAPOn() ? CMD_WIFI_IS_ON : CMD_WIFI_IS_OFF);
   } else if (cmd == CMD_FOOL) {
     warningMessage();
   } else if (cmd == CMD_RANDOM1) {

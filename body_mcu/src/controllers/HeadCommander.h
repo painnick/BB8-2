@@ -56,6 +56,8 @@ class HeadCommander {
 
   void send(HeadCommandType cmd);
 
+  bool isWifiOn = false;
+
  protected:
   SoftwareSerial &serial;
   HeadCommanderCallback proc;
