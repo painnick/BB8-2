@@ -206,6 +206,7 @@ void setup() {
         DoAttention();
         break;
       case BT_UNKNOWN:
+        bt.println("Type 'HELP'");
       default:
         playFail();
         break;
