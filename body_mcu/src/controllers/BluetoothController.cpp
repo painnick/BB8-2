@@ -92,12 +92,15 @@ void BluetoothController::println(const char c[]) {
 }
 
 void BluetoothController::printHelp() {
-  // Do not log
+  ESP_LOGD(BT_TAG, "Print help messages");
   serial.println("Commands");
   for (const auto &btCommand : btCommands) {
     serial.print("- ");
-    serial.println(btCommand.msg);
+    serial.print(btCommand.msg.c_str());
+    serial.print(" : ");
+    serial.println(btCommand.desc.c_str());
   }
+  serial.flush();
 }
 
 void BluetoothController::close() {
