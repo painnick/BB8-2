@@ -93,7 +93,7 @@ void DoFool() {
       motorController.moveOpposite(300, dir2, [=](MotorController *c3, MOTOR_DIRECTION dir3) {
       });
     });
-  }, 500);
+  }, 0);
 }
 
 void DoLookAtMe() {

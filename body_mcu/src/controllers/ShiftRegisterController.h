@@ -6,6 +6,7 @@
 #define SR_TAG "SR"
 
 typedef struct {
+  int idx;
   unsigned long endMs;
   byte val1;
   byte val2;
@@ -40,6 +41,9 @@ class ShiftRegisterController {
   void randomLight(boolean isOn);
 
  private:
+  int lastActionIndex = 0;
+  int runningActionIndex = 0;
+
   uint8_t pin_data;
   uint8_t pin_latch;
   uint8_t pin_clock;
