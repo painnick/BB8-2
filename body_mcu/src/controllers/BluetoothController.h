@@ -14,15 +14,19 @@ enum BluetoothCommandType {
   BT_UNKNOWN,
   BT_HELP,
   BT_ACK,
-  BT_WIFI_ON,
-  BT_WIFI_OFF,
-  BT_WARN,
-  BT_RANDOM_LIGHT1,
-  BT_RANDOM_LIGHT2,
-  BT_LIGHT_ON,
-  BT_LIGHT_OFF,
+  BT_WAKE_UP,
+  BT_SLEEP,
+  BT_STOP,
   BT_TURN_LEFT,
   BT_TURN_RIGHT,
+  BT_LIGHT_ON,
+  BT_LIGHT_OFF,
+  BT_WIFI_ON,
+  BT_WIFI_OFF,
+  BT_PLAY_MUSIC,
+  BT_FOOL,
+  BT_LOOK_AT_ME,
+  BT_ATTENTION,
 };
 
 typedef struct {
@@ -41,9 +45,11 @@ typedef std::function<void(BluetoothController *controller,
 
 class BluetoothController {
  public:
+  BluetoothController(String btName) : name(btName) {}
+
   void init(BluetoothControllerCallback callback);
 
-  void begin(String name);
+  void begin();
 
   void loop();
 
@@ -51,7 +57,12 @@ class BluetoothController {
 
   void printHelp();
 
+  void close();
+
+  bool isBluetoothOn = false;
+
  protected:
+  String name;
   BluetoothSerial serial;
   BluetoothControllerCallback proc;
 };

@@ -11,16 +11,21 @@
 
 static const BluetoothCommandInfo btCommands[] = {
     {BT_UNKNOWN, CMD_UNKNOWN, "Unknown"},
+    {BT_HELP, "HELP", "Help"},
     {BT_ACK, CMD_ACK, "Ack"},
-    {BT_WIFI_ON, CMD_WIFI_ON, "WiFiOn"},
-    {BT_WIFI_OFF, CMD_WIFI_OFF, "WiFiOff"},
-    {BT_WARN, CMD_WARN, "Warn"},
-    {BT_RANDOM_LIGHT1, CMD_RANDOM1, "RandomLight1"},
-    {BT_RANDOM_LIGHT2, CMD_RANDOM2, "RandomLight2"},
-    {BT_LIGHT_ON, CMD_LIGHT_ON, "LightOn"},
-    {BT_LIGHT_OFF, CMD_LIGHT_OFF, "LightOff"},
+    {BT_WAKE_UP, "WAKEUP", "WakeUp"},
+    {BT_SLEEP, "SLEEP", "Sleep"},
+    {BT_STOP, "STOP", "Stop"},
     {BT_TURN_LEFT, CMD_TURN_LEFT, "TurnLeft"},
     {BT_TURN_RIGHT, CMD_TURN_RIGHT, "TurnRight"},
+    {BT_LIGHT_ON, CMD_LIGHT_ON, "LightOn"},
+    {BT_LIGHT_OFF, CMD_LIGHT_OFF, "LightOff"},
+    {BT_WIFI_ON, CMD_WIFI_ON, "WiFiOn"},
+    {BT_WIFI_OFF, CMD_WIFI_OFF, "WiFiOff"},
+    {BT_PLAY_MUSIC, "MUSIC", "PlayMusic"},
+    {BT_FOOL, "FOOL", "Fool"},
+    {BT_LOOK_AT_ME, "LOOK", "LookAtMe"},
+    {BT_ATTENTION, "ATTENTION", "Attention"},
 };
 
 String ToString(const BluetoothCommandInfo &cmd) {
@@ -54,8 +59,11 @@ void BluetoothController::init(BluetoothControllerCallback callback) {
   proc = std::move(callback);
 }
 
-void BluetoothController::begin(String name) {
-  serial.begin(std::move(name));
+void BluetoothController::begin() {
+  if (isBluetoothOn)
+    return;
+
+  serial.begin(name);
   serial.register_callback([](esp_spp_cb_event_t evt, esp_spp_cb_param_t *param) {
     switch (evt) {
       case ESP_SPP_SRV_OPEN_EVT:
@@ -65,6 +73,7 @@ void BluetoothController::begin(String name) {
         break;
     }
   });
+  isBluetoothOn = true;
 }
 
 void BluetoothController::loop() {
@@ -89,4 +98,15 @@ void BluetoothController::printHelp() {
     serial.print("- ");
     serial.println(btCommand.msg);
   }
+}
+
+void BluetoothController::close() {
+  if (!isBluetoothOn)
+    return;
+
+  serial.flush();
+  serial.disconnect();
+  serial.end();
+
+  isBluetoothOn = false;
 }

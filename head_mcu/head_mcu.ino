@@ -63,7 +63,7 @@ void process(const String &cmd) {
       closeSoftAP();
       clearWifiLed(true);
     }
-  } else if (cmd == CMD_WARN) {
+  } else if (cmd == CMD_FOOL) {
     warningMessage();
   } else if (cmd == CMD_RANDOM1) {
     randomLight(true);

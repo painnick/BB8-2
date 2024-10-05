@@ -16,9 +16,10 @@
 #define MAIN_TAG "Main"
 
 #define ALIVE_SOUND_INTERVAL_MS 30000
+#define BLUETOOTH_NAME "BB-8"
 
 VoiceCommander vc02(Serial1);
-BluetoothController bt;
+BluetoothController bt(BLUETOOTH_NAME);
 ShiftRegisterController shiftRegister(SR_DATA_PIN, SR_LATCH_PIN, SR_CLOCK_PIN);
 SoftwareSerial cmdSerial;
 HeadCommander head(cmdSerial);
@@ -29,6 +30,79 @@ bool isListening = false;
 bool moveHeadToFront = false;
 bool isWifiOn = false;
 
+void DoWakeUp() {
+  head.send(HEAD_WIFI_ON);
+  isListening = true;
+  stateLed.on();
+}
+
+void DoSleep() {
+  head.send(HEAD_WIFI_OFF);
+  isListening = false;
+  stateLed.blink();
+}
+
+void DoStop() {
+  motorController.stop(0);
+  stopMusic();
+}
+
+void DoTurnHeadLeft() {
+  moveHeadToFront = false;
+  motorController.left(1000);
+}
+
+void DoTurnHeadRight() {
+  moveHeadToFront = false;
+  motorController.left(1000);
+}
+
+void DoTurnOnLight() {
+  head.send(HEAD_LIGHT_ON);
+  shiftRegister.set(0xFF, 0xFF);
+}
+
+void DoTurnOffLight() {
+  head.send(HEAD_LIGHT_OFF);
+  shiftRegister.clear();
+}
+
+void DoWifiOn() {
+  head.send(HEAD_WIFI_ON);
+}
+
+void DoWifiOff() {
+  head.send(HEAD_WIFI_OFF);
+}
+
+void DoBluetoothOn() {
+    bt.begin();
+}
+
+void DoBluetoothOff() {
+    bt.close();
+}
+
+void DoFool() {
+  head.send(HEAD_FOOL);
+  shiftRegister.warningMessage();
+  motorController.randomMove(1000 + random(0, 500), [=](MotorController *c1, MOTOR_DIRECTION dir1) {
+    motorController.moveOpposite(1000 + random(0, 500), [=](MotorController *c1, MOTOR_DIRECTION dir1) {
+      moveHeadToFront = true;
+      motorController.moveOpposite(1000 + random(0, 500));
+    });
+  });
+}
+
+void DoLookAtMe() {
+  // TODO.
+}
+
+void DoAttention() {
+  moveHeadToFront = true;
+  motorController.randomMove(1000 * 10);
+}
+
 void setup() {
   motorController.init();
 
@@ -36,59 +110,49 @@ void setup() {
   vc02.init([=](const VoiceCommander *cmd, const VoiceCommandType cmdType) {
     switch (cmdType) {
       case VC02_WAKE_UP:
-        head.send(HEAD_WIFI_ON);
-        isListening = true;
-        stateLed.on();
+        DoWakeUp();
         break;
       case VC02_SLEEP:
-        head.send(HEAD_WIFI_OFF);
-        isListening = false;
-        stateLed.blink();
+        DoSleep();
         break;
       case VC02_STOP:
-        motorController.stop(0);
-        stopMusic();
-        // TODO : ...
+        DoStop();
         break;
       case VC02_TURN_LEFT:
-        moveHeadToFront = false;
-        motorController.left(1000);
+        DoTurnHeadLeft();
         break;
       case VC02_TURN_RIGHT:
-        moveHeadToFront = false;
-        motorController.left(1000);
+        DoTurnHeadRight();
         break;
       case VC02_TURN_ON_LIGHT:
-        head.send(HEAD_LIGHT_ON);
+        DoTurnOnLight();
         break;
       case VC02_TURN_OFF_LIGHT:
-        head.send(HEAD_LIGHT_OFF);
+        DoTurnOffLight();
         break;
       case VC02_TURN_ON_AP:
-        // TODO
+        DoWifiOn();
         break;
       case VC02_TURN_OFF_AP:
-        // TODO
+        DoWifiOff();
         break;
       case VC02_TURN_ON_BLUETOOTH:
-        // TODO
+        DoBluetoothOn();
         break;
       case VC02_TURN_OFF_BLUETOOTH:
-        // TODO
+        DoBluetoothOff();
         break;
       case VC02_PLAY_MUSIC:
         playMusic();
         break;
       case VC02_FOOL:
-        head.send(HEAD_WARN);
-        // TODO : Motor control
+        DoFool();
         break;
       case VC02_LOOK_AT_ME:
-        // TODO
+        DoLookAtMe();
         break;
       case VC02_ATTENTION:
-        moveHeadToFront = true;
-        motorController.randomMove(1000 * 10);
+        DoAttention();
         break;
       case VC02_UNKNOWN:
       default:
@@ -97,7 +161,7 @@ void setup() {
     }
   });
 
-  bt.begin("BB-8");
+  bt.begin();
   bt.init([=](BluetoothController *controller, BluetoothCommandType cmdType, String &msg) {
     switch (cmdType) {
       case BT_HELP:
@@ -106,32 +170,44 @@ void setup() {
       case BT_ACK:
         // Do nothing
         break;
-      case BT_WIFI_ON:
-        // TODO
+      case BT_WAKE_UP:
+        DoWakeUp();
         break;
-      case BT_WIFI_OFF:
-        // TODO
+      case BT_SLEEP:
+        DoSleep();
         break;
-      case BT_WARN:
-        // TODO
-        break;
-      case BT_RANDOM_LIGHT1:
-        // TODO
-        break;
-      case BT_RANDOM_LIGHT2:
-        // TODO
-        break;
-      case BT_LIGHT_ON:
-        // TODO
-        break;
-      case BT_LIGHT_OFF:
-        // TODO
+      case BT_STOP:
+        DoStop();
         break;
       case BT_TURN_LEFT:
-        // TODO
+        DoTurnHeadLeft();
         break;
       case BT_TURN_RIGHT:
-        // TODO
+        DoTurnHeadRight();
+        break;
+      case BT_LIGHT_ON:
+        DoTurnOnLight();
+        break;
+      case BT_LIGHT_OFF:
+        DoTurnOffLight();
+        break;
+      case BT_WIFI_ON:
+        DoWifiOn();
+        break;
+      case BT_WIFI_OFF:
+        DoWifiOff();
+        break;
+      case BT_PLAY_MUSIC:
+        playMusic();
+        break;
+      case BT_FOOL:
+        DoFool();
+        break;
+      case BT_LOOK_AT_ME:
+        DoLookAtMe();
+        break;
+      case BT_ATTENTION:
+        DoAttention();
         break;
       case BT_UNKNOWN:
       default:
@@ -151,26 +227,20 @@ void setup() {
       case HEAD_WIFI_OFF:
         // Unavailable
         break;
-      case HEAD_WARN:
-        // TODO
-        break;
-      case HEAD_RANDOM_LIGHT1:
-        // TODO
-        break;
-      case HEAD_RANDOM_LIGHT2:
-        // TODO
+      case HEAD_FOOL:
+        DoFool();
         break;
       case HEAD_LIGHT_ON:
-        // TODO
+        DoTurnOnLight();
         break;
       case HEAD_LIGHT_OFF:
-        // TODO
+        DoTurnOffLight();
         break;
       case HEAD_TURN_LEFT:
-        // TODO
+        DoTurnHeadLeft();
         break;
       case HEAD_TURN_RIGHT:
-        // TODO
+        DoTurnHeadRight();
         break;
       case HEAD_WIFI_IS_ON:
         isWifiOn = true;
