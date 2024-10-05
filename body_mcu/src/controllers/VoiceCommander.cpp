@@ -8,25 +8,24 @@
 
 #define VC_TAG "VC02"
 
-#define COMMAND_SIZE 16
-
-static const VoiceCommand voiceCommands[COMMAND_SIZE] = {
+static const VoiceCommand voiceCommands[] = {
     {VC02_UNKNOWN, 0x00, "Unknown"},
     {VC02_WAKE_UP, 0x01, "WakeUp"},
-    {VC02_SLEEP, 0x01, "Sleep"},
-    {VC02_STOP, 0x01, "Stop"},
-    {VC02_TURN_LEFT, 0x01, "TurnHeadLeft"},
-    {VC02_TURN_RIGHT, 0x01, "TurnHeadRight"},
-    {VC02_TURN_ON_LIGHT, 0x01, "TurnOnLight"},
-    {VC02_TURN_OFF_LIGHT, 0x01, "TurnOffLight"},
-    {VC02_TURN_ON_AP, 0x01, "TurnOnAP"},
-    {VC02_TURN_OFF_AP, 0x01, "TurnOffAP"},
-    {VC02_TURN_ON_BLUETOOTH, 0x01, "TurnOnBT"},
-    {VC02_TURN_OFF_BLUETOOTH, 0x01, "TurnOffBT"},
-    {VC02_PLAY_MUSIC, 0x01, "PlayMusic"},
-    {VC02_FOOL, 0x01, "Fool"},
-    {VC02_LOOK_AT_ME, 0x01, "LookAtMe"},
-    {VC02_ATTENTION, 0x01, "Attention"},
+    {VC02_SLEEP, 0x02, "Sleep"},
+    {VC02_STOP, 0x03, "Stop"},
+    {VC02_KEEPALIVE, 0x04, "KeepAlive"},
+    {VC02_TURN_LEFT, 0x11, "TurnHeadLeft"},
+    {VC02_TURN_RIGHT, 0x12, "TurnHeadRight"},
+    {VC02_TURN_ON_LIGHT, 0x41, "TurnOnLight"},
+    {VC02_TURN_OFF_LIGHT, 0x42, "TurnOffLight"},
+    {VC02_TURN_ON_AP, 0x51, "TurnOnAP"},
+    {VC02_TURN_OFF_AP, 0x52, "TurnOffAP"},
+    {VC02_TURN_ON_BLUETOOTH, 0x53, "TurnOnBT"},
+    {VC02_TURN_OFF_BLUETOOTH, 0x53, "TurnOffBT"},
+    {VC02_PLAY_MUSIC, 0x21, "PlayMusic"},
+    {VC02_FOOL, 0x31, "Fool"},
+    {VC02_LOOK_AT_ME, 0x32, "LookAtMe"},
+    {VC02_ATTENTION, 0x33, "Attention"},
 };
 
 String ToString(const VoiceCommand &cmd) {

@@ -213,7 +213,7 @@ void loop() {
   auto now = millis();
   if (now - lastAliveSoundChecked > ALIVE_SOUND_INTERVAL_MS) {
     if (isListening)
-      vc02.send(0xD3);
+      vc02.send(VC02_KEEPALIVE);
     lastAliveSoundChecked = now;
   }
   dfmp3.loop();
