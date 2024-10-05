@@ -24,7 +24,7 @@ void setup() {
   initCamera();
 
   commandRouterBegin(process);
-  sendCommand("InitCMD");
+  sendCommand("INITCMD");
 
   //  initSoftAP();// Test
   //  startCameraServer();// Test
@@ -78,7 +78,7 @@ void process(const String &cmd) {
   }
 
   if (isUnknown)
-    sendCommand("Unknown");
+    sendCommand("UNKNOWN");
   else
     ackCommand(cmd);
 }

@@ -39,7 +39,7 @@ void commandRouterLoop(unsigned long now) {
     // Check size of command-buffer
     if (cmdBuffer.length() > MAX_COMMAND_BUFFER_SIZE) {
       cmdBuffer = "";
-      sendCommand("BufFull");
+      sendCommand("BUFFULL");
       log_d("Clear Buffer!");
     } else {
       while (-1 != cmdBuffer.indexOf(COMMAND_DELIMITER)) {
