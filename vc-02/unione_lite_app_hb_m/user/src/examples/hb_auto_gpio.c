@@ -142,7 +142,9 @@ static void _register_event_callback(void) {
 }
 
 static void _hb_uart_recv(char *buf, int len) {
-// TODO.
+ if (buf[0] == 0x04) { // KeepAlive
+   user_player_reply_list_random("[108,109,110,111]");
+ }
 }
 
 int hb_auto_gpio(void) {
