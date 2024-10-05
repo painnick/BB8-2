@@ -10,7 +10,7 @@
 
 #define COMMAND_SIZE 16
 
-static const VoiceCommandInfo voiceCommands[COMMAND_SIZE] = {
+static const VoiceCommand voiceCommands[COMMAND_SIZE] = {
     {VC02_UNKNOWN, 0x00, "Unknown"},
     {VC02_WAKE_UP, 0x01, "WakeUp"},
     {VC02_SLEEP, 0x01, "Sleep"},
@@ -29,7 +29,7 @@ static const VoiceCommandInfo voiceCommands[COMMAND_SIZE] = {
     {VC02_ATTENTION, 0x01, "Attention"},
 };
 
-String ToString(const VoiceCommandInfo &cmd) {
+String ToString(const VoiceCommand &cmd) {
   for (const auto &voiceCommand : voiceCommands) {
     if (cmd.commandType == voiceCommand.commandType)
       return cmd.desc;
@@ -71,14 +71,10 @@ void VoiceCommander::loop() {
       ESP_LOGW(VC_TAG, "%d bytes read", read_bytes);
       return;
     }
-
     ESP_LOGD(VC_TAG, "Read 0x%02X", buffer);
+
     auto commandType = ToVoiceCommandType(buffer[0]);
-
-    if (commandType != VoiceCommandType::VC02_UNKNOWN) {
-      proc(this, commandType);
-    }
-
+    proc(this, commandType);
   }
 }
 

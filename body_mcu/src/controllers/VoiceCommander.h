@@ -39,9 +39,9 @@ typedef struct {
   VoiceCommandType commandType;
   byte buffer;
   String desc;
-} VoiceCommandInfo;
+} VoiceCommand;
 
-String ToString(const VoiceCommandInfo &cmd);
+String ToString(const VoiceCommand &cmd);
 
 VoiceCommandType ToVoiceCommandType(char buffer);
 
