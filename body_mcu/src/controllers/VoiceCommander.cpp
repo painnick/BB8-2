@@ -4,9 +4,54 @@
 
 #include "VoiceCommander.h"
 
-VoiceCommander::VoiceCommander(HardwareSerial &serial) : serial(serial), buffer{0} {}
+#include <utility>
+
+#define VC_TAG "VC02"
+
+#define COMMAND_SIZE 16
+
+static const VoiceCommandInfo voiceCommands[COMMAND_SIZE] = {
+    {VC02_UNKNOWN, 0x00, "Unknown"},
+    {VC02_WAKE_UP, 0x01, "WakeUp"},
+    {VC02_SLEEP, 0x01, "Sleep"},
+    {VC02_STOP, 0x01, "Stop"},
+    {VC02_TURN_LEFT, 0x01, "TurnHeadLeft"},
+    {VC02_TURN_RIGHT, 0x01, "TurnHeadRight"},
+    {VC02_TURN_ON_LIGHT, 0x01, "TurnOnLight"},
+    {VC02_TURN_OFF_LIGHT, 0x01, "TurnOffLight"},
+    {VC02_TURN_ON_AP, 0x01, "TurnOnAP"},
+    {VC02_TURN_OFF_AP, 0x01, "TurnOffAP"},
+    {VC02_TURN_ON_BLUETOOTH, 0x01, "TurnOnBT"},
+    {VC02_TURN_OFF_BLUETOOTH, 0x01, "TurnOffBT"},
+    {VC02_PLAY_MUSIC, 0x01, "PlayMusic"},
+    {VC02_FOOL, 0x01, "Fool"},
+    {VC02_LOOK_AT_ME, 0x01, "LookAtMe"},
+    {VC02_ATTENTION, 0x01, "Attention"},
+};
+
+String ToString(const VoiceCommandInfo &cmd) {
+  for (const auto &voiceCommand : voiceCommands) {
+    if (cmd.commandType == voiceCommand.commandType)
+      return cmd.desc;
+  }
+  return voiceCommands[0].desc;
+}
+
+VoiceCommandType ToVoiceCommandType(char buffer) {
+  for (const auto &voiceCommand : voiceCommands) {
+    if (buffer == voiceCommand.buffer)
+      return voiceCommand.commandType;
+  }
+  return voiceCommands[0].commandType;
+}
+
+VoiceCommander::VoiceCommander(HardwareSerial &serial) : serial(serial) {}
 
 VoiceCommander::~VoiceCommander() = default;
+
+void VoiceCommander::init(VoiceCommanderCallback callback) {
+  proc = std::move(callback);
+}
 
 void VoiceCommander::begin(unsigned long baud,
                            uint32_t config,
@@ -18,36 +63,29 @@ void VoiceCommander::begin(unsigned long baud,
   serial.begin(baud, config, rxPin, txPin, invert, timeout_ms, rxfifo_full_thrhd);
 }
 
-Command VoiceCommander::receive() {
+void VoiceCommander::loop() {
   if (serial.available()) {
-    size_t read_bytes = serial.read(buffer, VOICE_COMMANDER_PACKET_SIZE);
-    if (read_bytes != VOICE_COMMANDER_PACKET_SIZE) {
+    char buffer[1];
+    size_t read_bytes = serial.read(buffer, 1);
+    if (read_bytes != 1) {
       ESP_LOGW(VC_TAG, "%d bytes read", read_bytes);
-      return Command::UNKNOWN;
+      return;
     }
 
-    uint64_t read_data = buffer[3] + (buffer[2] << 8) + (buffer[1] << 16) + (buffer[0] << 24);
+    ESP_LOGD(VC_TAG, "Read 0x%02X", buffer);
+    auto commandType = ToVoiceCommandType(buffer[0]);
 
-    ESP_LOGD(VC_TAG, "Read 0x%08X", read_data);
-
-    for (int i = 0; i < COMMAND_COUNT; i++) {
-      uint64_t val = Commands[i];
-      if (read_data == val) {
-        ESP_LOGD(VC_TAG, "Found. [%d](%s)", i, ToString(Commands[i]).c_str());
-        return Commands[i];
-      }
+    if (commandType != VoiceCommandType::VC02_UNKNOWN) {
+      proc(this, commandType);
     }
 
-    ESP_LOGW(VC_TAG, "Not Found.");
-    return Command::UNKNOWN;
-  } else
-    return Command::NO_COMMAND;
+  }
 }
 
-void VoiceCommander::send(byte val1) {
+void VoiceCommander::send(byte val) {
   char buffer[1];
-  buffer[0] = val1;
+  buffer[0] = val;
   serial.write(buffer, 1);
   serial.flush();
-  ESP_LOGD(VC_TAG, "Send 0x%02X", val1);
+  ESP_LOGD(VC_TAG, "Send 0x%02X", val);
 }

@@ -36,6 +36,69 @@ void setup() {
   motorController.init();
 
   vc02.begin(115200, SERIAL_8N1, VOICE_COMMAND_RX_PIN, VOICE_COMMAND_TX_PIN);
+  vc02.init([=](const VoiceCommander *cmd, const VoiceCommandType cmdType) {
+    switch (cmdType) {
+      case VC02_WAKE_UP:
+        router.send("WIFION");
+        isListening = true;
+        stateLed.on();
+        break;
+      case VC02_SLEEP:
+        router.send("WIFIOFF");
+        isListening = false;
+        stateLed.blink();
+        break;
+      case VC02_STOP:
+        motorController.stop(0);
+        stopMusic();
+        // TODO : ...
+        break;
+      case VC02_TURN_LEFT:
+        moveHeadToFront = false;
+        motorController.left(1000);
+        break;
+      case VC02_TURN_RIGHT:
+        moveHeadToFront = false;
+        motorController.left(1000);
+        break;
+      case VC02_TURN_ON_LIGHT:
+        router.send("LIGHTON");
+        break;
+      case VC02_TURN_OFF_LIGHT:
+        router.send("LIGHTOFF");
+        break;
+      case VC02_TURN_ON_AP:
+        // TODO
+        break;
+      case VC02_TURN_OFF_AP:
+        // TODO
+        break;
+      case VC02_TURN_ON_BLUETOOTH:
+        // TODO
+        break;
+      case VC02_TURN_OFF_BLUETOOTH:
+        // TODO
+        break;
+      case VC02_PLAY_MUSIC:
+        playMusic();
+        break;
+      case VC02_FOOL:
+        router.send("WARN");
+        // TODO : Motor control
+        break;
+      case VC02_LOOK_AT_ME:
+        // TODO
+        break;
+      case VC02_ATTENTION:
+        moveHeadToFront = true;
+        motorController.randomMove(1000 * 10);
+        break;
+      case VC02_UNKNOWN:
+      default:
+        playFail();
+        break;
+    }
+  });
 
   bt.begin("BB-8");
 
@@ -75,15 +138,9 @@ void setup() {
 uint32_t lastAliveSoundChecked = 0;
 
 void loop() {
+  vc02.loop();
+
   Command cmd;
-
-  cmd = vc02.receive();
-  if ((cmd & Command::NO_COMMAND) != Command::NO_COMMAND) {
-    ESP_LOGD(MAIN_TAG, "VC Cmd : %s", ToString(cmd).c_str());
-    if ((cmd & Command::NOT_COMMAND) != Command::NOT_COMMAND)
-      processCommand(cmd);
-  }
-
   cmd = bt.receive();
   if ((cmd & Command::NO_COMMAND) != Command::NO_COMMAND) {
     ESP_LOGD(MAIN_TAG, "BT Cmd : %s", ToString(cmd).c_str());
