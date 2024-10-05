@@ -19,20 +19,21 @@ typedef struct {
 } uart_data_t;
 
 /*
-  Bye=Bye|Good bye|See you|Sleep@Go to sleep
-  Stop=Stop@Stop
-  TurnLeft=Turn left|Left@Turn left
-  TurnRight=Turn right|Right@Turn right
-  LightOn=Turn on|Turn on the light@Turn on the light
-  LightOff=Turn off|Turn off the light@Turn off the light
-  BTOn=Bluetooth on|Turn on the Bluetooth@Turn on the Bluetooth
-  BTOff=Bluetooth off|Turn off the Bluetooth@Turn off the Bluetooth
-  APOn=AP on|Turn on the AP@Turn on the AP
-  APOff=AP off|Turn off the AP@Turn off the AP
-  PlayMusic=Play music@Play music
-  Fool=Fool|Stupid@Fool
-  LookAtMe=Look at me|Hey!@Where are you?
-  Attention=Attention@Yes, Sir!
+Sleep=Bye|Good bye|See you|Sleep@Go to sleep
+Stop=Stop@Stop
+TurnLeft=Turn left|Left@Turn left
+TurnRight=Turn right|Right@Turn right
+LightOn=Turn on|Turn on the light@Turn on the light
+LightOff=Turn off|Turn off the light@Turn off the light
+BTOn=Bluetooth on|Turn on the Bluetooth@Turn on the Bluetooth
+BTOff=Bluetooth off|Turn off the Bluetooth@Turn off the Bluetooth
+APOn=AP on|Turn on the AP@Turn on the AP
+APOff=AP off|Turn off the AP@Turn off the AP
+PlayMusic=Play music@Play music
+Fool=Fool|Stupid@Fool
+LookAtMe=Look at me|Hey!@Where are you?
+Attention=Attention@Yes, Sir!
+Help=Help|Help me@Wait a moment
 */
 
 const uart_data_t g_uart_buf[] = {
