@@ -31,6 +31,12 @@ bool moveHeadToFront = false;
 void DoWakeUp() {
   head.send(HEAD_WIFI_ON);
   stateLed.on();
+  motorController.randomMove(
+      200 + random(0, 5) * 100,
+      [](MotorController *c1, MOTOR_DIRECTION dir1) -> void {
+        motorController.moveOpposite(200 + random(0, 5) * 100, dir1);
+      },
+      1000);
 }
 
 void DoSleep() {
