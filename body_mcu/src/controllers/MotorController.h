@@ -19,17 +19,22 @@ typedef std::function<void(MotorController *, MOTOR_DIRECTION)> MotorCallback;
 class MotorController {
  public:
   MotorController(uint8_t leftPin, uint8_t rightPin);
+
   ~MotorController();
 
   void init();
+
   void left(unsigned long ms, MotorCallback callback = nullptr, unsigned long startDeltaMs = 0);
+
   void right(unsigned long ms, MotorCallback callback = nullptr, unsigned long startDeltaMs = 0);
+
   void stop(unsigned long ms, MotorCallback callback = nullptr, unsigned long startDeltaMs = 0);
 
   void loop(unsigned long now);
 
   void randomMove(unsigned long duration, const MotorCallback &callback = nullptr, unsigned long startDelayMs = 0);
-  void moveOpposite(unsigned long duration, const MotorCallback &cb = nullptr);
+
+  void moveOpposite(unsigned long duration, MOTOR_DIRECTION newDir, const MotorCallback &cb = nullptr);
 
  private:
   uint8_t pin_left;
@@ -41,7 +46,9 @@ class MotorController {
   MotorCallback callback;
 
   void internalLeft();
+
   void internalRight();
+
   void internalStop();
 };
 

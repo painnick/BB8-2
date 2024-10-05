@@ -4,7 +4,8 @@
 
 #define MOTOR_TAG "MOTOR"
 
-MotorController::MotorController(uint8_t leftPin, uint8_t rightPin) : pin_left(leftPin), pin_right(rightPin), startMoveMs(0), endMoveMs(0), dir(MOTOR_DIRECTION::STOP) {}
+MotorController::MotorController(uint8_t leftPin, uint8_t rightPin)
+    : pin_left(leftPin), pin_right(rightPin), startMoveMs(0), endMoveMs(0), dir(MOTOR_DIRECTION::STOP) {}
 
 MotorController::~MotorController() = default;
 
@@ -18,6 +19,7 @@ void MotorController::left(unsigned long ms,
                            MotorCallback cb,
                            unsigned long startDelayMs) {
   callback = std::move(cb);
+
   unsigned long now = millis();
   endMoveMs = now + ms + startDelayMs;
   if (startDelayMs == 0) {
@@ -32,7 +34,8 @@ void MotorController::left(unsigned long ms,
 void MotorController::right(unsigned long ms,
                             MotorCallback cb,
                             unsigned long startDelayMs) {
-  callback = cb;
+  callback = std::move(cb);
+
   unsigned long now = millis();
   endMoveMs = now + ms + startDelayMs;
   if (startDelayMs == 0) {
@@ -108,8 +111,8 @@ void MotorController::internalStop() {
 }
 
 void MotorController::randomMove(unsigned long duration,
-                             const MotorCallback &cb,
-                             unsigned long delay) {
+                                 const MotorCallback &cb,
+                                 unsigned long delay) {
   if ((random(1024) % 2) == 0)
     left(duration, cb, delay);
   else
@@ -118,14 +121,15 @@ void MotorController::randomMove(unsigned long duration,
 
 void MotorController::moveOpposite(
     unsigned long duration,
+    MOTOR_DIRECTION newDir,
     const MotorCallback &cb) {
-  if (dir == MOTOR_DIRECTION::LEFT || dir == MOTOR_DIRECTION::STOP) {
-    stop(100, [this, duration, cb](MotorController *, MOTOR_DIRECTION) {
-      right(duration, cb);
-    });
-  } else if (dir == MOTOR_DIRECTION::RIGHT) {
-    stop(100, [this, duration, cb](MotorController *, MOTOR_DIRECTION) {
-      left(duration, cb);
-    });
+  if (newDir == MOTOR_DIRECTION::LEFT || newDir == MOTOR_DIRECTION::STOP) {
+    internalStop();
+    delay(100);
+    right(duration, cb);
+  } else if (newDir == MOTOR_DIRECTION::RIGHT) {
+    internalStop();
+    delay(100);
+    left(duration, cb);
   }
 }

@@ -72,22 +72,25 @@ void DoWifiOff() {
 }
 
 void DoBluetoothOn() {
-    bt.begin();
+  bt.begin();
 }
 
 void DoBluetoothOff() {
-    bt.close();
+  bt.close();
 }
 
 void DoFool() {
   head.send(HEAD_FOOL);
   shiftRegister.warningMessage();
-  motorController.randomMove(1000 + random(0, 500), [=](MotorController *c1, MOTOR_DIRECTION dir1) {
-    motorController.moveOpposite(1000 + random(0, 500), [=](MotorController *c1, MOTOR_DIRECTION dir1) {
-      moveHeadToFront = true;
-      motorController.moveOpposite(1000 + random(0, 500));
+  motorController.randomMove(500, [=](MotorController *c1, MOTOR_DIRECTION dir1) {
+    ESP_LOGD(MAIN_TAG, "Fool #1");
+    motorController.moveOpposite(500, dir1, [=](MotorController *c2, MOTOR_DIRECTION dir2) {
+      ESP_LOGD(MAIN_TAG, "Fool #2");
+      motorController.moveOpposite(300, dir2, [=](MotorController *c3, MOTOR_DIRECTION dir3) {
+        ESP_LOGD(MAIN_TAG, "Fool #3");
+      });
     });
-  });
+  }, 500);
 }
 
 void DoLookAtMe() {
