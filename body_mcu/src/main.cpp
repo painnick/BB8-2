@@ -53,12 +53,12 @@ void DoStop() {
 
 void DoTurnHeadLeft() {
   moveHeadToFront = false;
-  motorController.left(1000);
+  motorController.left(500);
 }
 
 void DoTurnHeadRight() {
   moveHeadToFront = false;
-  motorController.left(1000);
+  motorController.right(500);
 }
 
 void DoTurnOnLight() {
