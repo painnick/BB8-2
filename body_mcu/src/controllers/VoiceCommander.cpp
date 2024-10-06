@@ -14,15 +14,20 @@ static const VoiceCommand voiceCommands[] = {
     {VC02_SLEEP, 0x02, "Sleep"},
     {VC02_STOP, 0x03, "Stop"},
     {VC02_KEEPALIVE, 0x04, "KeepAlive"},
+
     {VC02_TURN_LEFT, 0x11, "HeadLeft"},
     {VC02_TURN_RIGHT, 0x12, "HeadRight"},
+
     {VC02_TURN_ON_LIGHT, 0x41, "LightOn"},
     {VC02_TURN_OFF_LIGHT, 0x42, "LightOff"},
+
     {VC02_TURN_ON_AP, 0x51, "WifiOn"},
     {VC02_TURN_OFF_AP, 0x52, "WifiOff"},
     {VC02_TURN_ON_BLUETOOTH, 0x53, "BluetoothOn"},
     {VC02_TURN_OFF_BLUETOOTH, 0x53, "BluetoothOff"},
+
     {VC02_PLAY_MUSIC, 0x21, "PlayMusic"},
+
     {VC02_FOOL, 0x31, "Fool"},
     {VC02_LOOK_AT_ME, 0x32, "LookAtMe"},
     {VC02_ATTENTION, 0x33, "Attention"},
@@ -70,7 +75,7 @@ void VoiceCommander::loop() {
       ESP_LOGW(VC_TAG, "%d bytes read", read_bytes);
       return;
     }
-    ESP_LOGD(VC_TAG, "Read 0x%02X", buffer);
+    ESP_LOGD(VC_TAG, "Read 0x%02X", buffer[0]);
 
     auto commandType = ToVoiceCommandType(buffer[0]);
     if (commandType == VC02_WAKE_UP)
