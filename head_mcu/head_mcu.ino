@@ -20,7 +20,7 @@ void setup() {
   initLed();
 
   initShiftRegister();
-  setShiftRegister(0xFF);
+  setShiftRegister(0x00);
 
   initCamera();
 

@@ -265,7 +265,7 @@ void setup() {
     motorController.randomMove(5000);
   }
 
-  shiftRegister.set(0xFF, 0xFF);
+  shiftRegister.set(0x00, 0x00);
 
   head.send(HEAD_WIFI_OFF);
 }
