@@ -64,7 +64,7 @@ void ShiftRegisterController::loop(unsigned long now, bool forceUpdate) {
   }
 }
 
-void ShiftRegisterController::set(byte newVal1, byte newVal2) {
+void ShiftRegisterController::set(byte newVal1, byte newVal2, bool forced) {
   actions.clear();
 
   mode = ShiftRegisterMode::FIXED;
@@ -73,6 +73,9 @@ void ShiftRegisterController::set(byte newVal1, byte newVal2) {
 
   value1 = newVal1;
   value2 = newVal2;
+
+  if (forced)
+    internalSet(value1, value2);
 }
 
 /**
@@ -117,10 +120,13 @@ void ShiftRegisterController::off(int index) {
   }
 }
 
-void ShiftRegisterController::clear() {
+void ShiftRegisterController::clear(bool forced) {
   value1 = 0;
   value2 = 0;
   changed = true;
+  if (forced) {
+    internalSet(value1, value2);
+  }
 }
 
 void ShiftRegisterController::append(SR_ACTION action) {

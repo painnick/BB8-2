@@ -24,13 +24,13 @@ class ShiftRegisterController {
 
   void loop(unsigned long now, bool forceUpdate = false);
 
-  void set(byte newVal1, byte newVal2);
+  void set(byte newVal1, byte newVal2, bool forced = true);
 
   void on(int index);
 
   void off(int index);
 
-  void clear();
+  void clear(bool forced = true);
 
   byte get() const;
 
