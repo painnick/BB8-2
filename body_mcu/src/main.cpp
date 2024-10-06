@@ -41,6 +41,8 @@ void DoWakeUp() {
 
 void DoSleep() {
   head.send(HEAD_WIFI_OFF);
+  shiftRegister.clear();
+  head.send(HEAD_LIGHT_OFF);
   stateLed.blink();
 }
 
