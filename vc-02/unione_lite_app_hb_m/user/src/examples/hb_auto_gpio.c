@@ -99,7 +99,6 @@ static void _custom_setting_cb(USER_EVENT_TYPE event,
     } else if (0 == uni_strcmp(setting->cmd, "BTOff")) {
       user_uart_send(g_uart_buf[10].data, g_uart_buf[10].len);
     } else if (0 == uni_strcmp(setting->cmd, "PlayMusic")) {
-      // TODO : Send 0x3FFCA4E7
       user_uart_send(g_uart_buf[11].data, g_uart_buf[11].len);
       return;
     } else if (0 == uni_strcmp(setting->cmd, "Fool")) {
