@@ -224,6 +224,12 @@ void setup() {
         setVolume(vol);
         break;
       }
+      case BT_VC02_VOLUME: {
+        auto vol = msg.substring(6).toInt();
+        byte buf[2] = {0x22, (byte)vol};
+        vc02.send(buf, 2);
+        break;
+      }
       case BT_UNKNOWN:
         bt.println("Type 'HELP'");
       default:

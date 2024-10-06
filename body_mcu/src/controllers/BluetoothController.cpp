@@ -10,6 +10,7 @@
 #define BT_TAG "BLUETOOTH"
 
 #define CMD_DFPLAYER_VOLUME "DFVOL"
+#define CMD_VC02_VOLUME "VCVOL"
 
 static const BluetoothCommandInfo btCommands[] = {
     {BT_UNKNOWN, CMD_UNKNOWN, "Unknown"},
@@ -29,6 +30,7 @@ static const BluetoothCommandInfo btCommands[] = {
     {BT_LOOK_AT_ME, "LOOK", "LookAtMe"},
     {BT_ATTENTION, "ATTENTION", "Attention"},
     {BT_DFPLAYER_VOLUME, CMD_DFPLAYER_VOLUME, CMD_DFPLAYER_VOLUME " %d(1~30)"},
+    {BT_VC02_VOLUME, CMD_VC02_VOLUME, CMD_VC02_VOLUME " %d(1~100)"},
 };
 
 String ToString(const BluetoothCommandInfo &cmd) {
@@ -53,6 +55,9 @@ BluetoothCommandType ToBluetoothCommandType(String &msg) {
   }
   if (msg.indexOf(CMD_DFPLAYER_VOLUME) == 0) {
     return BT_DFPLAYER_VOLUME;
+  }
+  if (msg.indexOf(CMD_VC02_VOLUME) == 0) {
+    return BT_VC02_VOLUME;
   }
   for (const auto &btCommand : btCommands) {
     if (msg.indexOf(btCommand.msg) != -1)

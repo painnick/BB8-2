@@ -27,6 +27,7 @@ static const VoiceCommand voiceCommands[] = {
     {VC02_TURN_OFF_BLUETOOTH, 0x53, "BluetoothOff"},
 
     {VC02_PLAY_MUSIC, 0x21, "PlayMusic"},
+    {VC02_VOLUME, 0x22, "Volume"},
 
     {VC02_FOOL, 0x31, "Fool"},
     {VC02_LOOK_AT_ME, 0x32, "LookAtMe"},
@@ -92,4 +93,14 @@ void VoiceCommander::send(byte val) {
   serial.write(buffer, 1);
   serial.flush();
   ESP_LOGD(VC_TAG, "Send 0x%02X", val);
+}
+
+void VoiceCommander::send(byte *val, int len) {
+  serial.write(val, len);
+  serial.flush();
+
+  if (len == 1)
+    ESP_LOGD(VC_TAG, "Send 0x%02X", val[0]);
+  else
+    ESP_LOGD(VC_TAG, "Send 0x%02X 0x%02X", val[0], val[1]);
 }

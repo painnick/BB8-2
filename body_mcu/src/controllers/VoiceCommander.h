@@ -31,6 +31,7 @@ enum VoiceCommandType {
   VC02_FOOL,
   VC02_LOOK_AT_ME,
   VC02_ATTENTION,
+  VC02_VOLUME,
 };
 
 typedef struct {
@@ -64,6 +65,7 @@ class VoiceCommander {
   void loop();
 
   void send(byte val);
+  void send(byte *val, int len);
 
   bool isListening = true;
 
