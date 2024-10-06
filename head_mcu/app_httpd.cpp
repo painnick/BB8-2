@@ -63,6 +63,7 @@ static ra_filter_t *ra_filter_init(ra_filter_t *filter, size_t sample_size) {
 }
 
 #if ARDUHAL_LOG_LEVEL >= ARDUHAL_LOG_LEVEL_INFO
+
 static int ra_filter_run(ra_filter_t *filter, int value) {
   if (!filter->values) {
     return value;
@@ -77,6 +78,7 @@ static int ra_filter_run(ra_filter_t *filter, int value) {
   }
   return filter->sum / filter->count;
 }
+
 #endif
 
 static esp_err_t bmp_handler(httpd_req_t *req) {
@@ -113,7 +115,7 @@ static esp_err_t bmp_handler(httpd_req_t *req) {
   free(buf);
 #if ARDUHAL_LOG_LEVEL >= ARDUHAL_LOG_LEVEL_INFO
   uint64_t fr_end = esp_timer_get_time();
-  log_i("BMP: %llums, %uB", (uint64_t) ((fr_end - fr_start) / 1000), buf_len);
+  log_i("BMP: %llums, %uB", (uint64_t)((fr_end - fr_start) / 1000), buf_len);
 #endif
   return res;
 }
@@ -172,7 +174,7 @@ static esp_err_t capture_handler(httpd_req_t *req) {
   esp_camera_fb_return(fb);
 #if ARDUHAL_LOG_LEVEL >= ARDUHAL_LOG_LEVEL_INFO
   int64_t fr_end = esp_timer_get_time();
-  log_i("JPG: %uB %ums", (uint32_t) (fb_len), (uint32_t) ((fr_end - fr_start) / 1000));
+  log_i("JPG: %uB %ums", (uint32_t)(fb_len), (uint32_t)((fr_end - fr_start) / 1000));
 #endif
 
   return res;
@@ -251,7 +253,11 @@ static esp_err_t stream_handler(httpd_req_t *req) {
     uint32_t avg_frame_time = ra_filter_run(&ra_filter, frame_time);
     log_i(
         "MJPG: %uB %ums (%.1ffps), AVG: %ums (%.1ffps)",
-        (uint32_t) (_jpg_buf_len), (uint32_t) frame_time, 1000.0 / (uint32_t) frame_time, avg_frame_time, 1000.0 / avg_frame_time
+        (uint32_t)(_jpg_buf_len),
+        (uint32_t) frame_time,
+        1000.0 / (uint32_t) frame_time,
+        avg_frame_time,
+        1000.0 / avg_frame_time
 
     );
 #endif
@@ -289,7 +295,8 @@ static esp_err_t cmd_handler(httpd_req_t *req) {
   if (parse_get(req, &buf) != ESP_OK) {
     return ESP_FAIL;
   }
-  if (httpd_query_key_value(buf, "var", variable, sizeof(variable)) != ESP_OK || httpd_query_key_value(buf, "val", value, sizeof(value)) != ESP_OK) {
+  if (httpd_query_key_value(buf, "var", variable, sizeof(variable)) != ESP_OK ||
+      httpd_query_key_value(buf, "val", value, sizeof(value)) != ESP_OK) {
     free(buf);
     httpd_resp_send_404(req);
     return ESP_FAIL;
@@ -474,7 +481,8 @@ static esp_err_t reg_handler(httpd_req_t *req) {
   if (parse_get(req, &buf) != ESP_OK) {
     return ESP_FAIL;
   }
-  if (httpd_query_key_value(buf, "reg", _reg, sizeof(_reg)) != ESP_OK || httpd_query_key_value(buf, "mask", _mask, sizeof(_mask)) != ESP_OK
+  if (httpd_query_key_value(buf, "reg", _reg, sizeof(_reg)) != ESP_OK ||
+      httpd_query_key_value(buf, "mask", _mask, sizeof(_mask)) != ESP_OK
       || httpd_query_key_value(buf, "val", _val, sizeof(_val)) != ESP_OK) {
     free(buf);
     httpd_resp_send_404(req);
@@ -505,7 +513,8 @@ static esp_err_t greg_handler(httpd_req_t *req) {
   if (parse_get(req, &buf) != ESP_OK) {
     return ESP_FAIL;
   }
-  if (httpd_query_key_value(buf, "reg", _reg, sizeof(_reg)) != ESP_OK || httpd_query_key_value(buf, "mask", _mask, sizeof(_mask)) != ESP_OK) {
+  if (httpd_query_key_value(buf, "reg", _reg, sizeof(_reg)) != ESP_OK ||
+      httpd_query_key_value(buf, "mask", _mask, sizeof(_mask)) != ESP_OK) {
     free(buf);
     httpd_resp_send_404(req);
     return ESP_FAIL;
@@ -552,7 +561,15 @@ static esp_err_t pll_handler(httpd_req_t *req) {
   int pclk = parse_get_var(buf, "pclk", 0);
   free(buf);
 
-  log_i("Set Pll: bypass: %d, mul: %d, sys: %d, root: %d, pre: %d, seld5: %d, pclken: %d, pclk: %d", bypass, mul, sys, root, pre, seld5, pclken, pclk);
+  log_i("Set Pll: bypass: %d, mul: %d, sys: %d, root: %d, pre: %d, seld5: %d, pclken: %d, pclk: %d",
+        bypass,
+        mul,
+        sys,
+        root,
+        pre,
+        seld5,
+        pclken,
+        pclk);
   sensor_t *s = esp_camera_sensor_get();
   int res = s->set_pll(s, bypass, mul, sys, root, pre, seld5, pclken, pclk);
   if (res) {
@@ -585,10 +602,33 @@ static esp_err_t win_handler(httpd_req_t *req) {
   free(buf);
 
   log_i(
-      "Set Window: Start: %d %d, End: %d %d, Offset: %d %d, Total: %d %d, Output: %d %d, Scale: %u, Binning: %u", startX, startY, endX, endY, offsetX, offsetY,
-      totalX, totalY, outputX, outputY, scale, binning);
+      "Set Window: Start: %d %d, End: %d %d, Offset: %d %d, Total: %d %d, Output: %d %d, Scale: %u, Binning: %u",
+      startX,
+      startY,
+      endX,
+      endY,
+      offsetX,
+      offsetY,
+      totalX,
+      totalY,
+      outputX,
+      outputY,
+      scale,
+      binning);
   sensor_t *s = esp_camera_sensor_get();
-  int res = s->set_res_raw(s, startX, startY, endX, endY, offsetX, offsetY, totalX, totalY, outputX, outputY, scale, binning);
+  int res = s->set_res_raw(s,
+                           startX,
+                           startY,
+                           endX,
+                           endY,
+                           offsetX,
+                           offsetY,
+                           totalX,
+                           totalY,
+                           outputX,
+                           outputY,
+                           scale,
+                           binning);
   if (res) {
     return httpd_resp_send_500(req);
   }
@@ -615,24 +655,62 @@ static esp_err_t index_handler(httpd_req_t *req) {
   }
 }
 
-static esp_err_t turn_left_handler(httpd_req_t *req) {
-//  log_i("Call turn_left_handler");
+time_t last_catch;
+static esp_err_t head_handler(httpd_req_t *req) {
+  char *buf;
+  size_t buf_len;
+  char direction[32] = {0,}, found[6] = {0,};
+  char body[18] = {0,};
 
-  sendCommand(CMD_TURN_LEFT);
+  buf_len = httpd_req_get_url_query_len(req) + 1;
+  if (buf_len > 1) {
+    buf = (char *) malloc(buf_len);
+    if (!buf) {
+      httpd_resp_send_500(req);
+      return ESP_FAIL;
+    }
+    if (httpd_req_get_url_query_str(req, buf, buf_len) == ESP_OK) {
+      if (httpd_query_key_value(buf, "dir", direction, sizeof(direction)) != ESP_OK) {
+        free(buf);
+        httpd_resp_send_404(req);
+        return ESP_FAIL;
+      }
+      if (httpd_query_key_value(buf, "found", found, sizeof(found)) != ESP_OK) {
+        free(buf);
+        httpd_resp_send_404(req);
+        return ESP_FAIL;
+      }
+    } else {
+      free(buf);
+      httpd_resp_send_404(req);
+      return ESP_FAIL;
+    }
+    free(buf);
+  } else {
+    httpd_resp_send_404(req);
+    return ESP_FAIL;
+  }
 
-  httpd_resp_set_type(req, "text/html");
+  if (!strcmp(found, "true")) {
+//    mono_eye_leds.red(4);
+//    mono_eye_leds.orange(2);
+    time(&last_catch);
+  }
+
+  sensor_t *s = esp_camera_sensor_get();
+  //flip the camera vertically
+  //s->set_vflip(s, 1);          // 0 = disable , 1 = enable
+  // mirror effect
+  //s->set_hmirror(s, 1);          // 0 = disable , 1 = enable
+
+  if (!strcmp(direction, "left")) {
+    sendCommand(CMD_TURN_LEFT2);
+  } else if (!strcmp(direction, "right")) {
+    sendCommand(CMD_TURN_RIGHT2);
+  }
+
   httpd_resp_set_hdr(req, "Access-Control-Allow-Origin", "*");
-  return httpd_resp_send(req, "Left", 4);
-}
-
-static esp_err_t turn_right_handler(httpd_req_t *req) {
-//  log_i("Call turn_right_handler");
-
-  sendCommand(CMD_TURN_RIGHT);
-
-  httpd_resp_set_type(req, "text/html");
-  httpd_resp_set_hdr(req, "Access-Control-Allow-Origin", "*");
-  return httpd_resp_send(req, "Right", 5);
+  return httpd_resp_send(req, body, strlen(body));
 }
 
 void startCameraServer() {
@@ -705,17 +783,12 @@ void startCameraServer() {
       .handler = win_handler,
       .user_ctx = NULL};
 
-  httpd_uri_t turn_left_uri = {
-      .uri = "/left",
-      .method = HTTP_GET,
-      .handler = turn_left_handler,
-      .user_ctx = NULL};
-
-  httpd_uri_t turn_right_uri = {
-      .uri = "/right",
-      .method = HTTP_GET,
-      .handler = turn_right_handler,
-      .user_ctx = NULL};
+  httpd_uri_t head_uri = {
+      .uri       = "/motor",
+      .method    = HTTP_GET,
+      .handler   = head_handler,
+      .user_ctx  = NULL
+  };
 
   ra_filter_init(&ra_filter, 20);
 
@@ -733,8 +806,7 @@ void startCameraServer() {
     httpd_register_uri_handler(camera_httpd, &pll_uri);
     httpd_register_uri_handler(camera_httpd, &win_uri);
 
-    httpd_register_uri_handler(camera_httpd, &turn_left_uri);
-    httpd_register_uri_handler(camera_httpd, &turn_right_uri);
+    httpd_register_uri_handler(camera_httpd, &head_uri);
   }
 
   config.server_port += 1;

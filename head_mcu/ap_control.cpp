@@ -11,8 +11,8 @@ const char *password = "aaaa1111";
 
 #define SOFT_AP_IP_ADDRESS_1 192
 #define SOFT_AP_IP_ADDRESS_2 168
-#define SOFT_AP_IP_ADDRESS_3 1
-#define SOFT_AP_IP_ADDRESS_4 100
+#define SOFT_AP_IP_ADDRESS_3 5
+#define SOFT_AP_IP_ADDRESS_4 18
 
 #define SOFT_AP_GW_ADDRESS_1 192
 #define SOFT_AP_GW_ADDRESS_2 168
