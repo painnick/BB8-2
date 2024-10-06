@@ -103,6 +103,13 @@ inline void setDefaultVolume() {
   dfmp3.setVolume(DEFAULT_VOLUME);
 }
 
+inline void setVolume(int vol) {
+#ifndef DISABLE_MP3_DEBUG_LOG
+  ESP_LOGD(MP3_TAG, "Set Volume %d", vol);
+#endif
+  dfmp3.setVolume(vol);
+}
+
 inline void setupSound() {
 #ifndef DISABLE_MP3_DEBUG_LOG
   ESP_LOGI(MP3_TAG, "Setup DFPlayer");

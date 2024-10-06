@@ -219,6 +219,11 @@ void setup() {
       case BT_ATTENTION:
         DoAttention();
         break;
+      case BT_DFPLAYER_VOLUME: {
+        auto vol = msg.substring(6).toInt();
+        setVolume(vol);
+        break;
+      }
       case BT_UNKNOWN:
         bt.println("Type 'HELP'");
       default:

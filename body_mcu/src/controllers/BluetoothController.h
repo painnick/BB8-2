@@ -27,6 +27,7 @@ enum BluetoothCommandType {
   BT_FOOL,
   BT_LOOK_AT_ME,
   BT_ATTENTION,
+  BT_DFPLAYER_VOLUME,
 };
 
 typedef struct {
