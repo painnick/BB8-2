@@ -36,7 +36,7 @@
   - vc-02는 영어와 중국어를 지원하며, 자체 Web 설정 화면에서 원하는 문장을 설정 가능
   - Body에 설치된 ESP32와 Serial 통신
   - 기본 Firmware에서 지원하는 기능 외의 기능을 추가하기 위해 추가 개발 
-- 얼굴 인식(Google Media Pipe, Camera, HttpServer)
+- 얼굴 인식([Google Media Pipe](https://ai.google.dev/edge/mediapipe/solutions/vision/face_detector), Camera, HttpServer)
   - ESP32CAM의 Camera 기능과 WebServer 기능을 이용하여 Camera Server를 구현
   - ESP32CAM의 자체 AP(Access Point) 기능을 이용하여 외부에서도 접속 가능하도록 처리
   - Android 또는 기타 클라이언트에서 자체 AP에 연결하고, HTTP로 Camera Server에 연결
