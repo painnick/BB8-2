@@ -43,3 +43,8 @@
   - Camera Server에서 읽어온 이미지를 Google Media Pipe로 분석하여 얼굴 존재 여부를 판단
   - Camera Server의  특정 URL을 호출하여  Head 파트에 설치된 ESP32CAM이 Body 파트에 설치된 ESP32에 Serial 통신으로 모터 이동을 지시
   - Android 또는 기타 클라이언트는 얼굴을 화면 중앙에 위치할 때까지 반복
+
+## 도면
+
+Fritzing에서 표시할 수 없는 일부 부분들이 생략 또는 변경
+![image](https://github.com/user-attachments/assets/ae9096a7-fa22-453b-9071-b44e7bf3581a)
