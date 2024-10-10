@@ -29,6 +29,7 @@ class MotorController {
   void right(unsigned long ms, MotorCallback callback = nullptr, unsigned long startDeltaMs = 0);
 
   void stop(unsigned long ms, MotorCallback callback = nullptr, unsigned long startDeltaMs = 0);
+  void stop();
 
   void loop(unsigned long now);
 

@@ -22,6 +22,7 @@ static const HeadCommandInfo headCommands[] = {
     {HEAD_TURN_RIGHT, CMD_TURN_RIGHT, "TurnRight"},
     {HEAD_TURN_LEFT2, CMD_TURN_LEFT2, "TurnLeft2"},
     {HEAD_TURN_RIGHT2, CMD_TURN_RIGHT2, "TurnRight2"},
+    {HEAD_STOP_NOW, CMD_STOP_NOW, "StopNow"},
     {HEAD_WIFI_IS_ON, CMD_WIFI_IS_ON, "WiFiIsOn"},
     {HEAD_WIFI_IS_OFF, CMD_WIFI_IS_OFF, "WiFiIsOff"},
     {HEAD_BT_ON, CMD_BLUETOOTH_ON, "BluetoothOn"},

@@ -707,6 +707,8 @@ static esp_err_t head_handler(httpd_req_t *req) {
     sendCommand(CMD_TURN_LEFT2);
   } else if (!strcmp(direction, "right")) {
     sendCommand(CMD_TURN_RIGHT2);
+  } else if (!strcmp(direction, "none")) {
+    sendCommand(CMD_STOP_NOW);
   }
 
   httpd_resp_set_hdr(req, "Access-Control-Allow-Origin", "*");

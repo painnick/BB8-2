@@ -67,6 +67,11 @@ void DoTurnHeadRight2() {
   motorController.right(300);
 }
 
+void DoStopNow() {
+  moveHeadToFront = false;
+  motorController.stop();
+}
+
 void DoTurnOnLight() {
   head.send(HEAD_LIGHT_ON);
   shiftRegister.set(0xFF, 0xFF);
@@ -269,6 +274,9 @@ void setup() {
         break;
       case HEAD_TURN_RIGHT2:
         DoTurnHeadRight2();
+        break;
+      case HEAD_STOP_NOW:
+        DoStopNow();
         break;
       case HEAD_WIFI_IS_ON:
         break;

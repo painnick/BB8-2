@@ -62,6 +62,12 @@ void MotorController::stop(unsigned long ms,
   }
 }
 
+void MotorController::stop() {
+  startMoveMs = 0;
+  callback = nullptr;
+  internalStop();
+}
+
 void MotorController::loop(unsigned long now) {
   if (startMoveMs != 0) {
     if (now > startMoveMs) {
