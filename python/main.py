@@ -9,8 +9,8 @@ import requests
 from cv2 import ROTATE_180
 
 host = 'http://192.168.5.18'
-output_width = 640
-output_height = 480
+output_width = 320
+output_height = 240
 
 # Logger Settings
 logger = logging.getLogger("main")
@@ -39,7 +39,7 @@ session = requests.Session()
 
 # Window Settings
 cv2.namedWindow('mp', cv2.WINDOW_NORMAL)
-# cv2.setWindowProperty('mp', cv2.WND_PROP_FULLSCREEN, cv2.WINDOW_FULLSCREEN)
+cv2.setWindowProperty('mp', cv2.WND_PROP_FULLSCREEN, cv2.WINDOW_FULLSCREEN)
 
 mp_face_detection = mp.solutions.face_detection
 mp_drawing = mp.solutions.drawing_utils
@@ -174,7 +174,7 @@ with mp_face_detection.FaceDetection(model_selection=0, min_detection_confidence
           box = found
       center = box.xmin + (box.width / 2)  # Calculate only the space represented within the screen
       mp_drawing.draw_detection(image, detection)
-      if 0.3 > center or center > 0.7:
+      if 0.4 > center or center > 0.6:
         if center < 0.5:
           direction = 'right'
           turn(direction, True)
@@ -188,8 +188,16 @@ with mp_face_detection.FaceDetection(model_selection=0, min_detection_confidence
       else:
         logger.info('Found(Center)')
         turn('none', True)
+        cv2.putText(image,
+                    'Found!',
+                    (10, 32),
+                    cv2.FONT_HERSHEY_PLAIN,
+                    1,
+                    (0, 0, 255),
+                    2,
+                    cv2.LINE_8)
         cv2.imshow('mp', image)
-        cv2.waitKey(1000 * 4)
+        # cv2.waitKey(1000 * 1)
       face_lost = time.time()
     else:  # Lost
       past_time = current_time - face_lost
@@ -203,7 +211,6 @@ with mp_face_detection.FaceDetection(model_selection=0, min_detection_confidence
       else:
         time.sleep(0.01)
 
-    # output = cv2.resize(flipped, (640, 480), interpolation=cv2.INTER_CUBIC)
     cv2.imshow('mp', image)
     if cv2.waitKey(1) == 27:
       break
