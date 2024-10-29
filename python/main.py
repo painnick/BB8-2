@@ -9,7 +9,7 @@ import requests
 from PyQt5 import QtGui, uic
 from PyQt5.QtCore import pyqtSignal, pyqtSlot, Qt, QThread
 from PyQt5.QtGui import QPixmap
-from PyQt5.QtWidgets import QApplication, QDialog
+from PyQt5.QtWidgets import QApplication, QMainWindow
 from colorlog import ColoredFormatter
 from cv2 import ROTATE_180
 
@@ -159,7 +159,7 @@ class VideoThread(QThread):
 form_class = uic.loadUiType("app.ui")[0]
 
 
-class App(QDialog, form_class):
+class App(QMainWindow, form_class):
   def __init__(self):
     super().__init__()
     self.setupUi(self)
@@ -167,6 +167,7 @@ class App(QDialog, form_class):
     self.find_button.clicked.connect(self.find_button_clicked)
     self.left_button.clicked.connect(self.left_button_clicked)
     self.right_button.clicked.connect(self.right_button_clicked)
+    self.close_button.clicked.connect(self.close_button_clicked)
 
     # create the video capture thread
     self.thread = VideoThread()
@@ -204,6 +205,8 @@ class App(QDialog, form_class):
     time.sleep(0.05)
     turn('none', True)  # Stop
 
+  def close_button_clicked(self):
+    sys.exit(app.exec_())
 
 if __name__ == "__main__":
   # Logger Settings
@@ -231,4 +234,5 @@ if __name__ == "__main__":
   app = QApplication(sys.argv)
   a = App()
   a.show()
+  a.showFullScreen()
   sys.exit(app.exec_())
