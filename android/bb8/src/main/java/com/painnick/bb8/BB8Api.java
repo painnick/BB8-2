@@ -74,8 +74,7 @@ public class BB8Api {
             connection.connect();
             InputStream inputStream = connection.getInputStream();
             BufferedInputStream bufferedInputStream = new BufferedInputStream(inputStream);
-            Bitmap originBitmap = BitmapFactory.decodeStream(bufferedInputStream);
-            result = rotateBitmap(originBitmap, 180);
+            result = BitmapFactory.decodeStream(bufferedInputStream);
             connection.disconnect();
         } catch (IOException e) {
             e.printStackTrace();
