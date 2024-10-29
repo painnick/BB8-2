@@ -125,6 +125,7 @@ public class BB8Api {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+            stopNow(found);
         });
     }
 
@@ -136,6 +137,7 @@ public class BB8Api {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+            stopNow(found);
         });
     }
 
