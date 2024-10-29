@@ -129,6 +129,7 @@ class VideoThread(QThread):
                 turn('none', True)  # Stop
             else:
               logger.info('Found(Center)')
+              find_faces = False
               turn('none', True)
               cv2.putText(image,
                           'Found!',
