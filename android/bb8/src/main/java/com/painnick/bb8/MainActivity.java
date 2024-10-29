@@ -182,7 +182,7 @@ public class MainActivity extends AppCompatActivity {
                     // Found!!!
                     notFoundCount = 0;
                     foundCount++;
-                    if (foundCount > 3) {
+                    if (foundCount > 1) {
                         lastFaceFound = new Date();
                         runOnUiThread(() -> Toast.makeText(MainActivity.this, "발견!!!", Toast.LENGTH_LONG).show());
                         stopFindFace();
