@@ -41,6 +41,10 @@
     - http://voice.ai-thinker.com/
   - 소스 코드 및 설치 바이너리가 제공
     - 코드 수정 및 빌드를 통해 추가 기능 개발 가능
+    - 개발 링크
+      - 스펙 및 업데이트 방법 https://blog.csdn.net/Boantong_/article/details/123846788
+      - 설정 페이지 설명 https://blog.csdn.net/Boantong_/article/details/124689101
+      - docker를 이용한 빌드 환경 https://blog.csdn.net/Boantong_/article/details/123889070
   - Body에 설치된 ESP32와 Serial 통신
 - 얼굴 인식([Google Media Pipe](https://ai.google.dev/edge/mediapipe/solutions/vision/face_detector), Camera, HttpServer)
   - ESP32CAM의 Camera 기능과 WebServer 기능을 이용하여 Camera Server를 구현
