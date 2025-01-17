@@ -32,10 +32,16 @@
 ## 주요 기술
 
 - 음성 인식 기능(vc-02)
-  - 이전에 사용한 vc-01은 학습한 소리에만 반응하여 타인의 목소리에 대응하는 것이 어려웠음
-  - vc-02는 영어와 중국어를 지원하며, 자체 Web 설정 화면에서 원하는 문장을 설정 가능
+  - 제품 링크
+    - 국내 : https://www.devicemart.co.kr/goods/view?no=14907525
+    - 알리 : https://ko.aliexpress.com/item/1005005316033953.html
+  - 이전 버전인 vc-01은 "학습한 소리"에만 반응. 타인의 목소리에 대응하는 것이 어려움
+  - vc-02는 영어와 중국어를 지원
+  - 대상 문장을 자체 Web 설정에서 원하는 문장을 설정 가능
+    - http://voice.ai-thinker.com/
+  - 소스 코드 및 설치 바이너리가 제공
+    - 코드 수정 및 빌드를 통해 추가 기능 개발 가능
   - Body에 설치된 ESP32와 Serial 통신
-  - 기본 Firmware에서 지원하는 기능 외의 기능을 추가하기 위해 추가 개발 
 - 얼굴 인식([Google Media Pipe](https://ai.google.dev/edge/mediapipe/solutions/vision/face_detector), Camera, HttpServer)
   - ESP32CAM의 Camera 기능과 WebServer 기능을 이용하여 Camera Server를 구현
   - ESP32CAM의 자체 AP(Access Point) 기능을 이용하여 외부에서도 접속 가능하도록 처리
