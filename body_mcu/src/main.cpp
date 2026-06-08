@@ -1,8 +1,7 @@
 #include "esp_log.h"
 #include <Arduino.h>
 #include <HardwareSerial.h>
-
-#define DISABLE_MP3_DEBUG_LOG
+#include <EEPROM.h>
 
 #include "controllers/BluetoothController.h"
 #include "controllers/HeadCommander.h"
@@ -118,10 +117,34 @@ void DoAttention() {
   motorController.randomMove(1000 * 10);
 }
 
+#define DEFAULT_VC_VOLUME 70
+
+void setVcVolume(int vol) {
+  vol = constrain(vol, 1, 100);
+  byte buf[2] = {0x22, (byte)vol};
+  vc02.send(buf, 2);
+  EEPROM.write(EEPROM_VC_VOLUME_ADDR, vol);
+  EEPROM.commit();
+}
+
+void setDefaultVcVolume() {
+  uint8_t vol = EEPROM.read(EEPROM_VC_VOLUME_ADDR);
+  if (vol == 0xFF || vol < 1 || vol > 100) {
+    vol = DEFAULT_VC_VOLUME;
+  }
+  byte buf[2] = {0x22, (byte)vol};
+  vc02.send(buf, 2);
+}
+
 void setup() {
   motorController.init();
 
   vc02.begin(115200, SERIAL_8N1, VOICE_COMMAND_RX_PIN, VOICE_COMMAND_TX_PIN);
+  while (!vc02.available())
+  {
+    delay(1000);
+  }
+  
   vc02.init([=](const VoiceCommander *cmd, const VoiceCommandType cmdType) {
     switch (cmdType) {
       case VC02_WAKE_UP:
@@ -231,8 +254,7 @@ void setup() {
       }
       case BT_VC02_VOLUME: {
         auto vol = msg.substring(6).toInt();
-        byte buf[2] = {0x22, (byte)vol};
-        vc02.send(buf, 2);
+        setVcVolume(vol);
         break;
       }
       case BT_UNKNOWN:
@@ -291,6 +313,7 @@ void setup() {
 
   setupSound();
   setDefaultVolume();
+  setDefaultVcVolume();
   delay(1000 * 3);
   playWelcome();
 

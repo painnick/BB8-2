@@ -69,6 +69,10 @@ class VoiceCommander {
 
   bool isListening = true;
 
+  bool available() {
+    return serial.available();
+  }
+
  protected:
   HardwareSerial &serial;
   VoiceCommanderCallback proc;

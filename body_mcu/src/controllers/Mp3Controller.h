@@ -2,16 +2,21 @@
 
 #include <Arduino.h>
 #include <esp_log.h>
+#include <EEPROM.h>
 
 #include "../pinmap.h"
 #include "DFMiniMp3.h"
+
+#define EEPROM_VOLUME_ADDR 0
+#define EEPROM_VC_VOLUME_ADDR 1
+#define EEPROM_SIZE 4
 
 #define MP3_TAG "DFPLAYER"
 
 #ifdef DEBUG
 #define DEFAULT_VOLUME 10
 #else
-#define DEFAULT_VOLUME 15
+#define DEFAULT_VOLUME 30
 #endif
 
 int BACKGROUND_TRACK = -1;
@@ -96,18 +101,30 @@ class Mp3Notify {
 
 DfMp3 dfmp3(Serial2, DFPLAYER_RX_PIN, DFPLAYER_TX_PIN);
 
+inline int readVolumeFromEEPROM() {
+  uint8_t vol = EEPROM.read(EEPROM_VOLUME_ADDR);
+  if (vol == 0xFF || vol > 30) {
+    return DEFAULT_VOLUME;
+  }
+  return vol;
+}
+
 inline void setDefaultVolume() {
+  int vol = readVolumeFromEEPROM();
 #ifndef DISABLE_MP3_DEBUG_LOG
-  ESP_LOGD(MP3_TAG, "Set Volume");
+  ESP_LOGD(MP3_TAG, "Set Default/Stored Volume %d", vol);
 #endif
-  dfmp3.setVolume(DEFAULT_VOLUME);
+  dfmp3.setVolume(vol);
 }
 
 inline void setVolume(int vol) {
+  vol = constrain(vol, 0, 30);
 #ifndef DISABLE_MP3_DEBUG_LOG
   ESP_LOGD(MP3_TAG, "Set Volume %d", vol);
 #endif
   dfmp3.setVolume(vol);
+  EEPROM.write(EEPROM_VOLUME_ADDR, vol);
+  EEPROM.commit();
 }
 
 inline void setupSound() {
@@ -115,6 +132,9 @@ inline void setupSound() {
   ESP_LOGI(MP3_TAG, "Setup DFPlayer");
 #endif
   dfmp3.begin(9600, 1000);
+  unsigned long now = millis();
+  while(!Serial2.available() && millis() - now < 3000) {delay(1000); }
+  EEPROM.begin(EEPROM_SIZE);
 }
 
 void playWelcome() {
